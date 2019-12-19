@@ -1,7 +1,11 @@
-export default (req, res) => {
-  const date = new Date().toISOString()
-    .replace(/T/, ' ')
-    .replace(/\..+/, '') 
+import { NextApiRequest, NextApiResponse } from 'next';
 
-  res.json({ date })
+export default (req:NextApiRequest, res:NextApiResponse) => {
+    if (req && res) {
+        const date:string = new Date().toISOString()
+            .replace(/T/, ' ')
+            .replace(/\..+/, '');
+
+        res.json({ date });
+    }
 }
