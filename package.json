@@ -1,19 +1,27 @@
 {
-  "name": "create-next-example-app",
-  "description": "A Next.js starter app.",
+  "name": "freelook.now",
+  "description": "Freelook.Now project",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zeit/now-examples/tree/master/nextjs"
+    "url": "https://github.com/freelook/now"
   },
   "license": "MIT",
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "type-check": "tsc"
   },
   "dependencies": {
-    "next": "^9.0.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "isomorphic-unfetch": "3.0.0",
+    "next": "latest",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.8",
+    "@types/react": "^16.9.3",
+    "@types/react-dom": "^16.9.1",
+    "typescript": "3.6.3"
   }
 }
