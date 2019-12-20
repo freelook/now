@@ -16,7 +16,9 @@
     "isomorphic-unfetch": "3.0.0",
     "next": "latest",
     "react": "^16.10.1",
-    "react-dom": "^16.10.1"
+    "react-dom": "^16.10.1",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.2"
   },
   "devDependencies": {
     "@types/node": "^12.7.8",
