@@ -1,51 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from 'semantic-ui-react';
+import _ from 'lodash';
+import React from 'react';
+import fetch from 'unfetch';
+import useSWR from 'swr'
+import { Segment } from 'semantic-ui-react';
+import { NextPageContext } from 'next';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from '../components/layout';
-import Head from '../components/head';
 import Nav from '../components/nav';
+import {useLocale} from '../hooks/locale';
 
-const Home = () => {
-  const [date, setDate] = useState<string>('');
+interface HomeContext extends NextPageContext {}
 
-  useEffect(() => {
-    async function getDate() {
-      const res = await fetch('/api/date');
-      const newDate = await res.json();
-      setDate(newDate.date as string);
-    }
-    getDate();
-  }, []);
+const fetcher = async (url:string) => {
+    return (await fetch(url)).json();
+};
+
+const Home = (ctx:HomeContext) => {
+  const router = useRouter();
+  const locale = useLocale(ctx);
+  const { data } = useSWR('/api/date', fetcher);
+  const date = _.get(data, 'date', '?');
 
   return (
-    <Layout>
-      <Head title="Home" description="" url="" ogImage="" />
-      <Nav />
+    <Layout head={{title: 'Home', description: '', url: '', ogImage: ''}}>
+        <Nav />
 
-      <div className="hero">
-        <h1 className="title">Welcome to freelook.now!</h1>
-        <p className="description">
-          <Button>Just do it</Button>
-        </p>
+        <Segment>
+            <Link href='/deals'><a>Deals</a></Link>
+        </Segment>
 
-        <p className="row date">
-          The date is:&nbsp; {date
-            ? <span><b>{date}</b></span>
-            : <span className="loading"></span>}
-        </p>
+        <Segment textAlign='center'>{date} - {router.route}</Segment>
 
-        <div className='row'>
-          <Link href='https://github.com/freelook/now'>
-            <a className='card'>
-              <h3>Getting Started &rarr;</h3>
-              <p>Learn more about freelook.now project</p>
-            </a>
-          </Link>
-        </div>
-      </div>
-
+        <Segment textAlign='center'>Locale - {locale}</Segment>
     </Layout>
   );
-}
+};
+
+Home.getInitialProps = (ctx:NextPageContext) => {
+  return {
+      query: _.get(ctx, 'query', {})
+  };
+};
 
 export default Home;
