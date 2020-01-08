@@ -1,20 +1,46 @@
 import _ from 'lodash';
 import {useEffect, useState} from 'react';
+import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
+import fetch from 'unfetch';
+import path from 'path';
 
-const defaultLocale = 'en';
+const EN = 'en';
+const DE = 'de';
+const defaultLocale = EN;
+const supportedLocales = [EN, DE];
+const i18nPath = 'i18n';
 
-const getLocale = (ctx:any) => _.get(ctx, 'query.locale', defaultLocale);
+const getLocale = (ctx:NextPageContext) => {
+    let l = _.get(ctx, 'url.query.locale', _.get(ctx, 'query.locale'));
+    return _.includes(supportedLocales, l) ? l : defaultLocale;
+};
 
-export const useLocale =(ctx:any) => {
-  const router = useRouter();
-  const ctxLocale = getLocale(ctx);
-  const [locale, setLocale] = useState(ctxLocale);
+export const useLocale =(ctx:NextPageContext) => {
+  return getLocale(ctx);
+};
 
-  useEffect(() => {
-    const routeLocale = getLocale(router);
-    setLocale(routeLocale);
-  }, [locale]);
+export const importTranslation = async (locale: string) => {
+    let t = {};
+    try {
+        t = (await import(`../${i18nPath}/${locale}.json`)).default || {};
+    } finally {
+        return t;
+    }
+};
 
-  return locale;
+export const useTranslation = async (ctx:NextPageContext) => {
+    const locale = getLocale(ctx);
+    let t = {}; 
+    try {
+        if(ctx.req) {
+            t = importTranslation(locale);
+        } else {
+            t = await(await fetch(`/api/${i18nPath}/${locale}`)).json();
+        }
+    } catch (e) {
+        console.log('No i18n for locale:', locale);
+    } finally {
+        return t;
+    }
 };

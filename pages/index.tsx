@@ -1,16 +1,19 @@
 import _ from 'lodash';
 import React from 'react';
 import fetch from 'unfetch';
-import useSWR from 'swr'
+import useSWR from 'swr';
 import { Segment } from 'semantic-ui-react';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from '../components/layout';
 import Nav from '../components/nav';
-import {useLocale} from '../hooks/locale';
+import {useLocale, useTranslation} from '../hooks/locale';
 
-interface HomeContext extends NextPageContext {}
+interface HomeContext extends NextPageContext {
+    locale: string;
+    t: {[key:string]: string};
+}
 
 const fetcher = async (url:string) => {
     return (await fetch(url)).json();
@@ -18,7 +21,6 @@ const fetcher = async (url:string) => {
 
 const Home = (ctx:HomeContext) => {
   const router = useRouter();
-  const locale = useLocale(ctx);
   const { data } = useSWR('/api/date', fetcher);
   const date = _.get(data, 'date', '?');
 
@@ -27,19 +29,21 @@ const Home = (ctx:HomeContext) => {
         <Nav />
 
         <Segment>
-            <Link href='/deals'><a>Deals</a></Link>
+            <Link href='/ecom'><a>Ecom {ctx.t.Deals}</a></Link>
         </Segment>
 
         <Segment textAlign='center'>{date} - {router.route}</Segment>
 
-        <Segment textAlign='center'>Locale - {locale}</Segment>
+        <Segment textAlign='center'>Locale - {ctx.locale}</Segment>
     </Layout>
   );
 };
 
-Home.getInitialProps = (ctx:NextPageContext) => {
+Home.getInitialProps = async (ctx:NextPageContext) => {
+  let locale = useLocale(ctx);
   return {
-      query: _.get(ctx, 'query', {})
+      locale,
+      t: await useTranslation(ctx)
   };
 };
 
