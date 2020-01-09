@@ -6,14 +6,23 @@ import { Segment } from 'semantic-ui-react';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Layout from '../components/layout';
-import Nav from '../components/nav';
-import {useLocale, useTranslation} from '../hooks/locale';
+import Layout from 'components/layout';
+import Nav from 'components/nav';
+import {useLocale, useTranslation} from 'hooks/locale';
 
-interface HomeContext extends NextPageContext {
+export interface IndexContext extends NextPageContext {
     locale: string;
     t: {[key:string]: string};
 }
+
+export const getIndexProps = async (ctx: NextPageContext) => {
+    return {
+      locale: useLocale(ctx),
+      t: await useTranslation(ctx)
+  };
+}
+
+interface HomeContext extends IndexContext {}
 
 const fetcher = async (url:string) => {
     return (await fetch(url)).json();
@@ -40,11 +49,7 @@ const Home = (ctx:HomeContext) => {
 };
 
 Home.getInitialProps = async (ctx:NextPageContext) => {
-  let locale = useLocale(ctx);
-  return {
-      locale,
-      t: await useTranslation(ctx)
-  };
+  return getIndexProps(ctx);
 };
 
 export default Home;

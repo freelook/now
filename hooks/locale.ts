@@ -4,6 +4,7 @@ import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import fetch from 'unfetch';
 import path from 'path';
+import { setCookie } from 'nookies'
 
 const EN = 'en';
 const DE = 'de';
@@ -11,13 +12,23 @@ const defaultLocale = EN;
 const supportedLocales = [EN, DE];
 const i18nPath = 'i18n';
 
+const getRouteLocale = (ctx:NextPageContext) => {
+    return _.get(ctx, 'url.query.locale', _.get(ctx, 'query.locale', ''));
+};
+const needToSetLocale = (ctx:NextPageContext) => {
+    return !!getRouteLocale(ctx);
+};
 const getLocale = (ctx:NextPageContext) => {
-    let l = _.get(ctx, 'url.query.locale', _.get(ctx, 'query.locale'));
+    let l = getRouteLocale(ctx);
     return _.includes(supportedLocales, l) ? l : defaultLocale;
 };
 
 export const useLocale =(ctx:NextPageContext) => {
-  return getLocale(ctx);
+  let locale = getLocale(ctx);
+  if(needToSetLocale(ctx)) {
+    setCookie(ctx, 'locale', locale, {});
+  }
+  return locale;
 };
 
 export const importTranslation = async (locale: string) => {
@@ -31,7 +42,7 @@ export const importTranslation = async (locale: string) => {
 
 export const useTranslation = async (ctx:NextPageContext) => {
     const locale = getLocale(ctx);
-    let t = {}; 
+    let t = {};
     try {
         if(ctx.req) {
             t = importTranslation(locale);

@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import { NextPageContext } from 'next';
-import Layout from '../../components/layout';
-import Nav from '../../components/nav';
+import {IndexContext, getIndexProps} from 'pages';
+import Layout from 'components/layout';
+import Nav from 'components/nav';
 
-interface EcommerceContext extends NextPageContext {}
+interface EcommerceContext extends IndexContext {}
 
 const Ecommerce = (ctx:EcommerceContext) => {
   return (
@@ -17,9 +18,9 @@ const Ecommerce = (ctx:EcommerceContext) => {
   );
 };
 
-Ecommerce.getInitialProps = (ctx:NextPageContext) => {
+Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
   return {
-      query: _.get(ctx, 'query', {})
+    ...getIndexProps(ctx)
   };
 };
 
