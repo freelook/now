@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from 'components/layout';
 import Nav from 'components/nav';
+import Footer from 'components/footer';
 import {useLocale, useTranslation} from 'hooks/locale';
 
 export interface IndexContext extends NextPageContext {
@@ -44,12 +45,17 @@ const Home = (ctx:HomeContext) => {
         <Segment textAlign='center'>{date} - {router.route}</Segment>
 
         <Segment textAlign='center'>Locale - {ctx.locale}</Segment>
+
+        <Footer {...{ctx}} />
     </Layout>
   );
 };
 
 Home.getInitialProps = async (ctx:NextPageContext) => {
-  return getIndexProps(ctx);
+    return {
+      name: 'Home',
+      ... await getIndexProps(ctx)
+  };
 };
 
 export default Home;

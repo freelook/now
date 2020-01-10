@@ -4,28 +4,40 @@ import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import fetch from 'unfetch';
 import path from 'path';
-import { setCookie } from 'nookies'
+import { setCookie, parseCookies } from 'nookies'
+import { isSSR } from 'hooks/render';
+import { redirect, buildUrl } from 'hooks/route';
 
-const EN = 'en';
-const DE = 'de';
-const defaultLocale = EN;
-const supportedLocales = [EN, DE];
-const i18nPath = 'i18n';
+export const EN = 'en';
+export const DE = 'de';
+export const defaultLocale = EN;
+export const supportedLocales = [EN, DE];
+export const i18nPath = 'i18n';
 
+const getCookieLocale = (ctx:NextPageContext) => {
+    return _.get(parseCookies(ctx), 'locale', '');
+}
 const getRouteLocale = (ctx:NextPageContext) => {
-    return _.get(ctx, 'url.query.locale', _.get(ctx, 'query.locale', ''));
+    return _.get(ctx, 'url.query.locale', 
+           _.get(ctx, 'query.locale', ''
+    ));
 };
-const needToSetLocale = (ctx:NextPageContext) => {
-    return !!getRouteLocale(ctx);
+export const getLocale = (ctx:NextPageContext) => {
+    return getRouteLocale(ctx) || getCookieLocale(ctx) || defaultLocale;
 };
-const getLocale = (ctx:NextPageContext) => {
-    let l = getRouteLocale(ctx);
-    return _.includes(supportedLocales, l) ? l : defaultLocale;
+const needToSet = (ctx:NextPageContext) => {
+    return !!getRouteLocale(ctx) || !getCookieLocale(ctx);
 };
+const isSupported = (locale:string, list:string[] = supportedLocales ) => {
+    return _.includes(list, locale);
+}
 
 export const useLocale =(ctx:NextPageContext) => {
   let locale = getLocale(ctx);
-  if(needToSetLocale(ctx)) {
+  if(needToSet(ctx)) {
+    if(!isSupported(locale)) {
+        return redirect(ctx).to(buildUrl(ctx, {query: { locale: defaultLocale} }));
+    }
     setCookie(ctx, 'locale', locale, {});
   }
   return locale;
@@ -44,7 +56,7 @@ export const useTranslation = async (ctx:NextPageContext) => {
     const locale = getLocale(ctx);
     let t = {};
     try {
-        if(ctx.req) {
+        if(isSSR(ctx)) {
             t = importTranslation(locale);
         } else {
             t = await(await fetch(`/api/${i18nPath}/${locale}`)).json();

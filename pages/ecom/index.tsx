@@ -4,6 +4,7 @@ import { NextPageContext } from 'next';
 import {IndexContext, getIndexProps} from 'pages';
 import Layout from 'components/layout';
 import Nav from 'components/nav';
+import Footer from 'components/footer';
 
 interface EcommerceContext extends IndexContext {}
 
@@ -14,13 +15,15 @@ const Ecommerce = (ctx:EcommerceContext) => {
 
         <span>Ecommerce</span>
 
+        <Footer {...{ctx}} />
     </Layout>
   );
 };
 
 Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
   return {
-    ...getIndexProps(ctx)
+      name: 'Ecommerce',
+      ... await getIndexProps(ctx)
   };
 };
 
