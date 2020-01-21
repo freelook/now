@@ -1,0 +1,6 @@
+{
+  "env": {
+    "WEBTASK_TOKEN": "@webtask-token",
+    "WEBTASK_ENDPOINT": "@webtask-endpoint"
+  }
+}

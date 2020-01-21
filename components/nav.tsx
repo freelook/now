@@ -1,55 +1,49 @@
+import * as _ from 'lodash';
 import React from 'react';
 import Link from 'next/link';
+import { IndexContext } from 'pages';
 
-const links = [
-  { href: 'https://zeit.co/now', label: 'ZEIT', key: '' },
-].map(link => {
-  link.key = `nav-link-${link.href}-${link.label}`
-  return link
-});
+interface NavProps {
+    ctx: IndexContext
+}
 
-const Nav = () => (
-  <nav>
-    <ul>
-      <li>
-        <Link href='/'>
-          <a>Home</a>
-        </Link>
-      </li>
-      {links.map(({ key, href, label }) => (
-        <li key={key}>
-          <a href={href}>{label}</a>
-        </li>
-      ))}
-    </ul>
+const Nav = (props: NavProps) => {
+    const links = [
+        { href: '/', label: 'Home' },
+        { href: '/ecom', label: _.get(props, 'ctx.t.Ecom', 'Ecom') },
+    ];
 
-    <style jsx>{`
-      :global(body) {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir,
-          Helvetica, sans-serif;
-      }
-      nav {
-        text-align: center;
-      }
-      ul {
-        display: flex;
-        justify-content: space-between;
-      }
-      nav > ul {
-        padding: 4px 16px;
-      }
-      li {
-        display: flex;
-        padding: 6px 8px;
-      }
-      a {
-        color: #067df7;
-        text-decoration: none;
-        font-size: 13px;
-      }
-    `}</style>
-  </nav>
-)
+    return (
+        <nav>
+            <ul>
+                {links.map(({href, label }, key) => (
+                    <li key={`link-${key}`}>
+                        <Link href={href}><a>{label}</a></Link>
+                    </li>
+                ))}
+            </ul>
+
+            <style jsx>{`
+                nav {
+                    text-align: center;
+                }
+                ul {
+                    display: flex;
+                    justify-content: space-between;
+                }
+                nav > ul {
+                    padding: 4px 16px;
+                }
+                li {
+                    display: flex;
+                    padding: 6px 8px;
+                }
+                a {
+                    text-decoration: none;
+                }
+            `}</style>
+        </nav>
+    );
+}
 
 export default Nav;

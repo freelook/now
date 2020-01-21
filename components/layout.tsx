@@ -14,7 +14,7 @@ interface LayoutProps {
 }
 
 const Layout = (props:LayoutProps) => (
-  <>
+  <section>
     <Head {...props.head} />
     <style jsx global>{`
         html, body {
@@ -22,7 +22,7 @@ const Layout = (props:LayoutProps) => (
         }
     `}</style>
     {props.children}
-  </>
+  </section>
 );
 
 export default Layout;
