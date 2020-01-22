@@ -13,8 +13,8 @@ export const isSSR = (ctx: RenderContext) => {
 };
 
 export const qs = (ctx: RenderContext) => {
-   return _.get(ctx, 'url.query', 
-          _.get(ctx, 'query', {}
+   return _.get(ctx, 'query', 
+          _.get(ctx, 'url.query', {}
     ));
 };
 

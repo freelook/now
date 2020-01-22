@@ -1,16 +1,16 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import React from 'react';
 import Link from 'next/link';
 import { IndexContext } from 'pages';
 
 interface NavProps {
-    ctx: IndexContext
+    ctx: IndexContext;
 }
 
 const Nav = (props: NavProps) => {
     const links = [
-        { href: '/', label: 'Home' },
-        { href: '/ecom', label: _.get(props, 'ctx.t.Ecom', 'Ecom') },
+        { href: '/', label: _.get(props.ctx, 't.Home', 'Home') },
+        { href: '/ecom', label: _.get(props.ctx, 't.Ecom', 'Ecom') },
     ];
 
     return (

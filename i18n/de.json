@@ -1,5 +1,7 @@
 {
+    "Home": "Main",
     "Deals": "Angebot",
     "Trends": "Trends",
-    "Ecom": "Ecom"
+    "Ecom": "Ecom",
+    "Placeholder": "Suche nach..."
 }

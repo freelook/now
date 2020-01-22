@@ -1,11 +1,11 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { isSSR } from 'hooks/render';
 import Router, { NextRouter } from 'next/router';
 import { NextPageContext } from 'next';
 import querystring, { ParsedUrlQuery } from 'querystring';
 
 export const mergeQuery = (q:ParsedUrlQuery = {}, params:Object) => {
-    return _.merge(q, params);
+    return _.chain({}).assign(q, params).omitBy(_.isEmpty).value();
 }
 
 export const buildUrl = (router:NextRouter|NextPageContext, params:{query?: ParsedUrlQuery}) => {

@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import React from 'react';
 import { Segment, List } from 'semantic-ui-react';
 import Link from 'next/link';
@@ -8,7 +8,7 @@ import { buildUrl } from 'hooks/route';
 import { IndexContext } from 'pages';
 
 interface FooterProps {
-    ctx: IndexContext
+    ctx: IndexContext;
 }
 
 const Footer = (props:FooterProps) => {

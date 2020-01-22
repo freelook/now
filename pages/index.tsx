@@ -60,7 +60,7 @@ const Home = (ctx:HomeContext) => {
   const date = _.get(data, 'date', '?');
 
   return (
-    <Layout head={{title: 'Trends', description: '', url: '', ogImage: ''}}>
+    <Layout head={{title: _.get(ctx, 't.Trends', 'Trends'), description: '', url: '', ogImage: ''}}>
         <Nav {...{ctx}} />
 
         <Segment>
