@@ -11,7 +11,7 @@ export const mergeQuery = (q:ParsedUrlQuery = {}, params:Object) => {
 export const buildUrl = (router:NextRouter|NextPageContext|string, params:{query?: ParsedUrlQuery}) => {
     const path = _.isString(router)? router : router.pathname;
     const qs = querystring.stringify(mergeQuery(_.get(router, 'query', {}), params.query || {}));
-    return `${path}${qs && '?'.concat(qs)}`
+    return `${path}${qs ? '?'.concat(qs) : ''}`
 };
 
 export const redirect = (ctx: NextPageContext) => ({ to: (url:string) => {
