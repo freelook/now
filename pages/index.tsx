@@ -10,7 +10,7 @@ import Layout from 'components/layout';
 import Nav from 'components/nav';
 import Footer from 'components/footer';
 import * as locale from 'hooks/locale';
-import { useWebtask } from 'hooks/webtask';
+import { useWebtask, RSS_TASK } from 'hooks/webtask';
 import { useRandomColor } from 'hooks/render';
 
 export const TRENDS_ENPOINT = 'https://trends.google.com/trends/trendingsearches/daily/rss';
@@ -111,7 +111,7 @@ Home.getInitialProps = async (ctx:NextPageContext) => {
       name: 'Home',
       ... indexProps,
       trends: (await useWebtask(ctx)({
-        taskName:'rss', 
+        taskName: RSS_TASK, 
         body: {
             rss: `https://trends.google.com/trends/trendingsearches/daily/rss?geo=${TRENDS_LOCALES[indexProps.locale]}`
         },

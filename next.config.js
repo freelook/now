@@ -1,11 +1,9 @@
 require("dotenv").config();
 
+// !!! Do not export env for client side
 module.exports = {
-    env: [
-        'WEBTASK_TOKEN',
-        'WEBTASK_ENDPOINT'
-    ].reduce((env, key) => { 
-        env[key] = process.env[key];
-        return env;
-    }, {})
+    env: {
+        WEBTASK_TOKEN: '',
+        WEBTASK_ENDPOINT: ''
+    }
 };

@@ -6,6 +6,7 @@ import { webtask } from 'hooks/webtask';
 export default async (req:NextApiRequest, res:NextApiResponse) => {
     const taskName = _.get(req, 'query.name');
     const body = _.get(req, 'body', {});
-    const cache = _.get(req, 'query.cache'); 
-    res.json(await webtask({taskName, body, cache}));
+    const cache = _.get(req, 'query.cache');
+    const taskPath = _.get(req, 'query.taskPath'); 
+    res.json(await webtask({taskName, body, cache, taskPath}));
 };

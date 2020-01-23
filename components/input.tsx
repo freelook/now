@@ -24,7 +24,7 @@ const Input = (props:InputProps) => {
     const pushInput = () => {
         router.push({
             pathname: router.pathname,
-            query: route.mergeQuery(router.query, {input: value})
+            query: route.mergeQuery(router.query, {input: _.trim(value as string)})
         });
     };
     const handleInputChange = (e:React.SyntheticEvent) => {

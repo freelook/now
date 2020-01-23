@@ -8,10 +8,10 @@ export const mergeQuery = (q:ParsedUrlQuery = {}, params:Object) => {
     return _.chain({}).assign(q, params).omitBy(_.isEmpty).value();
 }
 
-export const buildUrl = (router:NextRouter|NextPageContext, params:{query?: ParsedUrlQuery}) => {
-    return `${router.pathname}?${querystring.stringify(mergeQuery(
-        _.get(router, 'query', {}), params.query || {}
-    ))}`
+export const buildUrl = (router:NextRouter|NextPageContext|string, params:{query?: ParsedUrlQuery}) => {
+    const path = _.isString(router)? router : router.pathname;
+    const qs = querystring.stringify(mergeQuery(_.get(router, 'query', {}), params.query || {}));
+    return `${path}${qs && '?'.concat(qs)}`
 };
 
 export const redirect = (ctx: NextPageContext) => ({ to: (url:string) => {

@@ -7,16 +7,21 @@ interface NavProps {
     ctx: IndexContext;
 }
 
+export const PATH = {
+    HOME: '/',
+    ECOM: '/ecom'
+};
+
 const Nav = (props: NavProps) => {
     const links = [
-        { href: '/', label: _.get(props.ctx, 't.Home', 'Home') },
-        { href: '/ecom', label: _.get(props.ctx, 't.Ecom', 'Ecom') },
+        { href: PATH.HOME, label: _.get(props.ctx, 't.Home', 'Home') },
+        { href: PATH.ECOM, label: _.get(props.ctx, 't.Ecom', 'Ecom') },
     ];
 
     return (
         <nav>
             <ul>
-                {links.map(({href, label }, key) => (
+                {links.map(({ href, label }, key) => (
                     <li key={`link-${key}`}>
                         <Link href={href}><a>{label}</a></Link>
                     </li>
