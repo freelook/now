@@ -31,7 +31,7 @@ export const webtask = async (props: IWebTaskProps) => {
         let url = `${WEBTASK_ENDPOINT}/${taskName}-function/${taskPath}?token=${WEBTASK_TOKEN}`;
         if(cache) {
             return await request.post(
-                `${WEBTASK_ENDPOINT}/cache-function/?token=${WEBTASK_TOKEN}${_.isString(cache) ? '&ttl='.concat(cache) : ''}`,
+                `${WEBTASK_ENDPOINT}/cache-function/?token=${WEBTASK_TOKEN}${_.isInteger(+cache) ? '&ttl='.concat(cache as string) : ''}`,
                 {
                     method: request.HTTP.post,
                     url: url,
