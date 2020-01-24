@@ -10,9 +10,8 @@ import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';
 import Input, {useInput} from 'components/input';
 import * as locale from 'hooks/locale';
+import * as route from 'hooks/route';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
-import { buildUrl } from 'hooks/route';
-import * as render from 'hooks/render';
 
 export const ECOM_LOCALES = [locale.EN, locale.ES];
 export const ECOM_PARENT_NODES = {
@@ -36,17 +35,19 @@ const Ecommerce = (ctx:EcommerceContext) => {
   const router = useRouter();
   const input = useInput();
   const nodes = _.get(ctx.nodes, 'BrowseNodesResult.BrowseNodes', []);
-  const renderNodes = (nodes: INode[] = [], space:string = '') => _.map(nodes, (n: INode) => n && (
-    <div key={`node-${n.Id}`}>
-        {n.Ancestor && renderNodes(_.isArray(n.Ancestor) ? n.Ancestor: [n.Ancestor], '*')}
-        {space} <Link href={buildUrl(PATH.ECOM, {query: {
-                      node: n.Id,
-                      slug: n.DisplayName.replace(/&|\?/mig, '').replace(/( )+/mig, '-')} })}>
-                    <a>{n.DisplayName}</a>
-                </Link>
-        {n.Children && renderNodes(_.isArray(n.Children) ? n.Children: [n.Children], space + '-')}
-    </div>
-  ));
+  const renderNodes = (nodes: INode[] = [], space:string = '') => _.map(nodes, (n: INode) => {
+    if(n && n.Id) {
+        const slug = _.chain(n).get('DisplayName', '').trim().replace(/&|\?/mig, '').replace(/( )+/mig, '-').value();
+        const node = !!slug ? slug.concat('-').concat(n.Id): n.Id;
+        return (<div key={`node-${n.Id}`}>
+                {n.Ancestor && renderNodes(_.isArray(n.Ancestor) ? n.Ancestor: [n.Ancestor], '*')}
+                {space} <Link href={route.buildUrl(router, {query: { node }})}>
+                            <a>{n.DisplayName}</a>
+                        </Link>
+                {n.Children && renderNodes(_.isArray(n.Children) ? n.Children: [n.Children], space + '-')}
+        </div>);
+    }
+  });
 
   return (
     <Layout head={{title: _.get(ctx, 't.ecommerce', 'E-commerce'), description: '', url: '', ogImage: ''}}>
@@ -61,7 +62,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
         </Segment>
 
         <Segment>
-            {ctx.node && <Link href={buildUrl(PATH.ECOM, {query: {node: '', slug: ''}})}><a>{'^'}</a></Link>}
+            {ctx.node && <Link href={route.buildUrl(router, {query: {node: ''}})}><a>{'^'}</a></Link>}
             {renderNodes(nodes)}
         </Segment>
 
@@ -71,8 +72,8 @@ const Ecommerce = (ctx:EcommerceContext) => {
 };
 
 Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
-  const qs = render.qs(ctx);
-  const node = _.get(qs, 'node', '');
+  const query = route.query(ctx);
+  const node = _.last(_.get(query, 'node', '').split('-'));
   return {
       name: 'Ecommerce',
       ... await useIndexProps(ctx),

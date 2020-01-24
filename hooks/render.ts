@@ -12,12 +12,6 @@ export const isSSR = (ctx: RenderContext) => {
     return ctx && ctx.req;
 };
 
-export const qs = (ctx: RenderContext) => {
-   return _.get(ctx, 'query', 
-          _.get(ctx, 'url.query', {}
-    ));
-};
-
 export const body = (ctx: RenderContext) => {
    return _.get(ctx, 'req.body', 
           _.get(ctx, 'body', {}

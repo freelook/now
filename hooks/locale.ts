@@ -1,10 +1,9 @@
 import _ from 'lodash';
-import {useEffect, useState} from 'react';
 import { NextPageContext } from 'next';
-import { useRouter } from 'next/router';
 import fetch from 'isomorphic-unfetch';
 import { setCookie, parseCookies } from 'nookies'
 import * as render from 'hooks/render';
+import * as route from 'hooks/route';
 import { redirect, buildUrl } from 'hooks/route';
 
 export const EN = 'en';
@@ -18,7 +17,7 @@ const getCookieLocale = (ctx:NextPageContext) => {
     return _.get(parseCookies(ctx), 'locale', '');
 }
 const getRouteLocale = (ctx:NextPageContext) => {
-    return render.qs(ctx).locale;
+    return route.query(ctx).locale;
 };
 export const getLocale = (ctx:NextPageContext) => {
     return getRouteLocale(ctx) || getCookieLocale(ctx) || defaultLocale;
@@ -34,7 +33,7 @@ export const useLocale =(ctx:NextPageContext, list:string[] = supportedLocales )
   let locale = getLocale(ctx);
   if(needToSet(ctx)) {
     if(!isSupported(locale, list)) {
-        return redirect(ctx).to(buildUrl(ctx, {query: { locale: defaultLocale} }));
+        return redirect(ctx).to(buildUrl(ctx, {query: { locale: defaultLocale} }) as string);
     }
     setCookie(ctx, 'locale', locale, {});
   }

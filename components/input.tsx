@@ -13,8 +13,7 @@ interface InputProps {
 export const preventDefault = (e:React.SyntheticEvent) => e && e.preventDefault();
 
 export const useInput = () => {
-    const router = useRouter();
-    return _.get(router.query, 'input', '');
+    return _.get(route.query(), 'input', '');
 };
 
 const Input = (props:InputProps) => {
@@ -22,10 +21,10 @@ const Input = (props:InputProps) => {
     const input = useInput();
     const [value, setValue] = React.useState(input);
     const pushInput = () => {
-        router.push({
-            pathname: router.pathname,
-            query: route.mergeQuery(router.query, {input: _.trim(value as string)})
-        });
+        router.push(route.buildUrl(router, {
+            query: {input: _.trim(value as string)},
+            asObject: true
+        }));
     };
     const handleInputChange = (e:React.SyntheticEvent) => {
         preventDefault(e);
@@ -40,9 +39,6 @@ const Input = (props:InputProps) => {
             props.set(input);
         }
         setValue(input);
-        if(_.isEmpty(value)) {
-            pushInput();
-        }
     }, [input]);
     return (
         <form onSubmit={handleInputSubmit}>
