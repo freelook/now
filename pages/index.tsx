@@ -2,13 +2,14 @@ import _ from 'lodash';
 import React from 'react';
 import fetch from 'unfetch';
 import useSWR from 'swr';
-import { Segment, Grid, Card, Image, Icon } from 'semantic-ui-react';
+import { Segment, Icon } from 'semantic-ui-react';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from 'components/layout';
 import Nav from 'components/nav';
 import Footer from 'components/footer';
+import Grid from 'components/grid';
 import * as locale from 'hooks/locale';
 import { useWebtask, RSS_TASK } from 'hooks/webtask';
 import { useRandomColor } from 'hooks/render';
@@ -64,23 +65,16 @@ const Home = (ctx:HomeContext) => {
         <Nav {...{ctx}} />
 
         <Segment>
-            <Grid centered className='trends'>
-                {_.map(ctx.trends, (tr: ITrend, i:number) => <Grid.Column mobile={8} tablet={5} computer={3} key={`trend-${i}`}>   
-                    <Card color={useRandomColor(i)}>
-                        <Card.Content>
-                            <Card.Header>{_.get(tr, 'title')}</Card.Header>
-                            <Card.Meta>
-                                {_.get(tr, 'ht:picture_source.#')}&nbsp;
-                                {_.get(tr, 'ht:approx_traffic.#')}&nbsp;
-                                <Icon name='clock outline' title={_.get(tr, 'rss:pubdate.#')} />
-                            </Card.Meta>
-                            <Image src={_.get(tr, 'ht:picture.#', '/static/no_image.png')} wrapped />
-                            <Card.Description>{_.get(tr, 'description', _.get(tr, 'summary'))}</Card.Description>
-                        </Card.Content>
-                        
-                    </Card>
-                </Grid.Column>)}
-            </Grid>
+            <Grid<ITrend> className='trends'
+                  items={ctx.trends} 
+                  header={(tr) => _.get(tr, 'title')}
+                  meta={(tr) => (<>
+                    {_.get(tr, 'ht:picture_source.#')}&nbsp;
+                    {_.get(tr, 'ht:approx_traffic.#')}&nbsp;
+                    <Icon name='clock outline' title={_.get(tr, 'rss:pubdate.#')} />
+                  </>)}
+                  image={(tr) => _.get(tr, 'ht:picture.#')}
+                  description={(tr) => _.get(tr, 'description', _.get(tr, 'summary'))} />
         </Segment>   
 
         <Segment textAlign='center'>{date}</Segment>
@@ -92,10 +86,6 @@ const Home = (ctx:HomeContext) => {
                 width: 100%;
                 text-align: center;
                 margin 7px;
-            }
-            .trends .card {
-                width: 100%;
-                margin: auto;
             }
             .trends .image > img {
                 max-width: 100px;

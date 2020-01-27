@@ -55,7 +55,7 @@ export const useWebtask = (ctx:render.RenderContext) => async (props: IWebTaskPr
                 const {taskName, body} = props;
                 const cache = _.get(props, 'cache', false);
                 const taskPath = _.get(props, 'taskPath', '');
-                w = await request.post(`/api/webtask/${taskName}?cache=${cache}&taskPath=${taskPath}`, body);
+                w = await request.post(`/api/webtask/${taskName}?cache=${cache}&taskPath=${taskPath}`, body, { cache });
             } catch(e) {
                 w = { error: COMMON_ERROR};
             }

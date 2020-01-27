@@ -3,6 +3,7 @@ import { NextPageContext } from 'next';
 import fetch from 'isomorphic-unfetch';
 import { setCookie, parseCookies } from 'nookies'
 import * as render from 'hooks/render';
+import * as request from 'hooks/request';
 import * as route from 'hooks/route';
 import { redirect, buildUrl } from 'hooks/route';
 
@@ -56,7 +57,7 @@ export const useTranslation = async (ctx:NextPageContext) => {
         if(render.isSSR(ctx)) {
             t = importTranslation(locale);
         } else {
-            t = await (await fetch(`/api/${i18nPath}/${locale}`)).json();
+            t = await request.post(`/api/${i18nPath}/${locale}`, {}, {cache: true});
         }
     } catch (e) {
         console.log('No i18n for locale:', locale);
