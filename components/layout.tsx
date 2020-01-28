@@ -19,6 +19,7 @@ const Layout = (props:LayoutProps) => (
     <style jsx global>{`
         html, body {
             background: ${background};
+            font-family: Roboto Mono, monospace;
         }
     `}</style>
     {props.children}

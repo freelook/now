@@ -99,7 +99,7 @@ Home.getInitialProps = async (ctx:NextPageContext) => {
     let indexProps = await useIndexProps(ctx);
     return {
       name: 'Home',
-      ... indexProps,
+      ...indexProps,
       trends: (await useWebtask(ctx)({
         taskName: RSS_TASK, 
         body: {

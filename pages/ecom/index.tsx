@@ -2,8 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import { NextPageContext } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { Segment, Rating } from 'semantic-ui-react';
+import { useRouter, NextRouter } from 'next/router';
+import { Segment, Icon } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'pages';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
@@ -13,7 +13,6 @@ import Input, {useInput} from 'components/input';
 import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
-import { useRandomColor } from 'hooks/render';
 
 export const ECOM_LOCALES = [locale.EN, locale.ES];
 export const ECOM_CACHE = '86400'; // one day
@@ -25,17 +24,18 @@ interface EcommerceContext extends IndexContext {
     node?: string;
     slug?: string;
     nodes: {BrowseNodesResult: {BrowseNodes: INode[]}};
-    items: {SearchResult: {Items: Iitem[]}}
+    items: {SearchResult: {Items: IItem[]}}
 }
 
-interface Iitem {
+export interface IItem {
     ASIN: string;
+    DetailPageURL: string;
     Offers: {Listings: [{Price: {DisplayAmount: string}}]};
     Images: {Primary: {Large: {URL: string}}};
     ItemInfo: {
-        Title: {
-             DisplayValue: string;
-        }
+        Title: {DisplayValue: string; Label: string;};
+        Features: {DisplayValues: string[]; Label: string;};
+        TradeInInfo: {Price: {DisplayAmount: string};};
     };
 }
 
@@ -47,6 +47,27 @@ interface INode {
     Ancestor?: INode|INode[];
 }
 
+const renderHomeNode = (router: NextRouter) => (<Link href={route.buildUrl(router, {query: {node: ''}, pathname: PATH.ECOM})}><a><Icon name="eye slash"/></a></Link>);
+const renderFullNodes = (router: NextRouter) => (nodes: INode[] = [], space:string = ' | ') => _.map(nodes, (n: INode) => {
+    if(n && n.Id) {
+        const slug = route.slug(n, 'DisplayName');
+        const node = !!slug ? slug.concat('-').concat(n.Id): n.Id;
+        return (<span key={`node-${n.Id}`}>
+                {n.Ancestor && renderFullNodes(router)(_.isArray(n.Ancestor) ? n.Ancestor: [n.Ancestor], '*')}
+                {space} <Link href={route.buildUrl(router, {query: { node }, pathname: PATH.ECOM})}>
+                            <a>{n.DisplayName}</a>
+                        </Link>
+                {n.Children && renderFullNodes(router)(_.isArray(n.Children) ? n.Children: [n.Children], ' - ')}
+        </span>);
+    }
+})
+export const renderNodes = (router: NextRouter) => (nodes: INode[] = []) => {
+    return (<>
+        {renderHomeNode(router)}
+        {renderFullNodes(router)(nodes)}
+    </>);
+}
+
 const Ecommerce = (ctx:EcommerceContext) => {
   const router = useRouter();
   const input = useInput();
@@ -56,19 +77,6 @@ const Ecommerce = (ctx:EcommerceContext) => {
   const titlePrefix = _.get(ctx, 't.ecommerce', 'E-commerce');
   const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
   const description = slug;
-  const renderNodes = (nodes: INode[] = [], space:string = ' | ') => _.map(nodes, (n: INode) => {
-    if(n && n.Id) {
-        const slug = _.chain(n).get('DisplayName', '').trim().replace(/&|\?/mig, '').replace(/( )+/mig, '-').value();
-        const node = !!slug ? slug.concat('-').concat(n.Id): n.Id;
-        return (<span key={`node-${n.Id}`}>
-                {n.Ancestor && renderNodes(_.isArray(n.Ancestor) ? n.Ancestor: [n.Ancestor], '*')}
-                {space} <Link href={route.buildUrl(router, {query: { node }})}>
-                            <a>{n.DisplayName}</a>
-                        </Link>
-                {n.Children && renderNodes(_.isArray(n.Children) ? n.Children: [n.Children], ' - ')}
-        </span>);
-    }
-  });
 
   return (
     <Layout head={{title: title, description: description, url: '', ogImage: ''}}>
@@ -79,16 +87,24 @@ const Ecommerce = (ctx:EcommerceContext) => {
         </Segment>
 
         <Segment>
-            <Grid<Iitem> 
-                  items={items} 
-                  header={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
-                  image={(it) => _.get(it, 'Images.Primary.Large.URL')}
-                  meta={(it) => _.get(it, 'Offers.Listings[0].Price.DisplayAmount')} />
+            {renderNodes(router)(nodes)}
         </Segment>
 
         <Segment>
-            <Link href={route.buildUrl(router, {query: {node: ''}})}><a>{'^'}</a></Link>
-            {renderNodes(nodes)}
+            <Grid<IItem> 
+                  items={items} 
+                  header={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
+                  image={(it) => _.get(it, 'Images.Primary.Large.URL')}
+                  meta={(it) => _.get(it, 'Offers.Listings[0].Price.DisplayAmount')}
+                  extra={(it) => {
+                      const asin = _.get(it, 'ASIN', '');
+                      const dp = _.get(it, 'DetailPageURL', '');
+                      const slug = route.slug(it, 'ItemInfo.Title.DisplayValue');
+                      return (<div style={{marginTop: '5px'}}>
+                        <Link href={`${PATH.ECOM}/it/${asin}/${slug}`}><a><Icon circular name="shopping cart"/></a></Link>
+                        <a href={dp} target="_blank"><Icon color='teal' circular name="external alternate"/></a>
+                      </div>);
+                  }} />
         </Segment>
 
         <Footer {...{ctx}} />
@@ -124,7 +140,7 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
   });
   return {
       name: 'Ecommerce',
-      ... indexProps,
+      ...indexProps,
       node: node,
       slug: slug,
       nodes: await nodesTaks || {},
