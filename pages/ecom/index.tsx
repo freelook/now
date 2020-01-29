@@ -60,13 +60,13 @@ const renderFullNodes = (router: NextRouter) => (nodes: INode[] = [], space:stri
                 {n.Children && renderFullNodes(router)(_.isArray(n.Children) ? n.Children: [n.Children], ' - ')}
         </span>);
     }
-})
+});
 export const renderNodes = (router: NextRouter) => (nodes: INode[] = []) => {
     return (<>
         {renderHomeNode(router)}
         {renderFullNodes(router)(nodes)}
     </>);
-}
+};
 
 const Ecommerce = (ctx:EcommerceContext) => {
   const router = useRouter();
@@ -96,12 +96,15 @@ const Ecommerce = (ctx:EcommerceContext) => {
                   header={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
                   image={(it) => _.get(it, 'Images.Primary.Large.URL')}
                   meta={(it) => _.get(it, 'Offers.Listings[0].Price.DisplayAmount')}
-                  extra={(it) => {
+                  alt={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
+                  link={(it)=> {
                       const asin = _.get(it, 'ASIN', '');
-                      const dp = _.get(it, 'DetailPageURL', '');
                       const slug = route.slug(it, 'ItemInfo.Title.DisplayValue');
-                      return (<div style={{marginTop: '5px'}}>
-                        <Link href={`${PATH.ECOM}/it/${asin}/${slug}`}><a><Icon circular name="shopping cart"/></a></Link>
+                      return `${PATH.ECOM}/it/${asin}/${slug}`;
+                  }}
+                  extra={(it) => {
+                      const dp = _.get(it, 'DetailPageURL', '');
+                      return (<div style={{marginTop: '5px', textAlign: 'right'}}>
                         <a href={dp} target="_blank"><Icon color='teal' circular name="external alternate"/></a>
                       </div>);
                   }} />
@@ -114,7 +117,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
 
 Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
   const query = route.query(ctx);
-  const input = _.get(query, 'input', '*');
+  const input = _.get(query, 'input', 'deals');
   const slugArr = _.get(query, 'node', '').split('-');
   const node = _.last(slugArr) || null;
   const slug = slugArr.slice(0, -1).join(' ');

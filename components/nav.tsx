@@ -14,7 +14,7 @@ export const PATH = {
 
 const Nav = (props: NavProps) => {
     const links = [
-        { href: PATH.HOME, label: _.get(props.ctx, 't.Home', 'Home') },
+        { href: PATH.HOME, label: _.get(props.ctx, 't.Trends', 'Trends') },
         { href: PATH.ECOM, label: _.get(props.ctx, 't.Ecom', 'Ecom') },
     ];
 

@@ -42,10 +42,12 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
             {renderNodes(router)(nodes)}
         </Segment>
 
-        <Segment>
+        <Segment className="ecom-item">
             <Table color={useRandomColor(itemTitle.length)}><Table.Body>
                 <Table.Row>
-                    <Table.Cell rowSpan={2} textAlign='center'><Image style={{margin: 'auto'}} src={_.get(item, 'Images.Primary.Large.URL')}/></Table.Cell>
+                    <Table.Cell rowSpan={2} textAlign='center'>
+                    <Image wrapped src={_.get(item, 'Images.Primary.Large.URL')}/>
+                    </Table.Cell>
                     <Table.Cell><h3>{itemTitle}</h3></Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -63,6 +65,12 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
         </Segment>
 
         <Footer {...{ctx}} />
+
+        <style jsx global>{`
+            .ecom-item img {
+                max-width: 100% !important;
+            }
+        `}</style>
     </Layout>
   );
 };

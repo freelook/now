@@ -7,7 +7,7 @@ import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from 'components/layout';
-import Nav from 'components/nav';
+import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';
 import Grid from 'components/grid';
 import * as locale from 'hooks/locale';
@@ -66,7 +66,7 @@ const Home = (ctx:HomeContext) => {
 
         <Segment>
             <Grid<ITrend> className='trends'
-                  items={ctx.trends} 
+                  items={ctx.trends}
                   header={(tr) => _.get(tr, 'title')}
                   meta={(tr) => (<>
                     {_.get(tr, 'ht:picture_source.#')}&nbsp;
@@ -74,7 +74,14 @@ const Home = (ctx:HomeContext) => {
                     <Icon name='clock outline' title={_.get(tr, 'rss:pubdate.#')} />
                   </>)}
                   image={(tr) => _.get(tr, 'ht:picture.#')}
-                  description={(tr) => _.get(tr, 'description', _.get(tr, 'summary'))} />
+                  alt={(tr) => _.get(tr, 'title')}
+                  description={(tr) => _.get(tr, 'description', _.get(tr, 'summary'))} 
+                  extra={(tr) => {
+                      const href = `${PATH.ECOM}?input=${_.get(tr, 'title', '')}`;
+                      return (<div style={{marginTop: '5px', textAlign: 'right'}}>
+                        <Link href={href}><a><Icon circular name="shopping cart"/></a></Link>
+                      </div>);
+                  }}/>
         </Segment>   
 
         <Segment textAlign='center'>{date}</Segment>

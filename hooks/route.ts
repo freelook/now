@@ -67,7 +67,7 @@ export const redirect = (ctx: NextPageContext) => ({ to: (url:string) => {
 }});
 
 export const slug = (node:Object, path:string) => _.chain(node).get(path, '').trim()
-.replace(/&|\?/mig, '')
+.replace(/\/|&|\?/mig, '')
 .replace(/(-|–)+/mig, ' ')
 .replace(/( )+/mig, '-')
 .value();
