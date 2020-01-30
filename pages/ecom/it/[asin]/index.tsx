@@ -18,6 +18,7 @@ import { IItem, ECOM_CACHE, renderNodes } from 'pages/ecom';
 
 interface EcommerceItemContext extends IndexContext {
     asin: string;
+    slug?: string;
     item: {ItemsResult: {Items: [IItem]}};
 }
 
@@ -25,14 +26,14 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
   const router = useRouter();
   const item = _.get(ctx.item, 'ItemsResult.Items[0]', {});
   const nodes = _.get(item, 'BrowseNodeInfo.BrowseNodes', []);
-  const slug = _.get(ctx, 'slug', '');
   const titlePrefix = _.get(ctx, 't.ecommerce', 'E-commerce');
-  const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
-  const description = slug;
   const itemTitle = _.get(item, 'ItemInfo.Title.DisplayValue', '');
   const itemPrice = _.get(item, 'Offers.Listings[0].Price.DisplayAmount', '');
   const itemFeatures = _.get(item, 'ItemInfo.Features.DisplayValues', []);
   const itemDp = _.get(item, 'DetailPageURL', '');
+  const slug = _.get(ctx, 'slug', itemTitle);
+  const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
+  const description = slug;
 
   return (
     <Layout head={{title: title, description: description, url: '', ogImage: ''}}>
@@ -79,6 +80,7 @@ EcommerceItem.getInitialProps = async (ctx:NextPageContext) => {
   const query = route.query(ctx);
   const input = _.get(query, 'input', '*');
   const asin = _.get(query, 'asin', '');
+  const slug = _.get(query, 'seo', '');
   const indexProps = await useIndexProps(ctx);
   const itemTask = useWebtask(ctx)({
         taskName: AMZN_TASK,
@@ -96,6 +98,7 @@ EcommerceItem.getInitialProps = async (ctx:NextPageContext) => {
       name: 'EcommerceItem',
       ...indexProps,
       asin: asin,
+      slug: slug,
       item: await itemTask || {}
   };
 };

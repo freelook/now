@@ -53,7 +53,7 @@ const renderFullNodes = (router: NextRouter) => (nodes: INode[] = [], space:stri
         const slug = route.slug(n, 'DisplayName');
         const node = !!slug ? slug.concat('-').concat(n.Id): n.Id;
         return (<span key={`node-${n.Id}`}>
-                {n.Ancestor && renderFullNodes(router)(_.isArray(n.Ancestor) ? n.Ancestor: [n.Ancestor], '*')}
+                {n.Ancestor && renderFullNodes(router)(_.isArray(n.Ancestor) ? n.Ancestor: [n.Ancestor], ' * ')}
                 {space} <Link href={route.buildUrl(router, {query: { node }, pathname: PATH.ECOM})}>
                             <a>{n.DisplayName}</a>
                         </Link>
@@ -73,7 +73,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
   const input = useInput();
   const nodes = _.get(ctx.nodes, 'BrowseNodesResult.BrowseNodes', []);
   const items = _.get(ctx.items, 'SearchResult.Items', []);
-  const slug = _.get(ctx, 'slug', '');
+  const slug = _.get(ctx, 'slug', input || '');
   const titlePrefix = _.get(ctx, 't.ecommerce', 'E-commerce');
   const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
   const description = slug;
@@ -100,13 +100,16 @@ const Ecommerce = (ctx:EcommerceContext) => {
                   link={(it)=> {
                       const asin = _.get(it, 'ASIN', '');
                       const slug = route.slug(it, 'ItemInfo.Title.DisplayValue');
-                      return `${PATH.ECOM}/it/${asin}/${slug}`;
+                      if(slug) {
+                        return {href: `${PATH.ECOM}/it/[asin]/[seo]`, as: `${PATH.ECOM}/it/${asin}/${slug}`};
+                      }
+                      return {href: `${PATH.ECOM}/it/[asin]`, as: `${PATH.ECOM}/it/${asin}`};
                   }}
                   extra={(it) => {
                       const dp = _.get(it, 'DetailPageURL', '');
-                      return (<div style={{marginTop: '5px', textAlign: 'right'}}>
+                      return (<Grid.Extra>
                         <a href={dp} target="_blank"><Icon color='teal' circular name="external alternate"/></a>
-                      </div>);
+                      </Grid.Extra>);
                   }} />
         </Segment>
 
@@ -120,7 +123,7 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
   const input = _.get(query, 'input', 'deals');
   const slugArr = _.get(query, 'node', '').split('-');
   const node = _.last(slugArr) || null;
-  const slug = slugArr.slice(0, -1).join(' ');
+  const slug = slugArr.slice(0, -1).join(' ').trim() || _.get(query, 'seo', '');
   const indexProps = await useIndexProps(ctx);
   const nodesTaks = useWebtask(ctx)({
         taskName: AMZN_TASK,

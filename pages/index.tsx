@@ -78,9 +78,9 @@ const Home = (ctx:HomeContext) => {
                   description={(tr) => _.get(tr, 'description', _.get(tr, 'summary'))} 
                   extra={(tr) => {
                       const href = `${PATH.ECOM}?input=${_.get(tr, 'title', '')}`;
-                      return (<div style={{marginTop: '5px', textAlign: 'right'}}>
+                      return (<Grid.Extra>
                         <Link href={href}><a><Icon circular name="shopping cart"/></a></Link>
-                      </div>);
+                      </Grid.Extra>);
                   }}/>
         </Segment>   
 

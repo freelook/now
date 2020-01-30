@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import Link from 'next/link';
+import Link, {LinkProps} from 'next/link';
 import { Grid as SemanticGrid, Card, Image, Icon } from 'semantic-ui-react';
 import { useRandomColor } from 'hooks/render';
 
@@ -17,15 +17,19 @@ interface GridProps<T> {
    image?: (item:T) => string;
    alt?: (item:T) => string;
    header?: (item:T) => ElementType;
-   link?: (item:T) => string;
+   link?: (item:T) => LinkProps;
    meta?: (item:T) => ElementType;
    description?: (item:T) => ElementType;
    extra?: (item:T) => ElementType;
 }
 
+const Linkify = (props: {link?: LinkProps; children: any}) => {
+    const {link} = props;
+    return link ? <Link href={link.href} as={link.as}><a>{props.children}</a></Link>: props.children;
+}
+
 const Grid = <T extends {}>(props:GridProps<T>) => { 
     const className = _.get(props, 'className', '').concat(' ').concat(GRID_CLASS_NAME).trim();
-    //todo: card link 
     return (
         <SemanticGrid centered className={className}>
             {_.map(props.items, (it:T, i:number) => {
@@ -39,12 +43,14 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                 return (<SemanticGrid.Column key={`${GRID_ITEM_CLASS_NAME}-${i}`}>
                     <Card color={useRandomColor(i)}>
                         <Card.Content>
-                            {header && <Card.Header>{link ? <Link href={link}><a>{header}</a></Link>: header}</Card.Header>}
+                            {header && <Card.Header><Linkify link={link}>{header}</Linkify></Card.Header>}
                             {meta && <Card.Meta>{meta}</Card.Meta>}
-                            <Image {...(link ? {href:link, as: 'a'} : {})} alt={alt} src={image} wrapped onError={(e:React.SyntheticEvent|any) => {
-                                e.persist();
-                                e.target.src = GRID_ITEM_IMAGE;
-                            }}/>
+                            <Linkify link={link}>
+                                <Image alt={alt} src={image} wrapped onError={(e:React.SyntheticEvent|any) => {
+                                    e.persist();
+                                    e.target.src = GRID_ITEM_IMAGE;
+                                }}/>
+                            </Linkify>
                             {description && <Card.Description>{description}</Card.Description>}
                             {extra && <Card.Content extra>{extra}</Card.Content>}
                         </Card.Content>
@@ -84,6 +90,14 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                 }
             `}</style>
         </SemanticGrid>
+    );
+};
+
+Grid.Extra = (props: {children: JSX.Element|JSX.Element[]}) => {
+    return (
+        <div style={{marginTop: '5px', textAlign: 'right'}}>
+            {props.children}
+        </div>
     );
 };
 
