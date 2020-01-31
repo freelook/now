@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, {useEffect, useState} from 'react';
 import Head from 'components/head';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { Progress } from 'semantic-ui-react';
 
 interface LayoutProps {
@@ -17,14 +17,15 @@ interface LayoutProps {
 const background = '#fff';
 
 const Layout = (props:LayoutProps) => {
-
+    const router = useRouter();
     const [load, setLoad] = useState(false);
     const loader = () => setLoad(true);
 
     useEffect(() => {
-        Router.events.on('routeChangeStart', loader);
-        return () => Router.events.off('routeChangeStart', loader);
-    }, []);
+        setLoad(false);
+        router.events.on('routeChangeStart', loader);
+        return () => router.events.off('routeChangeStart', loader);
+    }, [router.asPath]);
 
     return (
         <section>
