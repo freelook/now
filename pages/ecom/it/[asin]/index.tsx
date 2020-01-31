@@ -14,7 +14,7 @@ import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import { useRandomColor } from 'hooks/render';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
-import { IItem, ECOM_CACHE, renderNodes } from 'pages/ecom';
+import { IItem, ECOM_CACHE, ECOM_LOCALES, renderNodes } from 'pages/ecom';
 
 interface EcommerceItemContext extends IndexContext {
     asin: string;
@@ -82,10 +82,12 @@ EcommerceItem.getInitialProps = async (ctx:NextPageContext) => {
   const asin = _.get(query, 'asin', '');
   const slug = _.get(query, 'seo', '');
   const indexProps = await useIndexProps(ctx);
+  const lang = ECOM_LOCALES[indexProps.locale] || ECOM_LOCALES[locale.EN];
   const itemTask = useWebtask(ctx)({
         taskName: AMZN_TASK,
         taskPath: 'us/paapi/v5/getItems',
         body: {
+            LanguagesOfPreference: [lang],
             ItemIds: [asin],
             Resources: [
                 "Images.Primary.Large", "ItemInfo.Title", "Offers.Listings.Price",

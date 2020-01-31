@@ -15,10 +15,11 @@ import { useWebtask, RSS_TASK } from 'hooks/webtask';
 import { useRandomColor } from 'hooks/render';
 
 export const TRENDS_ENPOINT = 'https://trends.google.com/trends/trendingsearches/daily/rss';
-export let TRENDS_LOCALES = {} as {[key:string]:string};
-TRENDS_LOCALES[locale.EN] = 'US';
-TRENDS_LOCALES[locale.ES] = 'MX';
-TRENDS_LOCALES[locale.DE] = 'DE';
+export const TRENDS_LOCALES = {
+    [locale.EN]: 'US',
+    [locale.ES]: 'MX',
+    [locale.DE]: 'DE'
+} as {[key:string]:string};
 
 export interface IndexContext extends NextPageContext {
     locale: string;
@@ -103,14 +104,15 @@ const Home = (ctx:HomeContext) => {
 };
 
 Home.getInitialProps = async (ctx:NextPageContext) => {
-    let indexProps = await useIndexProps(ctx);
+    const indexProps = await useIndexProps(ctx);
+    const geo = TRENDS_LOCALES[indexProps.locale] || TRENDS_LOCALES[locale.EN];
     return {
       name: 'Home',
       ...indexProps,
       trends: (await useWebtask(ctx)({
         taskName: RSS_TASK, 
         body: {
-            rss: `https://trends.google.com/trends/trendingsearches/daily/rss?geo=${TRENDS_LOCALES[indexProps.locale]}`
+            rss: `https://trends.google.com/trends/trendingsearches/daily/rss?geo=${geo}`
         },
         cache: true
       })).rss

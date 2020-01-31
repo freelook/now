@@ -14,7 +14,11 @@ import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
 
-export const ECOM_LOCALES = [locale.EN, locale.ES];
+export const ECOM_LOCALES = {
+    [locale.EN]: 'en_US',
+    [locale.ES]: 'es_US',
+    [locale.DE]: 'de_DE'
+} as {[key:string]:string};
 export const ECOM_CACHE = '86400'; // one day
 export const ECOM_PARENT_NODES = {
     US: ["2617941011", "2619525011", "15684181", "3760901", "3760911", "283155", "165796011", "1055398", "3375251", "172282"]
@@ -125,10 +129,12 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
   const node = _.last(slugArr) || null;
   const slug = slugArr.slice(0, -1).join(' ').trim() || _.get(query, 'seo', '');
   const indexProps = await useIndexProps(ctx);
+  const lang = ECOM_LOCALES[indexProps.locale] || ECOM_LOCALES[locale.EN];
   const nodesTaks = useWebtask(ctx)({
         taskName: AMZN_TASK,
         taskPath: 'us/paapi/v5/getBrowseNodes',
         body: {
+            LanguagesOfPreference: [lang],
             BrowseNodeIds: node ? [node] : ECOM_PARENT_NODES.US,
             Resources: ["BrowseNodes.Ancestor", "BrowseNodes.Children"]
         },
@@ -138,6 +144,7 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
         taskName: AMZN_TASK,
         taskPath: 'us/paapi/v5/searchItems',
         body: {
+            LanguagesOfPreference: [lang],
             BrowseNodeId: node,
             Keywords: input,
             Resources:["Images.Primary.Large", "ItemInfo.Title", "Offers.Listings.Price"]
