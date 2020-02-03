@@ -14,18 +14,20 @@ import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import { useRandomColor } from 'hooks/render';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
-import { IItem, ECOM_CACHE, ECOM_LOCALES, renderNodes } from 'pages/ecom';
+import { IItem, ECOM_CACHE, ECOM_LOCALES, renderNodes, renderItems } from 'pages/ecom';
 
 interface EcommerceItemContext extends IndexContext {
     asin: string;
     slug?: string;
     item: {ItemsResult: {Items: [IItem]}};
+    variations: {VariationsResult: {Items: IItem[]}}
 }
 
 const EcommerceItem = (ctx:EcommerceItemContext) => {
   const router = useRouter();
   const item = _.get(ctx.item, 'ItemsResult.Items[0]', {});
   const nodes = _.get(item, 'BrowseNodeInfo.BrowseNodes', []);
+  const variations = _.get(ctx.variations, 'VariationsResult.Items', []);
   const titlePrefix = _.get(ctx, 't.ecommerce', 'E-commerce');
   const itemTitle = _.get(item, 'ItemInfo.Title.DisplayValue', '');
   const itemPrice = _.get(item, 'Offers.Listings[0].Price.DisplayAmount', '');
@@ -65,6 +67,8 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
             </Table.Body></Table>
         </Segment>
 
+       {renderItems(variations)}
+
         <Footer {...{ctx}} />
 
         <style jsx global>{`
@@ -96,12 +100,24 @@ EcommerceItem.getInitialProps = async (ctx:NextPageContext) => {
         },
         cache: ECOM_CACHE
   });
+  const variationsTask = useWebtask(ctx)({
+        taskName: AMZN_TASK,
+        taskPath: 'us/paapi/v5/getVariations',
+        body: {
+            LanguagesOfPreference: [lang],
+            VariationPage: 1,
+            ASIN: asin,
+            Resources:["Images.Primary.Large", "ItemInfo.Title", "Offers.Listings.Price"]
+        },
+        cache: ECOM_CACHE
+  });
   return {
       name: 'EcommerceItem',
       ...indexProps,
       asin: asin,
       slug: slug,
-      item: await itemTask || {}
+      item: await itemTask || {},
+      variations: await variationsTask || {}
   };
 };
 

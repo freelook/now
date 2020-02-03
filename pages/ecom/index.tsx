@@ -71,6 +71,32 @@ export const renderNodes = (router: NextRouter) => (nodes: INode[] = []) => {
         {renderFullNodes(router)(nodes)}
     </>);
 };
+export const renderItems = (items:IItem[]) => {
+    return !_.isEmpty(items) ? (
+        <Segment>
+            <Grid<IItem> 
+                  items={items} 
+                  header={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
+                  image={(it) => _.get(it, 'Images.Primary.Large.URL')}
+                  meta={(it) => _.get(it, 'Offers.Listings[0].Price.DisplayAmount')}
+                  alt={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
+                  link={(it)=> {
+                      const asin = _.get(it, 'ASIN', '');
+                      const slug = route.slug(it, 'ItemInfo.Title.DisplayValue');
+                      if(slug) {
+                        return {href: `${PATH.ECOM}/it/[asin]/[seo]`, as: `${PATH.ECOM}/it/${asin}/${slug}`};
+                      }
+                      return {href: `${PATH.ECOM}/it/[asin]`, as: `${PATH.ECOM}/it/${asin}`};
+                  }}
+                  extra={(it) => {
+                      const dp = _.get(it, 'DetailPageURL', '');
+                      return (<Grid.Extra>
+                        <a href={dp} target="_blank"><Icon color='teal' circular name="external alternate"/></a>
+                      </Grid.Extra>);
+                  }} />
+        </Segment>
+    ) : <></>;
+}
 
 const Ecommerce = (ctx:EcommerceContext) => {
   const router = useRouter();
@@ -94,28 +120,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
             {renderNodes(router)(nodes)}
         </Segment>
 
-        <Segment>
-            <Grid<IItem> 
-                  items={items} 
-                  header={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
-                  image={(it) => _.get(it, 'Images.Primary.Large.URL')}
-                  meta={(it) => _.get(it, 'Offers.Listings[0].Price.DisplayAmount')}
-                  alt={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
-                  link={(it)=> {
-                      const asin = _.get(it, 'ASIN', '');
-                      const slug = route.slug(it, 'ItemInfo.Title.DisplayValue');
-                      if(slug) {
-                        return {href: `${PATH.ECOM}/it/[asin]/[seo]`, as: `${PATH.ECOM}/it/${asin}/${slug}`};
-                      }
-                      return {href: `${PATH.ECOM}/it/[asin]`, as: `${PATH.ECOM}/it/${asin}`};
-                  }}
-                  extra={(it) => {
-                      const dp = _.get(it, 'DetailPageURL', '');
-                      return (<Grid.Extra>
-                        <a href={dp} target="_blank"><Icon color='teal' circular name="external alternate"/></a>
-                      </Grid.Extra>);
-                  }} />
-        </Segment>
+       {renderItems(items)}
 
         <Footer {...{ctx}} />
     </Layout>

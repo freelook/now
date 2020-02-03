@@ -45,7 +45,7 @@ const Layout = (props:LayoutProps) => {
                     right: 0;
                 }
                 .fli-loader .bar {
-                    height: 7px !important;
+                    height: 3px !important;
                 }
             `}</style>
             {load && <Progress percent={90} indicating className="fli-loader" />}
