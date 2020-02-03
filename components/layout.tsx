@@ -19,7 +19,11 @@ const background = '#fff';
 const Layout = (props:LayoutProps) => {
     const router = useRouter();
     const [load, setLoad] = useState(false);
-    const loader = () => setLoad(true);
+    const loader = (asPath:string) => {
+        if(asPath !== router.asPath) {
+            setLoad(true);
+        }
+    };
 
     useEffect(() => {
         setLoad(false);
