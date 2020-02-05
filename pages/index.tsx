@@ -12,7 +12,6 @@ import Footer from 'components/footer';
 import Grid from 'components/grid';
 import * as locale from 'hooks/locale';
 import { useWebtask, RSS_TASK } from 'hooks/webtask';
-import { useRandomColor } from 'hooks/render';
 
 export const TRENDS_ENPOINT = 'https://trends.google.com/trends/trendingsearches/daily/rss';
 export const TRENDS_LOCALES = {

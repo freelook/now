@@ -8,6 +8,9 @@ import * as route from 'hooks/route';
 interface InputProps {
     ctx: IndexContext;
     set?: (v:any) => void;
+    query?: Object;
+    pathname?: string;
+    as?: string;
 }
 
 export const preventDefault = (e:React.SyntheticEvent) => e && e.preventDefault();
@@ -21,10 +24,16 @@ const Input = (props:InputProps) => {
     const input = useInput();
     const [value, setValue] = React.useState(input);
     const pushInput = () => {
-        router.push(route.buildUrl(router, {
-            query: {input: _.trim(value as string)},
+        const pathname = props.as || props.pathname;
+        const url = route.buildUrl(router, {
+            query: _.chain({}).assign(props.query, {input: _.trim(value as string)}).value(),
+            pathname: pathname,
             asObject: true
-        }));
+        });
+        if(props.as && props.pathname) {
+            return router.push(props.pathname, url);
+        }
+        return router.push(url);
     };
     const handleInputChange = (e:React.SyntheticEvent) => {
         preventDefault(e);

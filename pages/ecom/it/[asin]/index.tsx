@@ -1,15 +1,13 @@
 import _ from 'lodash';
 import React from 'react';
 import { NextPageContext } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Segment, Icon, Table, Image, List } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'pages';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';
-import Grid from 'components/grid';
-import Input, {useInput} from 'components/input';
+import Input from 'components/input';
 import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import { useRandomColor } from 'hooks/render';
@@ -40,6 +38,10 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
   return (
     <Layout head={{title: title, description: description, url: '', ogImage: ''}}>
         <Nav {...{ctx}} />
+
+        <Segment>
+            <Input {...{ctx}} pathname={PATH.ECOM}/>
+        </Segment>
 
         <Segment>
             {renderNodes(router)(nodes)}

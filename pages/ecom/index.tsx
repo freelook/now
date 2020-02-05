@@ -3,7 +3,7 @@ import React from 'react';
 import { NextPageContext } from 'next';
 import Link from 'next/link';
 import { useRouter, NextRouter } from 'next/router';
-import { Segment, Icon } from 'semantic-ui-react';
+import { Segment, Icon, Pagination } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'pages';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
@@ -20,6 +20,8 @@ export const ECOM_LOCALES = {
     [locale.DE]: 'de_DE'
 } as {[key:string]:string};
 export const ECOM_CACHE = '86400'; // one day
+export const ECOM_TOTAL_ITEMS = 10;
+export const ECOM_FIRST_PAGE = 1;
 export const ECOM_PARENT_NODES = {
     US: ["2617941011", "2619525011", "15684181", "3760901", "3760911", "283155", "165796011", "1055398", "3375251", "172282"]
 };
@@ -27,8 +29,9 @@ export const ECOM_PARENT_NODES = {
 interface EcommerceContext extends IndexContext {
     node?: string;
     slug?: string;
+    page: number;
     nodes: {BrowseNodesResult: {BrowseNodes: INode[]}};
-    items: {SearchResult: {Items: IItem[]}}
+    items: {SearchResult: {Items: IItem[]; TotalResultCount: number;}}
 }
 
 export interface IItem {
@@ -103,6 +106,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
   const input = useInput();
   const nodes = _.get(ctx.nodes, 'BrowseNodesResult.BrowseNodes', []);
   const items = _.get(ctx.items, 'SearchResult.Items', []);
+  const total = _.get(ctx.items, 'SearchResult.TotalResultCount', 0);
   const slug = _.get(ctx, 'slug', input || '');
   const titlePrefix = _.get(ctx, 't.ecommerce', 'E-commerce');
   const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
@@ -113,7 +117,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
         <Nav {...{ctx}} />
 
         <Segment>
-            <Input {...{ctx}} />
+            <Input {...{ctx}} query={{p:null}}/>
         </Segment>
 
         <Segment>
@@ -121,6 +125,23 @@ const Ecommerce = (ctx:EcommerceContext) => {
         </Segment>
 
        {renderItems(items)}
+
+        <div style={{textAlign: 'center', margin: '15px 0'}}>
+            {items.length && total && items.length < total ? <Pagination
+                boundaryRange={0}
+                siblingRange={2}
+                ellipsisItem={null}
+                firstItem={null}
+                lastItem={null}
+                totalPages={Math.min(ECOM_TOTAL_ITEMS, _.toInteger(Math.ceil(total / ECOM_TOTAL_ITEMS)))} 
+                defaultActivePage={ctx.page}
+                pageItem={(PaginationItem, props) => {
+                    const p = _.toString(props.value);
+                    const href = route.buildUrl(router, {query: { p }, pathname: PATH.ECOM});
+                    props.onClick = _.noop;
+                    return <Link key={p} passHref={true} href={href}><PaginationItem {...props} /></Link>;
+                }} /> : null}
+        </div>
 
         <Footer {...{ctx}} />
     </Layout>
@@ -130,6 +151,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
 Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
   const query = route.query(ctx);
   const input = _.get(query, 'input', 'deals');
+  const page = Math.min(Math.max(_.chain(query).get('p').toInteger().value(), ECOM_FIRST_PAGE), ECOM_TOTAL_ITEMS);
   const slugArr = _.get(query, 'node', '').split('-');
   const node = _.last(slugArr) || null;
   const slug = slugArr.slice(0, -1).join(' ').trim() || _.get(query, 'seo', '');
@@ -152,6 +174,7 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
             LanguagesOfPreference: [lang],
             BrowseNodeId: node,
             Keywords: input,
+            ItemPage: page,
             Resources:["Images.Primary.Large", "ItemInfo.Title", "Offers.Listings.Price"]
         },
         cache: ECOM_CACHE
@@ -161,6 +184,7 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
       ...indexProps,
       node: node,
       slug: slug,
+      page: page,
       nodes: await nodesTaks || {},
       items: await itemsTask || {}
   };
