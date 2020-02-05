@@ -23,6 +23,7 @@
     "object-hash": "^2.0.1",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
+    "react-ga": "^2.7.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
     "swr": "^0.1.16"

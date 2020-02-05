@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import Head from 'components/head';
 import { useRouter } from 'next/router';
 import { Progress } from 'semantic-ui-react';
+import * as analytics from 'hooks/analytics';
 
 interface LayoutProps {
     children?:JSX.Element|JSX.Element[];
@@ -27,6 +28,7 @@ const Layout = (props:LayoutProps) => {
 
     useEffect(() => {
         setLoad(false);
+        analytics.log();
         router.events.on('routeChangeStart', loader);
         return () => router.events.off('routeChangeStart', loader);
     }, [router.asPath]);
