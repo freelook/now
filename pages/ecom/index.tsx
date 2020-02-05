@@ -54,14 +54,14 @@ interface INode {
     Ancestor?: INode|INode[];
 }
 
-const renderHomeNode = (router: NextRouter) => (<Link href={route.buildUrl(router, {query: {node: ''}, pathname: PATH.ECOM})}><a><Icon name="eye slash"/></a></Link>);
+const renderHomeNode = (router: NextRouter) => (<Link href={route.buildUrl(router, {query: {node: ''}, pathname: PATH.ECOM})} prefetch={false}><a><Icon name="eye slash"/></a></Link>);
 const renderFullNodes = (router: NextRouter) => (nodes: INode[] = [], space:string = ' | ') => _.map(nodes, (n: INode) => {
     if(n && n.Id) {
         const slug = route.slug(n, 'DisplayName');
         const node = !!slug ? slug.concat('-').concat(n.Id): n.Id;
         return (<span key={`node-${n.Id}`}>
                 {n.Ancestor && renderFullNodes(router)(_.isArray(n.Ancestor) ? n.Ancestor: [n.Ancestor], ' * ')}
-                {space} <Link href={route.buildUrl(router, {query: { node }, pathname: PATH.ECOM})}>
+                {space} <Link href={route.buildUrl(router, {query: { node }, pathname: PATH.ECOM})} prefetch={false}>
                             <a>{n.DisplayName}</a>
                         </Link>
                 {n.Children && renderFullNodes(router)(_.isArray(n.Children) ? n.Children: [n.Children], ' - ')}
@@ -139,7 +139,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
                     const p = _.toString(props.value);
                     const href = route.buildUrl(router, {query: { p }, pathname: PATH.ECOM});
                     props.onClick = _.noop;
-                    return <Link key={p} passHref={true} href={href}><PaginationItem {...props} /></Link>;
+                    return <Link key={p} passHref={true} href={href} prefetch={false}><PaginationItem {...props} /></Link>;
                 }} /> : null}
         </div>
 

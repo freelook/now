@@ -23,7 +23,7 @@ const Nav = (props: NavProps) => {
             <ul>
                 {links.map(({ href, label }, key) => (
                     <li key={`link-${key}`}>
-                        <Link href={href}><a>{label}</a></Link>
+                        <Link href={href} prefetch={false}><a>{label}</a></Link>
                     </li>
                 ))}
             </ul>

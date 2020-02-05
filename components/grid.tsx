@@ -25,7 +25,7 @@ interface GridProps<T> {
 
 const Linkify = (props: {link?: LinkProps; children: any}) => {
     const {link} = props;
-    return link ? <Link href={link.href} as={link.as}><a>{props.children}</a></Link>: props.children;
+    return link ? <Link href={link.href} as={link.as} prefetch={false}><a>{props.children}</a></Link>: props.children;
 }
 
 const Grid = <T extends {}>(props:GridProps<T>) => { 

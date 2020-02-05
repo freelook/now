@@ -20,7 +20,7 @@ const Footer = (props:FooterProps) => {
                 <List horizontal>
                     {supportedLocales.map((locale) => (<List.Item key={locale}>
                         {locale !== currentLocale ? 
-                        <Link href={buildUrl(router, {query: {locale} })}><a>{locale}</a></Link>
+                        <Link href={buildUrl(router, {query: {locale} })} prefetch={false}><a>{locale}</a></Link>
                         : <span>{locale}</span>
                     }
                     </List.Item>))}
