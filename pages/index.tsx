@@ -10,6 +10,7 @@ import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';
 import Grid from 'components/grid';
+import Input from 'components/input';
 import * as locale from 'hooks/locale';
 import { useWebtask, RSS_TASK } from 'hooks/webtask';
 
@@ -65,6 +66,10 @@ const Home = (ctx:HomeContext) => {
         <Nav {...{ctx}} />
 
         <Segment>
+            <Input {...{ctx}} pathname={PATH.NEWS}/>
+        </Segment>
+
+        <Segment>
             <Grid<ITrend> className='trends'
                   items={ctx.trends}
                   header={(tr) => _.get(tr, 'title')}
@@ -75,6 +80,10 @@ const Home = (ctx:HomeContext) => {
                   </>)}
                   image={(tr) => _.get(tr, 'ht:picture.#')}
                   alt={(tr) => _.get(tr, 'title')}
+                  link={(tr)=> {
+                      const input = _.get(tr, 'title', '');
+                      return {href: `${PATH.NEWS}?input=${input}`};
+                  }}
                   description={(tr) => _.get(tr, 'description', _.get(tr, 'summary'))} 
                   extra={(tr) => {
                       const href = `${PATH.ECOM}?input=${_.get(tr, 'title', '')}`;

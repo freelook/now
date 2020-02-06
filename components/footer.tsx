@@ -3,7 +3,7 @@ import React from 'react';
 import { Segment, List } from 'semantic-ui-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { supportedLocales, getLocale } from 'hooks/locale';
+import { supportedLocales } from 'hooks/locale';
 import { buildUrl } from 'hooks/route';
 import { IndexContext } from 'pages';
 

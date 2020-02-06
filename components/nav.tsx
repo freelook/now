@@ -9,12 +9,14 @@ interface NavProps {
 
 export const PATH = {
     HOME: '/',
+    NEWS: '/news',
     ECOM: '/ecom'
 };
 
 const Nav = (props: NavProps) => {
     const links = [
         { href: PATH.HOME, label: _.get(props.ctx, 't.Trends', 'Trends') },
+        { href: PATH.NEWS, label: _.get(props.ctx, 't.News', 'News') },
         { href: PATH.ECOM, label: _.get(props.ctx, 't.Ecom', 'Ecom') },
     ];
 
