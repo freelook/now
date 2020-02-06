@@ -1,45 +1,36 @@
+import _ from 'lodash';
 import React from 'react';
 import NextHead from 'next/head';
+import { useRouter } from 'next/router';
 
-const defaultDescription = '';
-const defaultOGURL = '';
-const defaultOGImage = '';
-
-interface HeadPropsType {
+export interface HeadPropsType {
   title: string;
   description: string;
-  url: string;
-  ogImage: string
+  image?: string
 };
 
-const Head = (props: HeadPropsType) => (
-  <NextHead>
-    <meta charSet="UTF-8" />
-    <title>{props.title || ''}</title>
-    <meta
-      name="description"
-      content={props.description || defaultDescription}
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" sizes="192x192" href="/static/touch-icon.png" />
-    <link rel="apple-touch-icon" href="/static/touch-icon.png" />
-    <link rel="mask-icon" href="/static/favicon-mask.svg" color="#49B882" />
-    <link rel="icon" href="/static/favicon.ico" />
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
-    <meta property="og:url" content={props.url || defaultOGURL} />
-    <meta property="og:title" content={props.title || ''} />
-    <meta
-      property="og:description"
-      content={props.description || defaultDescription}
-    />
-    <meta name="twitter:site" content={props.url || defaultOGURL} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content={props.ogImage || defaultOGImage} />
-    <meta property="og:image" content={props.ogImage || defaultOGImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+export const FLI_DOMAIN = 'freelook.now.sh';
 
-  </NextHead>
-);
+const Head = (props: HeadPropsType) => {
+    const router = useRouter();
+    const url = `https://${FLI_DOMAIN}${router.asPath}`; 
+    const title = props.title || '';
+    const description = props.description || '';
+    const image = props.image || '' ;   
+    return (
+        <NextHead>
+            <title>{title}</title>
+            <link rel="icon" href="/static/favicon.ico" />
+            <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+            <meta charSet="UTF-8" />
+            <meta name="viewport" content="width=device-width,initial-scale=1" />
+            <meta name="description" content={description} />
+            <meta property="og:url" content={url} />
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={description} />
+            {image && <meta property="og:image" content={image} />}
+        </NextHead>
+    );
+}
 
 export default Head;

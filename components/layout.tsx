@@ -1,18 +1,13 @@
 import _ from 'lodash';
 import React, {useEffect, useState} from 'react';
-import Head from 'components/head';
+import Head, {HeadPropsType} from 'components/head';
 import { useRouter } from 'next/router';
 import { Progress } from 'semantic-ui-react';
 import * as analytics from 'hooks/analytics';
 
 interface LayoutProps {
     children?:JSX.Element|JSX.Element[];
-    head: {
-        title: string;
-        description: string;
-        ogImage: string;
-        url: string;
-    };     
+    head: HeadPropsType;     
 }
 
 const background = '#fff';

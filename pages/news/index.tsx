@@ -41,7 +41,7 @@ const News = (ctx:NewsContext) => {
   const description = slug;
 
   return (
-    <Layout head={{title: title, description: description, url: '', ogImage: ''}}>
+    <Layout head={{title: title, description: description, image: ''}}>
         <Nav {...{ctx}} />
 
         <Segment>

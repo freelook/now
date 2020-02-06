@@ -60,9 +60,10 @@ const Home = (ctx:HomeContext) => {
   const router = useRouter();
   const { data } = useSWR(`${router.route}api/date`, fetcher);
   const date = _.get(data, 'date', '?');
+  const title = _.get(ctx, 't.Trends', 'Trends');
 
   return (
-    <Layout head={{title: _.get(ctx, 't.Trends', 'Trends'), description: '', url: '', ogImage: ''}}>
+    <Layout head={{title: title, description: title, image: ''}}>
         <Nav {...{ctx}} />
 
         <Segment>
