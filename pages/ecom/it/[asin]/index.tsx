@@ -34,9 +34,10 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
   const slug = _.get(ctx, 'slug', itemTitle);
   const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
   const description = slug;
+  const image = _.get(item, 'Images.Primary.Large.URL', '');
 
   return (
-    <Layout head={{title: title, description: description, image: ''}}>
+    <Layout head={{title, description, image}}>
         <Nav {...{ctx}} />
 
         <Segment>
@@ -51,7 +52,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
             <Table color={useRandomColor(itemTitle.length)}><Table.Body>
                 <Table.Row>
                     <Table.Cell rowSpan={2} textAlign='center'>
-                    <Image wrapped src={_.get(item, 'Images.Primary.Large.URL')}/>
+                    <Image wrapped src={image}/>
                     </Table.Cell>
                     <Table.Cell><h3>{itemTitle}</h3></Table.Cell>
                 </Table.Row>
