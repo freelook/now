@@ -24,6 +24,7 @@ const Head = (props: HeadPropsType) => {
             <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
             <meta charSet="UTF-8" />
             <meta name="viewport" content="width=device-width,initial-scale=1" />
+            <meta name="google-site-verification" content="5TUCUwv0Gd1iR99AyKGk47oJnx4931mvYoNyTKM2MNM" />
             <meta name="description" content={description} />
             <meta property="og:url" content={url} />
             <meta property="og:title" content={title} />
