@@ -97,17 +97,6 @@ const Home = (ctx:HomeContext) => {
         <Segment textAlign='center'>{date}</Segment>
 
         <Footer {...{ctx}} />
-
-        <style jsx global>{`
-            .trends .image {
-                width: 100%;
-                text-align: center;
-                margin 7px;
-            }
-            .trends .image > img {
-                max-width: 100px;
-            }
-        `}</style>
     </Layout>
   );
 };

@@ -1,12 +1,14 @@
-import _ from 'lodash';
+import _, { StringNullableChain } from 'lodash';
 import React from 'react';
+import btoa from 'btoa';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
-import { Segment, Icon, List } from 'semantic-ui-react';
+import { Segment, Icon } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'pages';
 import Layout from 'components/layout';
 import Nav from 'components/nav';
 import Footer from 'components/footer';
+import Grid from 'components/grid';
 import Input, {useInput} from 'components/input';
 import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
@@ -29,6 +31,7 @@ export interface INewsItem {
     title: string;
     description: string; // html
     link: string;
+    'rss:pubdate': {'#': string};
 }
 
 const News = (ctx:NewsContext) => {
@@ -49,21 +52,22 @@ const News = (ctx:NewsContext) => {
         </Segment>
 
         <Segment>
-            {news.length ? <List divided relaxed>
-                {_.map(news, (n:INewsItem, i) => {
-                    const title = _.get(n, 'title');
+            <Grid<INewsItem> className='news'
+                items={news}
+                header={(n) => _.get(n, 'title')}
+                meta={(n) => _.get(n, 'rss:pubdate.#')}
+                image={(n) => {
                     const link = _.get(n, 'link');
-                    return title && link ? (
-                         <List.Item key={`news-${i}`}>
-                            <List.Content>{title}</List.Content>
-                            <List.Content floated='right'>
-                                <a href={link} target="_blank"><Icon color='teal' circular name="external alternate"/></a>
-                            </List.Content>
-                        </List.Item>
-                    ) : null;
-                })}
-            </List> : null}
-        </Segment>
+                    return `/api/meta/img/${btoa(link)}`;
+                }}
+                alt={(n) => _.get(n, 'title')}
+                extra={(n) => {
+                    const link = _.get(n, 'link');
+                    return (<Grid.Extra>
+                        <a href={link} target="_blank"><Icon color='teal' circular name="external alternate"/></a>
+                    </Grid.Extra>);
+                }}/>
+        </Segment>  
 
         <Footer {...{ctx}} />
     </Layout>

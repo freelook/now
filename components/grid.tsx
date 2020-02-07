@@ -30,7 +30,7 @@ const Linkify = (props: {link?: LinkProps; children: any}) => {
 
 const Grid = <T extends {}>(props:GridProps<T>) => { 
     const className = _.get(props, 'className', '').concat(' ').concat(GRID_CLASS_NAME).trim();
-    return (
+    return !_.isEmpty(props.items) ? (
         <SemanticGrid centered className={className}>
             {_.map(props.items, (it:T, i:number) => {
                 const image = props.image && props.image(it) || GRID_ITEM_IMAGE;
@@ -65,6 +65,15 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                    column-count: 1;
                    column-gap: 0;
                 }
+                .fli-items .ui.image {
+                   width: 100%;
+                   margin: 5px 0;
+                   min-height: 150px;
+                   background: #f7f7f7;
+                   display: flex;
+                   align-items: center;
+                   justify-content: center;
+                }
                 .fli-items .column {
                    width: 100% !important;
                 }
@@ -90,7 +99,7 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                 }
             `}</style>
         </SemanticGrid>
-    );
+    ) : null;
 };
 
 Grid.Extra = (props: {children: JSX.Element|JSX.Element[]}) => {
