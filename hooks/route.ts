@@ -8,6 +8,8 @@ import { LinkProps } from 'next/link';
 import { NextPageContext } from 'next';
 import querystring, { ParsedUrlQuery } from 'querystring';
 
+const MAX_PREV_HISTORY = 3;
+
 export const query = (ctx?: NextPageContext) => {
     if(ctx) {
         return _.get(ctx, 'query', 
@@ -99,4 +101,16 @@ export const open = (url:string) => {
 
 export const replace = (url:string) => {
     window.location.href = url;
+};
+
+export const prev = (path?:string) => {
+    const w = window as any;
+    w.prev = w.prev || [];
+    if(path) {
+        if(w.prev.lenght > MAX_PREV_HISTORY) {
+            w.prev.lenght = MAX_PREV_HISTORY;
+        }
+        return w.prev.push(path);
+    } 
+    return w.prev;
 };

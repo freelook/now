@@ -4,6 +4,7 @@ import Head, {HeadPropsType} from 'components/head';
 import { useRouter } from 'next/router';
 import { Progress } from 'semantic-ui-react';
 import * as analytics from 'hooks/analytics';
+import * as route from 'hooks/route';
 
 interface LayoutProps {
     children?:JSX.Element|JSX.Element[];
@@ -25,6 +26,7 @@ const Layout = (props:LayoutProps) => {
         setLoad(false);
         analytics.log();
         router.events.on('routeChangeStart', loader);
+        route.prev(router.asPath);
         return () => router.events.off('routeChangeStart', loader);
     }, [router.asPath]);
 
