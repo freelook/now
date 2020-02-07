@@ -10,7 +10,8 @@ interface NavProps {
 export const PATH = {
     HOME: '/',
     NEWS: '/news',
-    ECOM: '/ecom'
+    ECOM: '/ecom',
+    META: '/meta'
 };
 
 const Nav = (props: NavProps) => {

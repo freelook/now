@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import request from 'request';
-import atob from 'atob';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { webtask, META_TASK } from 'hooks/webtask';
+import {decode} from 'hooks/route';
 
 export default async (req:NextApiRequest, res:NextApiResponse) => {
     const token = _.get(req, 'query.token');
@@ -11,7 +11,7 @@ export default async (req:NextApiRequest, res:NextApiResponse) => {
     }
     let meta = {};
     try {
-        const url = atob(token);
+        const url = decode(token);
         meta = await webtask({
             taskName: META_TASK, 
             body: { url },

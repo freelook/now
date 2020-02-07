@@ -1,11 +1,12 @@
 import _ from 'lodash';
 import url from 'url';
+import btoa from 'btoa';
+import atob from 'atob';
 import { isSSR } from 'hooks/render';
-import Router, { NextRouter } from 'next/router';
+import Router, { NextRouter, useRouter } from 'next/router';
 import { LinkProps } from 'next/link';
 import { NextPageContext } from 'next';
 import querystring, { ParsedUrlQuery } from 'querystring';
-import { useRouter } from 'next/router';
 
 export const query = (ctx?: NextPageContext) => {
     if(ctx) {
@@ -71,3 +72,31 @@ export const slug = (node:Object, path:string) => _.chain(node).get(path, '').tr
 .replace(/(-|–)+/mig, ' ')
 .replace(/( )+/mig, '-')
 .value();
+
+export const encode = (str:string) => {
+    let token = '';
+    try {
+        token = btoa(str).replace(/\//mig, '+');
+    } finally {}
+    return token;
+};
+export const decode = (token:string) => {
+    let str = '';
+        try {
+            str = atob(token.replace(/\+/mig, '/'));
+    } finally {}
+    return str;
+};
+
+export const open = (url:string) => {
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+};
+
+export const replace = (url:string) => {
+    window.location.href = url;
+};

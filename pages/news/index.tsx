@@ -1,12 +1,10 @@
 import _, { StringNullableChain } from 'lodash';
 import React from 'react';
-import btoa from 'btoa';
 import { NextPageContext } from 'next';
-import { useRouter } from 'next/router';
 import { Segment, Icon } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'pages';
 import Layout from 'components/layout';
-import Nav from 'components/nav';
+import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';
 import Grid from 'components/grid';
 import Input, {useInput} from 'components/input';
@@ -35,11 +33,10 @@ export interface INewsItem {
 }
 
 const News = (ctx:NewsContext) => {
-  const router = useRouter();
   const input = useInput();
   const news = ctx.news || [];
   const slug = _.get(ctx, 'slug', input || '');
-  const titlePrefix = _.get(ctx, 't.news', 'News');
+  const titlePrefix = _.get(ctx, 't.News', 'News');
   const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
   const description = slug;
 
@@ -58,9 +55,13 @@ const News = (ctx:NewsContext) => {
                 meta={(n) => _.get(n, 'rss:pubdate.#')}
                 image={(n) => {
                     const link = _.get(n, 'link');
-                    return `/api/meta/img/${btoa(link)}`;
+                    return `/api/meta/img/${route.encode(link)}`;
                 }}
                 alt={(n) => _.get(n, 'title')}
+                link={(n)=> {
+                    const link = _.get(n, 'link');
+                    return {href: `${PATH.META}/[token]`, as: `${PATH.META}/${route.encode(link)}`};
+                }}
                 extra={(n) => {
                     const link = _.get(n, 'link');
                     return (<Grid.Extra>
