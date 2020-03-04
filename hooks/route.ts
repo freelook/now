@@ -110,7 +110,7 @@ export const prev = (path?:string) => {
         if(w.prev.lenght > MAX_PREV_HISTORY) {
             w.prev.lenght = MAX_PREV_HISTORY;
         }
-        return w.prev.push(path);
+        w.prev.push(path);
     } 
     return w.prev;
 };

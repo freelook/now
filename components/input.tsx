@@ -1,12 +1,17 @@
 import _ from 'lodash';
 import React from 'react';
-import { Input as SemanticInput } from 'semantic-ui-react';
+import { Input as SemanticInput, List } from 'semantic-ui-react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { IndexContext } from 'pages';
 import * as route from 'hooks/route';
 
+interface InputContext extends IndexContext {
+    suggestion?: string[];
+}
+
 interface InputProps {
-    ctx: IndexContext;
+    ctx: InputContext;
     set?: (v:any) => void;
     query?: Object;
     pathname?: string;
@@ -23,6 +28,8 @@ const Input = (props:InputProps) => {
     const router = useRouter();
     const input = useInput();
     const [value, setValue] = React.useState(input);
+    const suggestion = _.get(props.ctx, 'suggestion', []).filter(s => !/\/\//.test(s));
+
     const pushInput = () => {
         const pathname = props.as || props.pathname;
         const url = route.buildUrl(router, {
@@ -57,6 +64,12 @@ const Input = (props:InputProps) => {
                 placeholder={_.get(props.ctx, 't.Placeholder', 'Looking for...')}
                 value={value} 
                 onChange={handleInputChange} />
+
+            {suggestion.length > 0 ? <List horizontal>
+                {_.map(suggestion, (s) => (<List.Item key={s}>
+                    <Link href={route.buildUrl(router, {query: {input:s} })} prefetch={false}><a>{s}</a></Link>
+                </List.Item>))}
+            </List> : null}
         </form>
     );
 };

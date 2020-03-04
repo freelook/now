@@ -12,6 +12,7 @@ import Grid from 'components/grid';
 import Input, {useInput} from 'components/input';
 import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
+import * as suggest from 'hooks/suggest';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
 
 export const ECOM_LOCALES = {
@@ -31,7 +32,8 @@ interface EcommerceContext extends IndexContext {
     slug?: string;
     page: number;
     nodes: {BrowseNodesResult: {BrowseNodes: INode[]}};
-    items: {SearchResult: {Items: IItem[]; TotalResultCount: number;}}
+    items: {SearchResult: {Items: IItem[]; TotalResultCount: number;}};
+    suggestion: string[];
 }
 
 export interface IItem {
@@ -111,7 +113,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
   const titlePrefix = _.get(ctx, 't.ecommerce', 'E-commerce');
   const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
   const description = slug;
-
+  console.log('---ctx', ctx);
   return (
     <Layout head={{title: title, description: description, image: ''}}>
         <Nav {...{ctx}} />
@@ -179,6 +181,7 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
         },
         cache: ECOM_CACHE
   });
+  const suggestion = suggest.useSuggestion(ctx)(input);
   return {
       name: 'Ecommerce',
       ...indexProps,
@@ -186,7 +189,8 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
       slug: slug,
       page: page,
       nodes: await nodesTaks || {},
-      items: await itemsTask || {}
+      items: await itemsTask || {},
+      suggestion: await suggestion || []
   };
 };
 

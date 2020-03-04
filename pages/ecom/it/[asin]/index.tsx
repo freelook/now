@@ -18,7 +18,7 @@ interface EcommerceItemContext extends IndexContext {
     asin: string;
     slug?: string;
     item: {ItemsResult: {Items: [IItem]}};
-    variations: {VariationsResult: {Items: IItem[]}}
+    variations: {VariationsResult: {Items: IItem[]}};
 }
 
 const EcommerceItem = (ctx:EcommerceItemContext) => {
@@ -85,7 +85,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
 
 EcommerceItem.getInitialProps = async (ctx:NextPageContext) => {
   const query = route.query(ctx);
-  const input = _.get(query, 'input', '*');
+  const input = _.get(query, 'input');
   const asin = _.get(query, 'asin', '');
   const slug = _.get(query, 'seo', '');
   const indexProps = await useIndexProps(ctx);
