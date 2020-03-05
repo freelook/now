@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Segment, List } from 'semantic-ui-react';
 import Link from 'next/link';
+import Comments from 'components/comments';
 import { useRouter } from 'next/router';
 import { supportedLocales } from 'hooks/locale';
 import { buildUrl } from 'hooks/route';
@@ -16,6 +17,7 @@ const Footer = (props:FooterProps) => {
     const currentLocale = props.ctx.locale;
     return (
         <footer>
+            <Comments {...props} />
             <Segment textAlign='center'>
                 <List horizontal>
                     {supportedLocales.map((locale) => (<List.Item key={locale}>

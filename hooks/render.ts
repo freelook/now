@@ -30,3 +30,17 @@ export const useRandomColor = (index?:number) => {
     }
     return Colors[Math.floor(Math.random() * (max - min + 1) + min)] as SemanticCOLORS;
 };
+
+export const load = (id:string, src:string) => {
+    const tag = 'script';
+    const fjs = document.getElementsByTagName(tag)[0];
+    if (!document.getElementById(id) && fjs) {
+        const js = document.createElement(tag) as HTMLScriptElement;
+        const parent = fjs.parentNode;
+        js.id = id;
+        js.src = src;
+        if(parent) {
+            parent.insertBefore(js, fjs);
+        }
+    }
+};
