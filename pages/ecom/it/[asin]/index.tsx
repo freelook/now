@@ -57,7 +57,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
                     <Table.Cell><h3>{itemTitle}</h3></Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell textAlign='right'>{itemPrice} <a href={itemDp} target="_blank"><Icon color='teal' circular name="external alternate"/></a></Table.Cell>
+                    <Table.Cell textAlign='right'>{itemPrice} <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External></Table.Cell>
                 </Table.Row>
                 {itemFeatures.length > 0 ?
                 <Table.Row>

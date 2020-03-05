@@ -96,7 +96,7 @@ export const renderItems = (items:IItem[]) => {
                   extra={(it) => {
                       const dp = _.get(it, 'DetailPageURL', '');
                       return (<Grid.Extra>
-                        <a href={dp} target="_blank"><Icon color='teal' circular name="external alternate"/></a>
+                        <Nav.External link={dp}><Icon color='teal' circular name="external alternate"/></Nav.External>
                       </Grid.Extra>);
                   }} />
         </Segment>
@@ -113,7 +113,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
   const titlePrefix = _.get(ctx, 't.ecommerce', 'E-commerce');
   const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
   const description = slug;
-  console.log('---ctx', ctx);
+
   return (
     <Layout head={{title: title, description: description, image: ''}}>
         <Nav {...{ctx}} />

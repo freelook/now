@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import Link from 'next/link';
+import * as route from 'hooks/route';
 import { IndexContext } from 'pages';
 
 interface NavProps {
@@ -52,6 +53,13 @@ const Nav = (props: NavProps) => {
             `}</style>
         </nav>
     );
-}
+};
+
+Nav.External = (props:{children:any; link:string;}) => {
+    return <a onClick={(e) => {
+        e && e.preventDefault();
+        route.open(props.link);
+    }}>{props.children}</a>
+};
 
 export default Nav;

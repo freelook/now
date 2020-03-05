@@ -65,7 +65,7 @@ const News = (ctx:NewsContext) => {
                 extra={(n) => {
                     const link = _.get(n, 'link');
                     return (<Grid.Extra>
-                        <a href={link} target="_blank"><Icon color='teal' circular name="external alternate"/></a>
+                        <Nav.External link={link}><Icon color='teal' circular name="external alternate"/></Nav.External>
                     </Grid.Extra>);
                 }}/>
         </Segment>  

@@ -56,7 +56,7 @@ const Meta = (ctx:MetaContext) => {
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell textAlign='right'>
-                         <a href={url} target="_blank"><Icon color='teal' circular name="external alternate"/></a>
+                         <Nav.External link={url}><Icon color='teal' circular name="external alternate"/></Nav.External>
                     </Table.Cell>
                 </Table.Row>
                 <Table.Row>
