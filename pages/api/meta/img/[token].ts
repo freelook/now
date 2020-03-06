@@ -7,7 +7,7 @@ import {bad} from 'hooks/request';
 
 export default async (req:NextApiRequest, res:NextApiResponse) => {
     const token = _.get(req, 'query.token');
-    if(!token || bad(req)) {
+    if(!token) {
         return res.status(400).end();
     }
     let meta = {};
