@@ -1,4 +1,4 @@
-import _, { StringNullableChain } from 'lodash';
+import _ from 'lodash';
 import React from 'react';
 import { NextPageContext } from 'next';
 import { Segment, Icon } from 'semantic-ui-react';
@@ -34,7 +34,6 @@ export interface INewsItem {
 
 const News = (ctx:NewsContext) => {
   const input = useInput();
-  const news = ctx.news || [];
   const slug = _.get(ctx, 'slug', input || '');
   const titlePrefix = _.get(ctx, 't.News', 'News');
   const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
@@ -50,7 +49,7 @@ const News = (ctx:NewsContext) => {
 
         <Segment>
             <Grid<INewsItem> className='news'
-                items={news}
+                items={ctx.news}
                 header={(n) => _.get(n, 'title')}
                 meta={(n) => _.get(n, 'rss:pubdate.#')}
                 image={(n) => {
@@ -92,7 +91,7 @@ News.getInitialProps = async (ctx:NextPageContext) => {
       name: 'News',
       ...indexProps,
       slug: slug,
-      news: (await newsTask || {}).rss || {}
+      news: (await newsTask || {}).rss
   };
 };
 

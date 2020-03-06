@@ -87,9 +87,11 @@ const Home = (ctx:HomeContext) => {
                   }}
                   description={(tr) => _.get(tr, 'description', _.get(tr, 'summary'))} 
                   extra={(tr) => {
-                      const href = `${PATH.ECOM}?input=${_.get(tr, 'title', '')}`;
+                      const images = `${PATH.WEB}/images?input=${_.get(tr, 'title', '')}`;
+                      const ecom = `${PATH.ECOM}?input=${_.get(tr, 'title', '')}`;
                       return (<Grid.Extra>
-                        <Link href={href} prefetch={false}><a><Icon circular name="shopping cart"/></a></Link>
+                        <Link href={images} prefetch={false}><a><Icon circular name="images"/></a></Link>
+                        <Link href={ecom} prefetch={false}><a><Icon circular name="shopping cart"/></a></Link>
                       </Grid.Extra>);
                   }}/>
         </Segment>   
@@ -113,7 +115,7 @@ Home.getInitialProps = async (ctx:NextPageContext) => {
             rss: `https://trends.google.com/trends/trendingsearches/daily/rss?geo=${geo}`
         },
         cache: true
-      })).rss
+      }) || {}).rss
   };
 };
 

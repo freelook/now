@@ -3,10 +3,11 @@ import request from 'request';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { webtask, META_TASK } from 'hooks/webtask';
 import {decode} from 'hooks/route';
+import {bad} from 'hooks/request';
 
 export default async (req:NextApiRequest, res:NextApiResponse) => {
     const token = _.get(req, 'query.token');
-    if(!token) {
+    if(!token || bad(req)) {
         return res.status(400).end();
     }
     let meta = {};

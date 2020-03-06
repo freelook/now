@@ -35,6 +35,7 @@ const Layout = (props:LayoutProps) => {
             <Head {...props.head} />
             <style jsx global>{`
                 html, body {
+                    overflow: auto;
                     background: ${background};
                     font-family: Roboto Mono, monospace;
                 }

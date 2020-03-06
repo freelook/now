@@ -2,6 +2,8 @@ import _ from 'lodash';
 import fetch from 'isomorphic-unfetch';
 import fetchJsonp from 'fetch-jsonp';
 import objectHash from 'object-hash';
+import { NextApiRequest } from 'next';
+import { FLI_DOMAIN } from 'components/head';
 
 export const FLI_CACHE_KEY = 'fli_cache';
 export const FLI_CACHE_RESULT_KEY = 'fli_cache_result';
@@ -65,7 +67,8 @@ const _fetch = async (params: {
             method: params.method,
             headers: {
                 'Accept': HEADERS.json,
-                'Content-Type': HEADERS.json
+                'Content-Type': HEADERS.json,
+                'csrf': FLI_DOMAIN
             },
             body: params.body ? JSON.stringify(params.body) : null
         })).json();
@@ -99,4 +102,8 @@ export const jsonp = async (url:string, options: {cache?: boolean|string, jsonpC
     return _fetch({
         method: HTTP.jsonp, url, options
     });
+};
+
+export const bad = (req:NextApiRequest) => {
+    return !(new RegExp(FLI_DOMAIN)).test(_.get(req, 'headers.csrf') as string);
 };

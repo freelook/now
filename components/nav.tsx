@@ -11,6 +11,7 @@ interface NavProps {
 export const PATH = {
     HOME: '/',
     NEWS: '/news',
+    WEB: '/web',
     ECOM: '/ecom',
     META: '/meta'
 };
@@ -19,6 +20,7 @@ const Nav = (props: NavProps) => {
     const links = [
         { href: PATH.HOME, label: _.get(props.ctx, 't.Trends', 'Trends') },
         { href: PATH.NEWS, label: _.get(props.ctx, 't.News', 'News') },
+        { href: PATH.WEB, label: _.get(props.ctx, 't.Web', 'Web') },
         { href: PATH.ECOM, label: _.get(props.ctx, 't.Ecom', 'Ecom') },
     ];
 
@@ -34,14 +36,14 @@ const Nav = (props: NavProps) => {
 
             <style jsx>{`
                 nav {
+                    overflow-x: auto;
                     text-align: center;
                 }
                 ul {
+                    margin: 0;
+                    padding: 8px 16px 0;
                     display: flex;
                     justify-content: space-between;
-                }
-                nav > ul {
-                    padding: 4px 16px;
                 }
                 li {
                     display: flex;

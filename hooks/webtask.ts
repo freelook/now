@@ -5,8 +5,9 @@ import * as request from 'hooks/request';
 
 export const RSS_TASK = 'rss';
 export const AMZN_TASK = 'amazon';
+export const WEB_TASK = 'google';
 export const META_TASK = 'meta';
-export const ALLOWED_TASKS = [RSS_TASK, AMZN_TASK, META_TASK];
+export const ALLOWED_TASKS = [RSS_TASK, AMZN_TASK, WEB_TASK, META_TASK];
 
 const COMMON_ERROR = 'Wrong request';
 
