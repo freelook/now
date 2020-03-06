@@ -25,6 +25,7 @@ const Head = (props: HeadPropsType) => {
             <meta charSet="UTF-8" />
             <meta name="viewport" content="width=device-width,initial-scale=1" />
             <meta name="google-site-verification" content="5TUCUwv0Gd1iR99AyKGk47oJnx4931mvYoNyTKM2MNM" />
+            <meta name="yandex-verification" content="aa19f081865997ad" />
             <meta name="description" content={description} />
             <meta property="og:url" content={url} />
             <meta property="og:title" content={title} />
