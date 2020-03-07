@@ -25,6 +25,7 @@ const Head = (props: HeadPropsType) => {
             <meta charSet="UTF-8" />
             <meta name="viewport" content="width=device-width,initial-scale=1" />
             <meta name="google-site-verification" content="5TUCUwv0Gd1iR99AyKGk47oJnx4931mvYoNyTKM2MNM" />
+            <script data-ad-client="ca-pub-2500456856779147" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <meta name="msvalidate.01" content="36AC47E1042C4DBD8923DEEE0F9FC843" />
             <meta name="yandex-verification" content="aa19f081865997ad" />
             <meta name="description" content={description} />
