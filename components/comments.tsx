@@ -18,7 +18,6 @@ const Comments = (props:CommentsProps) => {
                 w.FB.XFBML.parse();
             } finally{}
         }
-        render.load('facebook-jssdk', 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0&appId=846841298681206');
     }, []);
 
     return (
