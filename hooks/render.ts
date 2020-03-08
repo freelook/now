@@ -31,16 +31,21 @@ export const useRandomColor = (index?:number) => {
     return Colors[Math.floor(Math.random() * (max - min + 1) + min)] as SemanticCOLORS;
 };
 
-export const load = (id:string, src:string) => {
+export const load = (id:string, src:string, params?:{[key:string]:string}) => {
     const tag = 'script';
-    const fjs = document.getElementsByTagName(tag)[0];
-    if (!document.getElementById(id) && fjs) {
+    const firstScript = document.getElementsByTagName(tag)[0];
+    if (!document.getElementById(id) && firstScript) {
         const js = document.createElement(tag) as HTMLScriptElement;
-        const parent = fjs.parentNode;
+        const parent = firstScript.parentNode;
         js.id = id;
         js.src = src;
+        if(params) {
+            _.map(params, (v, k)=> {
+                js.setAttribute(k, v);
+            });
+        }
         if(parent) {
-            parent.insertBefore(js, fjs);
+            parent.insertBefore(js, firstScript);
         }
     }
 };

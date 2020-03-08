@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import Head, {HeadPropsType} from 'components/head';
 import { useRouter } from 'next/router';
 import { Progress } from 'semantic-ui-react';
-import * as analytics from 'hooks/analytics';
+import * as scripts from 'hooks/scripts';
 import * as route from 'hooks/route';
 
 interface LayoutProps {
@@ -24,7 +24,7 @@ const Layout = (props:LayoutProps) => {
 
     useEffect(() => {
         setLoad(false);
-        analytics.log();
+        scripts.load();
         router.events.on('routeChangeStart', loader);
         route.prev(router.asPath);
         return () => router.events.off('routeChangeStart', loader);
