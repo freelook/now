@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { NextPageContext } from 'next';
-import { Segment, Icon } from 'semantic-ui-react';
+import { Segment, Icon, StrictFormGroupProps } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'pages';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
@@ -27,6 +27,7 @@ interface WebContext extends IndexContext {
 export interface IWebItem {
     titleNoFormatting: string;
     contentNoFormatting: string;
+    originalContextUrl?: string;
     url: string;
     richSnippet: {
       cseImage: { src: string }
@@ -40,7 +41,7 @@ const Web = (ctx:WebContext) => {
   const description = slug;
   let title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
   if(ctx.type) {
-      title.concat(` | ${ctx.type}`);
+      title = title.concat(` | ${ctx.type}`);
   }
 
   return (
@@ -57,7 +58,16 @@ const Web = (ctx:WebContext) => {
                 header={(w) => _.get(w, 'titleNoFormatting')}
                 image={(w) => ctx.type === Images.type ? _.get(w, 'url') : _.get(w, 'richSnippet.cseImage.src')}
                 alt={(w) => _.get(w, 'titleNoFormatting')}
-                description={(w) => _.get(w, 'contentNoFormatting')} 
+                description={(w) => _.get(w, 'contentNoFormatting')}
+                link={(w)=> {
+                    const url =  _.get(w, 'url');
+                    const link = ctx.type === Images.type ? _.get(w, 'originalContextUrl', url) : url;
+                    return {href: `${PATH.META}/[token]`, as: `${PATH.META}/${route.encode(link)}`};
+                }}
+                imageLink={(w)=> {
+                    const link =  _.get(w, 'url');
+                    return ctx.type === Images.type ? {href: link, target: '_blank'} : {href: `${PATH.META}/[token]`, as: `${PATH.META}/${route.encode(link)}`};
+                }}
                 extra={(w) => {
                     const link = _.get(w, 'url');
                     return (<Grid.Extra>

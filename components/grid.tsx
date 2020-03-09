@@ -11,21 +11,31 @@ const GRID_ITEM_WIDTH = 300;
 
 type ElementType = string|JSX.Element;
 
+interface LinkAttr extends LinkProps {
+    target?: string;
+}
+
 interface GridProps<T> {
    className?: string; 
    items: T[];
    image?: (item:T) => string;
    alt?: (item:T) => string;
    header?: (item:T) => ElementType;
-   link?: (item:T) => LinkProps;
+   link?: (item:T) => LinkAttr;
+   imageLink?: (item:T) => LinkAttr;
    meta?: (item:T) => ElementType;
    description?: (item:T) => ElementType;
    extra?: (item:T) => ElementType;
 }
 
-const Linkify = (props: {link?: LinkProps; children: any}) => {
+const Linkify = (props: {link?: LinkAttr; children: any; target?:string}) => {
     const {link} = props;
-    return link ? <Link href={link.href} as={link.as} prefetch={false}><a>{props.children}</a></Link>: props.children;
+    if(!link) {
+        return props.children;
+    }
+    const target = _.get(link, 'target');
+    const aProps = target ? {target} : {};
+    return <Link href={link.href} as={link.as} prefetch={false}><a {...aProps}>{props.children}</a></Link>;
 }
 
 const Grid = <T extends {}>(props:GridProps<T>) => { 
@@ -37,6 +47,7 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                 const alt = props.alt && props.alt(it);
                 const header = props.header && props.header(it);
                 const link = props.link && props.link(it);
+                const imageLink = props.imageLink && props.imageLink(it) || link;
                 const meta = props.meta && props.meta(it);
                 const description = props.description && props.description(it);
                 const extra = props.extra && props.extra(it);
@@ -45,7 +56,7 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                         <Card.Content>
                             {header && <Card.Header><Linkify link={link}>{header}</Linkify></Card.Header>}
                             {meta && <Card.Meta>{meta}</Card.Meta>}
-                            <Linkify link={link}>
+                            <Linkify link={imageLink}>
                                 <Image alt={alt} src={image} wrapped onError={(e:React.SyntheticEvent|any) => {
                                     e.persist();
                                     e.target.src = GRID_ITEM_IMAGE;

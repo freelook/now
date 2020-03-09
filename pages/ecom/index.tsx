@@ -109,10 +109,12 @@ const Ecommerce = (ctx:EcommerceContext) => {
   const nodes = _.get(ctx.nodes, 'BrowseNodesResult.BrowseNodes', []);
   const items = _.get(ctx.items, 'SearchResult.Items', []);
   const total = _.get(ctx.items, 'SearchResult.TotalResultCount', 0);
-  const slug = _.get(ctx, 'slug', input || '');
-  const titlePrefix = _.get(ctx, 't.ecommerce', 'E-commerce');
-  const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
-  const description = slug;
+  const slug = _.get(ctx, 'slug' , '');
+  const titlePrefix = _.get(ctx, 't.Ecom', 'Ecom');
+  let title = slug ? titlePrefix.concat(`: ${slug}`): titlePrefix;
+  title = input ? title.concat(`: ${input}`) : title;
+  let description = input || '';
+  description = slug ? description.concat(` ${slug}`) : description;
 
   return (
     <Layout head={{title: title, description: description, image: ''}}>

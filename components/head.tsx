@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
 import NextHead from 'next/head';
+import { buildUrl } from 'hooks/route';
 import { useRouter } from 'next/router';
+import { supportedLocales } from 'hooks/locale';
 
 export interface HeadPropsType {
   title: string;
@@ -22,6 +24,16 @@ const Head = (props: HeadPropsType) => {
             <title>{title}</title>
             <link rel="icon" href="/static/favicon.ico" />
             <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+            <link rel="canonical" href={`https://${FLI_DOMAIN}${buildUrl(router, {query: {locale: ''} })}`} />
+            {_.map(supportedLocales, (l)=> {
+                const props = {
+                    key: l,
+                    rel: "alternate",
+                    hreflang: l,
+                    href: `https://${FLI_DOMAIN}${buildUrl(router, {query: {locale: l} })}`
+                };
+                return <link {...props} />;
+            })}
             <meta charSet="UTF-8" />
             <meta name="viewport" content="width=device-width,initial-scale=1" />
             <meta name="google-site-verification" content="5TUCUwv0Gd1iR99AyKGk47oJnx4931mvYoNyTKM2MNM" />

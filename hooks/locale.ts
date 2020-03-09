@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { NextPageContext } from 'next';
-import fetch from 'isomorphic-unfetch';
 import { setCookie, parseCookies } from 'nookies'
 import * as render from 'hooks/render';
 import * as request from 'hooks/request';

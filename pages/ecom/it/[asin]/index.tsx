@@ -26,7 +26,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
   const item = _.get(ctx.item, 'ItemsResult.Items[0]', {});
   const nodes = _.get(item, 'BrowseNodeInfo.BrowseNodes', []);
   const variations = _.get(ctx.variations, 'VariationsResult.Items', []);
-  const titlePrefix = _.get(ctx, 't.ecommerce', 'E-commerce');
+  const titlePrefix = _.get(ctx, 't.Ecom', 'Ecom');
   const itemTitle = _.get(item, 'ItemInfo.Title.DisplayValue', '');
   const itemPrice = _.get(item, 'Offers.Listings[0].Price.DisplayAmount', '');
   const itemFeatures = _.get(item, 'ItemInfo.Features.DisplayValues', []);

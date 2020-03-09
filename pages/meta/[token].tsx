@@ -20,7 +20,7 @@ interface MetaContext extends IndexContext {
 const Meta = (ctx:MetaContext) => {
   const router = useRouter();
   const meta = _.get(ctx, 'meta', {});
-  const titlePrefix = _.get(ctx, 't.News', 'Meta');
+  const titlePrefix = _.get(ctx, 't.Meta', 'Meta');
   const title = _.get(meta, 'og:title', '');
   const headTitle = title ? titlePrefix.concat(`: ${title}`): titlePrefix;
   const description = _.get(meta, 'og:description', _.get(meta, 'description', ''));
