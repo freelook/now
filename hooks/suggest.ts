@@ -3,6 +3,7 @@ import * as render from 'hooks/render';
 import * as request from 'hooks/request';
 
 export const SUGGEST_ENDPOINT = 'https://suggestqueries.google.com/complete/search?client=chrome&q=';
+export const MAX_LTH = 10;
 
 export const useSuggestion = (ctx:render.RenderContext) => async (input: string) => {
     let suggestion = [];
@@ -18,3 +19,7 @@ export const useSuggestion = (ctx:render.RenderContext) => async (input: string)
         return _.get(suggestion, '[1]', []);
     }
 };
+
+export const filter = (suggestion:string[] = []) => _
+    .filter(suggestion, (s) => !/\/\//.test(s) && s.length <= MAX_LTH)
+    .map(_.trim);

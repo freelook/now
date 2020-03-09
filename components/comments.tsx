@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import { Segment } from 'semantic-ui-react';
 import dynamic from 'next/dynamic';
-import * as render from 'hooks/render';
 import { IndexContext } from 'pages';
 
 interface CommentsProps {

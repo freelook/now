@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, {useEffect} from 'react';
 import { NextPageContext } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Segment, Icon, Table, Image, List } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'pages';
@@ -9,6 +10,7 @@ import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';
 import Input from 'components/input';
 import * as route from 'hooks/route';
+import * as suggest from 'hooks/suggest';
 import { useRandomColor } from 'hooks/render';
 import { useWebtask, META_TASK } from 'hooks/webtask';
 
@@ -25,6 +27,7 @@ const Meta = (ctx:MetaContext) => {
   const headTitle = title ? titlePrefix.concat(`: ${title}`): titlePrefix;
   const description = _.get(meta, 'og:description', _.get(meta, 'description', ''));
   const image = _.get(meta, 'og:image', _.get(meta, 'twitter:image', ''));
+  const keywords = suggest.filter(_.get(meta, 'keywords', _.get(meta, 'news_keywords', '')).split(','));
   const url = _.get(meta, 'og:url', ctx.link || '');
 
   useEffect(() => {
@@ -62,6 +65,17 @@ const Meta = (ctx:MetaContext) => {
                 <Table.Row>
                     <Table.Cell colSpan={2}>{description}</Table.Cell>
                 </Table.Row>
+                {
+                    keywords.length > 0 ?
+                    <Table.Row>
+                        <Table.Cell colSpan={2}><List horizontal>{
+                            _.map(keywords, (v, k) => <List.Item key={k}>
+                                <Link href={route.buildUrl(router, {pathname: PATH.WEB, query: {input:v} })} prefetch={false}><a>{v}</a></Link>
+                            </List.Item>)
+                        }</List></Table.Cell>
+                    </Table.Row>
+                    : null
+                }
             </Table.Body></Table>
         </Segment>
 

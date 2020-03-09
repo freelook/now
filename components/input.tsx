@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { IndexContext } from 'pages';
 import * as route from 'hooks/route';
+import * as suggest from 'hooks/suggest';
 
 interface InputContext extends IndexContext {
     suggestion?: string[];
@@ -28,7 +29,7 @@ const Input = (props:InputProps) => {
     const router = useRouter();
     const input = useInput();
     const [value, setValue] = React.useState(input);
-    const suggestion = _.get(props.ctx, 'suggestion', []).filter(s => !/\/\//.test(s));
+    const suggestion = suggest.filter(_.get(props.ctx, 'suggestion', []));
 
     const pushInput = () => {
         const pathname = props.as || props.pathname;

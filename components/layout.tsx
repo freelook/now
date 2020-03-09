@@ -19,6 +19,7 @@ const Layout = (props:LayoutProps) => {
     const loader = (asPath:string) => {
         if(asPath !== router.asPath) {
             setLoad(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
 
@@ -34,10 +35,12 @@ const Layout = (props:LayoutProps) => {
         <section>
             <Head {...props.head} />
             <style jsx global>{`
-                html, body {
-                    overflow: auto;
+                html {
                     background: ${background};
                     font-family: Roboto Mono, monospace;
+                }
+                body {
+                    overflow: auto;
                 }
                 .fli-loader {
                     position: fixed !important;
