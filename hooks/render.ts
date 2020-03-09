@@ -49,3 +49,11 @@ export const load = (id:string, src:string, params?:{[key:string]:string}) => {
         }
     }
 };
+
+export const encode = (v:string) => {
+    return encodeURIComponent(v);
+};
+
+export const decode = (v:string) => {
+    return decodeURIComponent(v);
+};

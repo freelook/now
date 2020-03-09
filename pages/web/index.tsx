@@ -10,6 +10,7 @@ import Grid from 'components/grid';
 import Input, {useInput} from 'components/input';
 import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
+import * as render from 'hooks/render';
 import { useWebtask, WEB_TASK} from 'hooks/webtask';
 import Images from './images';
 
@@ -61,15 +62,15 @@ const Web = (ctx:WebContext) => {
                 description={(w) => _.get(w, 'contentNoFormatting')}
                 link={(w)=> {
                     const url =  _.get(w, 'url');
-                    const link = ctx.type === Images.type ? _.get(w, 'originalContextUrl', url) : url;
+                    const link = render.decode(ctx.type === Images.type ? _.get(w, 'originalContextUrl', url) : url);
                     return {href: `${PATH.META}/[token]`, as: `${PATH.META}/${route.encode(link)}`};
                 }}
                 imageLink={(w)=> {
-                    const link =  _.get(w, 'url');
+                    const link = render.decode(_.get(w, 'url', ''));
                     return ctx.type === Images.type ? {href: link, target: '_blank'} : {href: `${PATH.META}/[token]`, as: `${PATH.META}/${route.encode(link)}`};
                 }}
                 extra={(w) => {
-                    const link = _.get(w, 'url');
+                    const link = render.decode(_.get(w, 'url', ''));
                     return (<Grid.Extra>
                         <Nav.External link={link}><Icon color='teal' circular name="external alternate"/></Nav.External>
                     </Grid.Extra>);

@@ -43,7 +43,7 @@ const Head = (props: HeadPropsType) => {
             <meta property="og:url" content={url} />
             <meta property="og:title" content={title} />
             <meta property="og:description" content={description} />
-            {image && <meta property="og:image" content={image} />}
+            {image ? <meta property="og:image" content={image} /> : null}
         </NextHead>
     );
 }

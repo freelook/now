@@ -30,10 +30,10 @@ const Meta = (ctx:MetaContext) => {
   useEffect(() => {
     if(!(title || description || image)) {
         route.open(url);
-        if(_.includes(route.prev().join(''), PATH.NEWS)) {
+        if(route.prev().length) {
             router.back();
         } else {
-            router.replace(PATH.NEWS);
+            router.replace(PATH.HOME);
         }
     }
   }, []);
