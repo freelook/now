@@ -7,6 +7,8 @@ import { IndexContext } from 'pages';
 import * as route from 'hooks/route';
 import * as suggest from 'hooks/suggest';
 
+export const MAX_SUGGESTION_LTH = 101;
+
 interface InputContext extends IndexContext {
     suggestion?: string[];
 }
@@ -29,7 +31,7 @@ const Input = (props:InputProps) => {
     const router = useRouter();
     const input = useInput();
     const [value, setValue] = React.useState(input);
-    const suggestion = suggest.filter(_.get(props.ctx, 'suggestion', []));
+    const suggestion = suggest.filter(_.get(props.ctx, 'suggestion', []), MAX_SUGGESTION_LTH);
 
     const pushInput = () => {
         const pathname = props.as || props.pathname;
