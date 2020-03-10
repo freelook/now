@@ -72,7 +72,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
 
        {renderItems(variations)}
 
-        <Footer {...{ctx}} media={image} />
+        <Footer {...{ctx}} media={image} url={itemDp} />
 
         <style jsx global>{`
             .ecom-item img {

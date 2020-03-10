@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Icon } from 'semantic-ui-react';
 import dynamic from 'next/dynamic';
 import { IndexContext } from 'pages';
 import * as rs from 'react-share';
@@ -20,14 +20,19 @@ const providers = {
 
 interface ShareProps {
     ctx: IndexContext;
-    media?: string;  
+    media?: string;
+    url?: string;  
 }
 
 const Share = (props:ShareProps) => {
-    const href = window.location.href;
+    const href = _.get(props, 'url', window.location.href);
     const media = _.get(props, 'media', `https://${FLI_DOMAIN}/static/no_image.png`);
     return (
         <Segment textAlign='center'>
+            <>
+                <rs.FacebookShareCount url={href} />
+                <Icon name='fork' />
+            </>
             {_.map(providers, (v, k) => {
                 return <v.component key={k} 
                     url={href} 

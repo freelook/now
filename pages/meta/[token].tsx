@@ -79,7 +79,7 @@ const Meta = (ctx:MetaContext) => {
             </Table.Body></Table>
         </Segment>
 
-        <Footer {...{ctx}} media={image} />
+        <Footer {...{ctx}} media={image} url={url} />
 
         <style jsx global>{`
             .meta img {

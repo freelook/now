@@ -12,6 +12,7 @@ import { IndexContext } from 'pages';
 interface FooterProps {
     ctx: IndexContext;
     media?: string;
+    url?: string; 
 }
 
 const Footer = (props:FooterProps) => {
