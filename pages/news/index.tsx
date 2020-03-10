@@ -15,7 +15,19 @@ import { useWebtask, RSS_TASK } from 'hooks/webtask';
 export const NEWS_LOCALES = {
     [locale.EN]: 'en',
     [locale.ES]: 'es',
-    [locale.DE]: 'de'
+    [locale.DE]: 'de',
+    [locale.FR]: 'fr',
+    [locale.IT]: 'it',
+    [locale.PL]: 'pl',
+    [locale.UK]: 'uk',
+    [locale.RU]: 'ru',
+    ['en.au']: 'en&gl=AU',
+    ['en.ca']: 'en&gl=CA',
+    ['fr.ca']: 'fr&gl=CA',
+    ['en.gb']: 'en&gl=GB',
+    ['uk.ua']: 'uk&gl=UA',
+    ['ru.ua']: 'ru&gl=UA',
+    ['ua']: 'uk',
 } as {[key:string]:string};
 
 interface NewsContext extends IndexContext {
@@ -79,7 +91,7 @@ News.getInitialProps = async (ctx:NextPageContext) => {
   const input = _.get(query, 'input', '');
   const slug = _.get(query, 'seo', input);
   const indexProps = await useIndexProps(ctx);
-  const lang = NEWS_LOCALES[indexProps.locale] || NEWS_LOCALES[locale.EN];
+  const lang = NEWS_LOCALES[indexProps.locale] || NEWS_LOCALES[locale.getGeo(indexProps.locale)] || NEWS_LOCALES[locale.getLng(indexProps.locale)] || NEWS_LOCALES[locale.EN];
   const newsTask = useWebtask(ctx)({
     taskName: RSS_TASK, 
     body: {

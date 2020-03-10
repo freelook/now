@@ -6,11 +6,43 @@ import * as request from 'hooks/request';
 import * as route from 'hooks/route';
 import { redirect, buildUrl } from 'hooks/route';
 
+export const localeDelimiter = '.';
 export const EN = 'en';
 export const ES = 'es';
+export const FR = 'fr';
+export const IT = 'it';
 export const DE = 'de';
+export const PL = 'pl';
+export const UK = 'uk';
+export const RU = 'ru';
 export const defaultLocale = EN;
-export const supportedLocales = [EN, ES, DE];
+export const defaultGeo = 'us';
+export const supportedLocales = [EN, ES, FR, IT, DE, PL, UK, RU];
+export const lng = [
+  { code: EN, text: 'English' },
+  { code: ES, text: 'Español' },
+  { code: FR, text: 'Français' },
+  { code: IT, text: 'Italiano' },
+  { code: DE, text: 'Deutsch' },
+  { code: PL, text: 'Polski' },
+  { code: UK, text: 'Українська' },
+  { code: RU, text: 'Русский' }, 
+];
+export const geo = [
+  { code: undefined, text: 'Global' },
+  { code: 'au', text: 'Australia' },
+  { code: 'ca', text: 'Canada' },
+  { code: defaultGeo, text: 'United States' },
+  { code: 'gb', text: 'United Kingdom' },
+  { code: 'mx', text: 'Mexico' },
+  { code: 'es', text: 'Spain' },
+  { code: 'fr', text: 'France' },
+  { code: 'it', text: 'Italy' },
+  { code: 'de', text: 'Germany' },
+  { code: 'pl', text: 'Poland' },
+  { code: 'ua', text: 'Ukraine' },
+  { code: 'ru', text: 'Russia' },
+];
 export const i18nPath = 'i18n';
 
 const getCookieLocale = (ctx:NextPageContext) => {
@@ -22,11 +54,22 @@ const getRouteLocale = (ctx:NextPageContext) => {
 export const getLocale = (ctx:NextPageContext) => {
     return getRouteLocale(ctx) || getCookieLocale(ctx) || defaultLocale;
 };
+export const splitLocale = (ctx:NextPageContext|string) => {
+    let locale = _.isString(ctx) ? ctx : getLocale(ctx);
+    return locale.split(localeDelimiter);
+};
+export const getLng = (ctx:NextPageContext|string) => {
+    return splitLocale(ctx)[0];
+};
+export const getGeo = (ctx:NextPageContext|string) => {
+    return splitLocale(ctx)[1];
+};
 const needToSet = (ctx:NextPageContext) => {
     return !!getRouteLocale(ctx) || !getCookieLocale(ctx);
 };
 const isSupported = (locale:string, list:string[] = supportedLocales ) => {
-    return _.includes(list, locale);
+    let [l, g] = splitLocale(locale);
+    return _.includes(list, l) && (g ? _.some(geo, (v) => v.code === g ) : true);
 }
 
 export const useLocale =(ctx:NextPageContext, list:string[] = supportedLocales ) => {
@@ -50,7 +93,7 @@ export const importTranslation = async (locale: string) => {
 };
 
 export const useTranslation = async (ctx:NextPageContext) => {
-    const locale = getLocale(ctx);
+    const locale = getLng(ctx);
     let t = {};
     try {
         if(render.isSSR(ctx)) {

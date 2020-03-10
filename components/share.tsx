@@ -28,7 +28,7 @@ const Share = (props:ShareProps) => {
     const href = _.get(props, 'url', window.location.href);
     const media = _.get(props, 'media', `https://${FLI_DOMAIN}/static/no_image.png`);
     return (
-        <Segment textAlign='center' style={{"overflowX": "auto", "whiteSpace": "nowrap"}}>
+        <Segment textAlign='center' style={{overflowX: 'auto', whiteSpace: 'nowrap'}}>
             <>
                 <rs.FacebookShareCount url={href} />
                 <Icon name='fork' />

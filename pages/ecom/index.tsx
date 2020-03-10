@@ -160,7 +160,7 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
   const node = _.last(slugArr) || null;
   const slug = slugArr.slice(0, -1).join(' ').trim() || _.get(query, 'seo', '');
   const indexProps = await useIndexProps(ctx);
-  const lang = ECOM_LOCALES[indexProps.locale] || ECOM_LOCALES[locale.EN];
+  const lang = ECOM_LOCALES[locale.getLng(indexProps.locale)] || ECOM_LOCALES[locale.EN];
   const nodesTaks = useWebtask(ctx)({
         taskName: AMZN_TASK,
         taskPath: 'us/paapi/v5/getBrowseNodes',

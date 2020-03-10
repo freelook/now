@@ -17,8 +17,18 @@ import { useWebtask, RSS_TASK } from 'hooks/webtask';
 export const TRENDS_ENPOINT = 'https://trends.google.com/trends/trendingsearches/daily/rss';
 export const TRENDS_LOCALES = {
     [locale.EN]: 'US',
-    [locale.ES]: 'MX',
-    [locale.DE]: 'DE'
+    [locale.ES]: 'ES',
+    [locale.DE]: 'DE',
+    [locale.FR]: 'FR',
+    [locale.IT]: 'IT',
+    [locale.PL]: 'PL',
+    [locale.UK]: 'UA',
+    [locale.RU]: 'RU',
+    ['au']: 'AU',
+    ['ca']: 'CA',
+    ['gb']: 'GB',
+    ['mx']: 'MX',
+    ['ua']: 'UA'
 } as {[key:string]:string};
 
 export interface IndexContext extends NextPageContext {
@@ -107,14 +117,14 @@ const Home = (ctx:HomeContext) => {
 
 Home.getInitialProps = async (ctx:NextPageContext) => {
     const indexProps = await useIndexProps(ctx);
-    const geo = TRENDS_LOCALES[indexProps.locale] || TRENDS_LOCALES[locale.EN];
+    const geo = TRENDS_LOCALES[locale.getGeo(indexProps.locale)] || TRENDS_LOCALES[locale.getLng(indexProps.locale)] || TRENDS_LOCALES[locale.EN];
     return {
       name: 'Home',
       ...indexProps,
       trends: (await useWebtask(ctx)({
         taskName: RSS_TASK, 
         body: {
-            rss: `https://trends.google.com/trends/trendingsearches/daily/rss?geo=${geo}`
+            rss: `${TRENDS_ENPOINT}?geo=${geo}`
         },
         cache: true
       }) || {}).rss
