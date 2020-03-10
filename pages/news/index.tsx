@@ -10,6 +10,7 @@ import Grid from 'components/grid';
 import Input, {useInput} from 'components/input';
 import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
+import * as render from 'hooks/render';
 import { useWebtask, RSS_TASK } from 'hooks/webtask';
 
 export const NEWS_LOCALES = {
@@ -95,7 +96,7 @@ News.getInitialProps = async (ctx:NextPageContext) => {
   const newsTask = useWebtask(ctx)({
     taskName: RSS_TASK, 
     body: {
-        rss: `https://news.google.com/rss?hl=${lang}${input ? `&q=${input}` : ''}`
+        rss: `https://news.google.com/rss?hl=${lang}${input ? `&q=${render.encode(input)}` : ''}`
     },
     cache: true
   });

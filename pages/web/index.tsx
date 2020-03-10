@@ -93,7 +93,7 @@ Web.getInitialProps = async (ctx:NextPageContext) => {
     taskName: WEB_TASK,
     taskPath: 'web',
     body: {
-        q: input,
+        q: render.encode(input),
         type: type
     },
     cache: true

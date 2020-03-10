@@ -29,7 +29,7 @@ const Head = (props: HeadPropsType) => {
                 const props = {
                     key: l,
                     rel: "alternate",
-                    hreflang: l,
+                    hrefLang: l,
                     href: `https://${FLI_DOMAIN}${buildUrl(router, {query: {locale: l} })}`
                 };
                 return <link {...props} />;
