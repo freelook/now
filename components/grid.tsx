@@ -19,6 +19,7 @@ interface GridProps<T> {
    className?: string; 
    items: T[];
    image?: (item:T) => string;
+   imageAlternate?: (item:T) => string;
    alt?: (item:T) => string;
    header?: (item:T) => ElementType;
    link?: (item:T) => LinkAttr;
@@ -44,6 +45,7 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
         <SemanticGrid centered className={className}>
             {_.map(props.items, (it:T, i:number) => {
                 const image = props.image && props.image(it) || GRID_ITEM_IMAGE;
+                const imageAlternate = props.imageAlternate && props.imageAlternate(it);
                 const alt = props.alt && props.alt(it);
                 const header = props.header && props.header(it);
                 const link = props.link && props.link(it);
@@ -59,7 +61,13 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                             <Linkify link={imageLink}>
                                 <Image alt={alt} src={image} wrapped onError={(e:React.SyntheticEvent|any) => {
                                     e.persist();
-                                    e.target.src = GRID_ITEM_IMAGE;
+                                    if(imageAlternate && e.target.src !== imageAlternate) {
+                                        e.target.src = imageAlternate;
+                                    } else if(e.target.src !== GRID_ITEM_IMAGE) {
+                                        e.target.src = GRID_ITEM_IMAGE;
+                                    } else {
+                                        return e && e.stopPropagation();
+                                    }
                                 }}/>
                             </Linkify>
                             {description && <Card.Description>{description}</Card.Description>}

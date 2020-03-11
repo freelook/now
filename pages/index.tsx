@@ -99,6 +99,7 @@ const Home = (ctx:HomeContext) => {
                       const newsItemUrl = _.get(tr, 'ht:news_item.ht:news_item_url.#', _.get(tr, 'ht:news_item[0].ht:news_item_url.#'));
                       return newsItemUrl ? `/api/meta/img/${route.encode(newsItemUrl)}` : _.get(tr, 'ht:picture.#');
                   }}
+                  imageAlternate={(tr) => _.get(tr, 'ht:picture.#')}
                   alt={(tr) => _.get(tr, 'title')}
                   link={(tr)=> {
                       const input = _.get(tr, 'title', '');

@@ -1,4 +1,4 @@
-import { NextPageContext } from 'next';
+import { NextPageContext, NextApiRequest, NextApiResponse } from 'next';
 import _ from 'lodash';
 import { SemanticCOLORS } from 'semantic-ui-react';
 
@@ -6,9 +6,14 @@ export interface RenderContext extends NextPageContext {
     body?: any;
 }
 
+export interface APIContext {
+    req: NextApiRequest; 
+    res:NextApiResponse;
+}
+
 export const Colors = ['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink', 'brown', 'grey'];
 
-export const isSSR = (ctx: RenderContext) => {
+export const isSSR = (ctx: RenderContext|APIContext) => {
     return ctx && ctx.req;
 };
 

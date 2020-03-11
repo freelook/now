@@ -1,9 +1,7 @@
 import _ from 'lodash';
-import request from 'request';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { webtask, META_TASK } from 'hooks/webtask';
-import {decode} from 'hooks/route';
-import {bad} from 'hooks/request';
+import * as route from 'hooks/route';
 
 export default async (req:NextApiRequest, res:NextApiResponse) => {
     const token = _.get(req, 'query.token');
@@ -12,7 +10,7 @@ export default async (req:NextApiRequest, res:NextApiResponse) => {
     }
     let meta = {};
     try {
-        const url = decode(token);
+        const url = route.decode(token);
         meta = await webtask({
             taskName: META_TASK, 
             body: { url },
@@ -22,12 +20,7 @@ export default async (req:NextApiRequest, res:NextApiResponse) => {
         if(!image) {
             return res.status(404).end();
         }
-        const stream = request.get(image);
-        stream.on('error', () => res.send(500)).pipe(res);
-        req.on('end', () => {
-            stream.destroy();
-            res.end();
-        });
+        route.redirect({req, res}).to(image);
     } catch(e) {
         res.status(500).end();
     }

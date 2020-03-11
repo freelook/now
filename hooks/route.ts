@@ -2,7 +2,7 @@ import _ from 'lodash';
 import url from 'url';
 import btoa from 'btoa';
 import atob from 'atob';
-import { isSSR } from 'hooks/render';
+import { isSSR, APIContext } from 'hooks/render';
 import Router, { NextRouter, useRouter } from 'next/router';
 import { LinkProps } from 'next/link';
 import { NextPageContext } from 'next';
@@ -59,7 +59,7 @@ export const buildUrl = (
     return `${pathname}${qs ? '?'.concat(qs) : ''}`;
 };
 
-export const redirect = (ctx: NextPageContext) => ({ to: (url:string) => {
+export const redirect = (ctx: NextPageContext|APIContext) => ({ to: (url:string) => {
     console.log('redirect to: ', url);
     if (isSSR(ctx) && ctx.res) {
         ctx.res.writeHead(302, { Location: url });
