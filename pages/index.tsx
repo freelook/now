@@ -12,6 +12,7 @@ import Footer from 'components/footer';
 import Grid from 'components/grid';
 import Input from 'components/input';
 import * as locale from 'hooks/locale';
+import * as route from 'hooks/route';
 import { useWebtask, RSS_TASK } from 'hooks/webtask';
 
 export const TRENDS_ENPOINT = 'https://trends.google.com/trends/trendingsearches/daily/rss';
@@ -51,6 +52,10 @@ interface ITrendHash {
     '#': string;
 }
 
+interface INewsItem {
+    "ht:news_item_url": ITrendHash;
+}
+
 interface ITrend {
     title: string;
     description: string;
@@ -60,6 +65,7 @@ interface ITrend {
     'ht:approx_traffic': ITrendHash;
     'ht:picture': ITrendHash;
     'rss:pubdate': ITrendHash;
+    'ht:news_item': INewsItem | INewsItem[]
 }
 
 const fetcher = async (url:string) => {
@@ -89,7 +95,10 @@ const Home = (ctx:HomeContext) => {
                     {_.get(tr, 'ht:approx_traffic.#')}&nbsp;
                     <Icon name='clock outline' title={_.get(tr, 'rss:pubdate.#')} />
                   </>)}
-                  image={(tr) => _.get(tr, 'ht:picture.#')}
+                  image={(tr) => {
+                      const newsItemUrl = _.get(tr, 'ht:news_item.ht:news_item_url.#', _.get(tr, 'ht:news_item[0].ht:news_item_url.#'));
+                      return newsItemUrl ? `/api/meta/img/${route.encode(newsItemUrl)}` : _.get(tr, 'ht:picture.#');
+                  }}
                   alt={(tr) => _.get(tr, 'title')}
                   link={(tr)=> {
                       const input = _.get(tr, 'title', '');
