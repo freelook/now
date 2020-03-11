@@ -18,7 +18,7 @@ export default async (req:NextApiRequest, res:NextApiResponse) => {
             body: { url },
             cache: true
         });
-        const image = _.get(meta, 'og:image', _.get(meta, 'twitter:image'));
+        const image = _.get(meta, 'og:image', _.get(meta, 'twitter:image', _.get(meta, 'icon')));
         if(!image) {
             return res.status(404).end();
         }

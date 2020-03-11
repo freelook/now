@@ -29,6 +29,7 @@ const Meta = (ctx:MetaContext) => {
   const image = _.get(meta, 'og:image', _.get(meta, 'twitter:image', ''));
   const keywords = suggest.filter(_.get(meta, 'keywords', _.get(meta, 'news_keywords', '')).split(','));
   const url = _.get(meta, 'og:url', ctx.link || '');
+  const rss = _.get(meta, 'rss');
 
   useEffect(() => {
     if(!(title || description || image)) {
@@ -59,6 +60,7 @@ const Meta = (ctx:MetaContext) => {
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell textAlign='right'>
+                         {rss ? <Nav.External link={rss}><Icon circular name="feed"/></Nav.External> : null}
                          <Nav.External link={url}><Icon color='teal' circular name="external alternate"/></Nav.External>
                     </Table.Cell>
                 </Table.Row>
