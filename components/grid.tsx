@@ -61,9 +61,9 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                             <Linkify link={imageLink}>
                                 <Image alt={alt} src={image} wrapped onError={(e:React.SyntheticEvent|any) => {
                                     e.persist();
-                                    if(imageAlternate && e.target.src !== imageAlternate) {
+                                    if(imageAlternate && !_.endsWith(e.target.src, imageAlternate)) {
                                         e.target.src = imageAlternate;
-                                    } else if(e.target.src !== GRID_ITEM_IMAGE) {
+                                    } else if(!_.endsWith(e.target.src, GRID_ITEM_IMAGE)) {
                                         e.target.src = GRID_ITEM_IMAGE;
                                     } else {
                                         return e && e.stopPropagation();
