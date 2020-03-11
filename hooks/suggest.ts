@@ -21,5 +21,5 @@ export const useSuggestion = (ctx:render.RenderContext) => async (input: string)
 };
 
 export const filter = (suggestion:string[] = [], max:number = MAX_LTH) => _
-    .filter(suggestion, (s) => !/\/\//.test(s) && s.length < max)
+    .filter(suggestion, (s) => !!s && !/\/\//.test(s) && s.length < max)
     .map(_.trim);
