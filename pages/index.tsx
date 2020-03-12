@@ -18,7 +18,7 @@ import { useWebtask, RSS_TASK } from 'hooks/webtask';
 export const TRENDS_ENPOINT = 'https://trends.google.com/trends/trendingsearches/daily/rss';
 export const TRENDS_LOCALES = {
     [locale.EN]: 'US',
-    [locale.ES]: 'ES',
+    [locale.ES]: 'US',
     [locale.DE]: 'DE',
     [locale.FR]: 'FR',
     [locale.IT]: 'IT',

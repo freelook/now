@@ -60,7 +60,7 @@ const Meta = (ctx:MetaContext) => {
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell textAlign='right'>
-                         {rss ? <Nav.External link={rss}><Icon circular name="feed"/></Nav.External> : null}
+                         {rss ? <Link href={`${PATH.FEED}/${route.encode(rss)}`} prefetch={false}><a><Icon circular name="feed"/></a></Link> : null}
                          <Nav.External link={url}><Icon color='teal' circular name="external alternate"/></Nav.External>
                     </Table.Cell>
                 </Table.Row>

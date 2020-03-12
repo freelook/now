@@ -13,7 +13,8 @@ export const PATH = {
     NEWS: '/news',
     WEB: '/web',
     ECOM: '/ecom',
-    META: '/meta'
+    META: '/meta',
+    FEED: '/feed'
 };
 
 const Nav = (props: NavProps) => {

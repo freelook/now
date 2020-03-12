@@ -88,8 +88,7 @@ Web.getInitialProps = async (ctx:NextPageContext) => {
   const type = (ctx as WebContext).type;
   const slug = _.get(query, 'seo', input);
   const indexProps = await useIndexProps(ctx);
-  const lang = WEB_LOCALES[indexProps.locale] || WEB_LOCALES[locale.EN];
-  const webTask = useWebtask(ctx)({
+  const webTask = input ? useWebtask(ctx)({
     taskName: WEB_TASK,
     taskPath: 'web',
     body: {
@@ -97,13 +96,13 @@ Web.getInitialProps = async (ctx:NextPageContext) => {
         type: type
     },
     cache: true
-  });
+  }) : null;
   return {
       name: 'Web',
       ...indexProps,
       slug: slug,
       type: type,
-      results: (await webTask || {}).results
+      results: input ? (await webTask || {}).results : null
   };
 };
 
