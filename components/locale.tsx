@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Segment, Dropdown } from 'semantic-ui-react';
 import Link from 'next/link';
+import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
 import { geo, lng, splitLocale } from 'hooks/locale';
 import { buildUrl } from 'hooks/route';
@@ -12,6 +13,7 @@ interface LocaleProps {
 }
 
 const Locale = (props:LocaleProps) => {
+    const isAmp = useAmp();
     const router = useRouter();
     const [currentLng, currentGeo] = splitLocale(props.ctx.locale);
 
@@ -34,7 +36,7 @@ const Locale = (props:LocaleProps) => {
             <Dropdown selection compact value={currentLng} options={lng.map((l, i) => {
                 return {key: i, value: l.code, text: l.text, content: (<LngContent l={l} />)};
             })} />
-            <Dropdown placeholder={geo[0].text} search selection value={currentGeo} options={geo.map((g, i) => {
+            <Dropdown placeholder={geo[0].text} search={!isAmp} selection value={currentGeo} options={geo.map((g, i) => {
                 return {key: i, value: g.code, flag: g.code, text: g.text, content: (<GeoContent g={g} />)};
             })} />
         </div>

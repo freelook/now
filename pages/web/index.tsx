@@ -14,6 +14,8 @@ import * as render from 'hooks/render';
 import { useWebtask, WEB_TASK} from 'hooks/webtask';
 import Images from './images';
 
+export const config = { amp: 'hybrid' };
+
 export const WEB_LOCALES = {
     [locale.EN]: 'en',
     [locale.ES]: 'es',

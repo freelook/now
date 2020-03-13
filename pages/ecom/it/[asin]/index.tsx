@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { NextPageContext } from 'next';
+import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
 import { Segment, Icon, Table, Image, List } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'pages';
@@ -10,9 +11,11 @@ import Footer from 'components/footer';
 import Input from 'components/input';
 import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
-import { useRandomColor } from 'hooks/render';
+import * as render from 'hooks/render';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
 import { IItem, ECOM_CACHE, ECOM_LOCALES, renderNodes, renderItems } from 'pages/ecom';
+
+export const config = { amp: 'hybrid' };
 
 interface EcommerceItemContext extends IndexContext {
     asin: string;
@@ -22,6 +25,8 @@ interface EcommerceItemContext extends IndexContext {
 }
 
 const EcommerceItem = (ctx:EcommerceItemContext) => {
+  const isAmp = useAmp();
+  const important = render.important(isAmp);
   const router = useRouter();
   const item = _.get(ctx.item, 'ItemsResult.Items[0]', {});
   const nodes = _.get(item, 'BrowseNodeInfo.BrowseNodes', []);
@@ -49,15 +54,18 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
         </Segment>
 
         <Segment className="ecom-item">
-            <Table color={useRandomColor(itemTitle.length)}><Table.Body>
+            <Table color={render.useRandomColor(itemTitle.length)}><Table.Body>
                 <Table.Row>
                     <Table.Cell rowSpan={2} textAlign='center'>
-                    <Image wrapped src={image}/>
+                    {!isAmp ? <Image wrapped src={image} alt={itemTitle} /> :                                 
+                    <div className='amp-container'>
+                        <amp-img className='contain' alt={itemTitle} src={image} layout='fill' />
+                    </div>}
                     </Table.Cell>
                     <Table.Cell><h3>{itemTitle}</h3></Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell textAlign='right'>{itemPrice} <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External></Table.Cell>
+                    <Table.Cell textAlign='right'>{!isAmp ? itemPrice : <a href={itemDp}>{itemPrice}</a>} <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External></Table.Cell>
                 </Table.Row>
                 {itemFeatures.length > 0 ?
                 <Table.Row>
@@ -76,7 +84,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
 
         <style jsx global>{`
             .ecom-item img {
-                max-width: 100% !important;
+                max-width: 100% ${important};
             }
         `}</style>
     </Layout>

@@ -62,3 +62,5 @@ export const encode = (v:string) => {
 export const decode = (v:string) => {
     return decodeURIComponent(v);
 };
+
+export const important = (isAmp:boolean) => !isAmp ? '!important' : '';

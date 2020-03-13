@@ -15,6 +15,8 @@ import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import { useWebtask, RSS_TASK } from 'hooks/webtask';
 
+export const config = { amp: 'hybrid' };
+
 export const TRENDS_ENPOINT = 'https://trends.google.com/trends/trendingsearches/daily/rss';
 export const TRENDS_LOCALES = {
     [locale.EN]: 'US',
@@ -75,7 +77,7 @@ const fetcher = async (url:string) => {
 const Home = (ctx:HomeContext) => {
   const router = useRouter();
   const { data } = useSWR(`${router.route}api/date`, fetcher);
-  const date = _.get(data, 'date', '?');
+  const date = _.get(data, 'date', 'now');
   const title = _.get(ctx, 't.Trends', 'Trends');
 
   return (

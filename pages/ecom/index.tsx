@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { NextPageContext } from 'next';
+import { useAmp } from 'next/amp';
 import Link from 'next/link';
 import { useRouter, NextRouter } from 'next/router';
 import { Segment, Icon, Pagination } from 'semantic-ui-react';
@@ -14,6 +15,8 @@ import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import * as suggest from 'hooks/suggest';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
+
+export const config = { amp: 'hybrid' };
 
 export const ECOM_LOCALES = {
     [locale.EN]: 'en_US',
@@ -104,6 +107,7 @@ export const renderItems = (items:IItem[]) => {
 }
 
 const Ecommerce = (ctx:EcommerceContext) => {
+  const isAmp = useAmp();
   const router = useRouter();
   const input = useInput();
   const nodes = _.get(ctx.nodes, 'BrowseNodesResult.BrowseNodes', []);
@@ -131,7 +135,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
        {renderItems(items)}
 
         <div style={{textAlign: 'center', margin: '15px 0'}}>
-            {items.length && total && items.length < total ? <Pagination
+            {!isAmp && items.length && total && items.length < total ? <Pagination
                 boundaryRange={0}
                 siblingRange={2}
                 ellipsisItem={null}

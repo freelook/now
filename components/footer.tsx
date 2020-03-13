@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import { useAmp } from 'next/amp';
 import Locale from 'components/locale';
 import Share from 'components/share';
 import Comments from 'components/comments';
@@ -12,10 +13,11 @@ interface FooterProps {
 }
 
 const Footer = (props:FooterProps) => {
+    const isAmp = useAmp();
     return (
         <footer>
-            <Share {...props} />
-            <Comments {...props} />
+            {!isAmp ?<Share {...props} /> : null}
+            {!isAmp ? <Comments {...props} /> : null}
             <Locale ctx={props.ctx} />
         </footer>
     );

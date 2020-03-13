@@ -21,7 +21,7 @@ const Comments = (props:CommentsProps) => {
 
     return (
         <Segment textAlign='center'>
-            <div className="fb-comments" data-href={window.location.href} data-numposts="7" data-width="100%" />   
+            <div className="fb-comments" data-href={window.location.href} data-numposts="7" data-width="100%" style={{minWidth: '100%'}} />   
         </Segment>
     );
 };

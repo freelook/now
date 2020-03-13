@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, {useEffect} from 'react';
 import { NextPageContext } from 'next';
 import Link from 'next/link';
+import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
 import { Segment, Icon, Table, Image, List } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'pages';
@@ -11,8 +12,10 @@ import Footer from 'components/footer';
 import Input from 'components/input';
 import * as route from 'hooks/route';
 import * as suggest from 'hooks/suggest';
-import { useRandomColor } from 'hooks/render';
+import * as render from 'hooks/render';
 import { useWebtask, META_TASK } from 'hooks/webtask';
+
+export const config = { amp: 'hybrid' };
 
 interface MetaContext extends IndexContext {
     link: string;
@@ -20,6 +23,8 @@ interface MetaContext extends IndexContext {
 }
 
 const Meta = (ctx:MetaContext) => {
+  const isAmp = useAmp();
+  const important = render.important(isAmp);
   const router = useRouter();
   const meta = _.get(ctx, 'meta', {});
   const titlePrefix = _.get(ctx, 't.Meta', 'Meta');
@@ -51,10 +56,13 @@ const Meta = (ctx:MetaContext) => {
         </Segment>
 
         <Segment className="meta">
-            <Table color={useRandomColor(title.length)}><Table.Body>
+            <Table color={render.useRandomColor(title.length)}><Table.Body>
                 <Table.Row>
                     <Table.Cell rowSpan={2} textAlign='center'>
-                    <Image wrapped src={image}/>
+                    {!isAmp ? <Image wrapped src={image} alt={title} /> :                                 
+                    <div className='amp-container'>
+                        <amp-img className='contain' alt={title} src={image} layout='fill' />
+                    </div>}
                     </Table.Cell>
                     <Table.Cell><h3>{title}</h3></Table.Cell>
                 </Table.Row>
@@ -85,7 +93,7 @@ const Meta = (ctx:MetaContext) => {
 
         <style jsx global>{`
             .meta img {
-                max-width: 100% !important;
+                max-width: 100% ${important};
             }
         `}</style>
     </Layout>

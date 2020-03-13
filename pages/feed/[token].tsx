@@ -11,6 +11,8 @@ import Grid from 'components/grid';
 import * as route from 'hooks/route';
 import { useWebtask, RSS_TASK } from 'hooks/webtask';
 
+export const config = { amp: 'hybrid' };
+
 interface FeedContext extends IndexContext {
     link: string;
     feed: IFeedItem[];

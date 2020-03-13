@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Input as SemanticInput, List } from 'semantic-ui-react';
 import Link from 'next/link';
+import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
 import { IndexContext } from 'pages';
 import * as route from 'hooks/route';
@@ -28,6 +29,7 @@ export const useInput = () => {
 };
 
 const Input = (props:InputProps) => {
+    const isAmp = useAmp();
     const router = useRouter();
     const input = useInput();
     const [value, setValue] = React.useState(input);
@@ -60,12 +62,13 @@ const Input = (props:InputProps) => {
         setValue(input);
     }, [input]);
     return (
-        <form onSubmit={handleInputSubmit}>
+        <form { ...(!isAmp ? {onSubmit:handleInputSubmit} : {method:'GET', target:'_top', action:props.pathname || '/'}) } >
             <SemanticInput fluid
                 type="text"
                 name="input"
                 placeholder={_.get(props.ctx, 't.Placeholder', 'Looking for...')}
-                value={value} 
+                value={value}
+                className="fli-input"
                 onChange={handleInputChange} />
 
             {suggestion.length > 0 ? <List horizontal>

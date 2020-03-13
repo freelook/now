@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
+import { useAmp } from 'next/amp';
 import Link, {LinkProps} from 'next/link';
 import { Grid as SemanticGrid, Card, Image, Icon } from 'semantic-ui-react';
-import { useRandomColor } from 'hooks/render';
+import * as render from 'hooks/render';
 
 const GRID_CLASS_NAME = `fli-items`;
 const GRID_ITEM_CLASS_NAME = `fli-item`;
@@ -39,7 +40,9 @@ const Linkify = (props: {link?: LinkAttr; children: any; target?:string}) => {
     return <Link href={link.href} as={link.as} prefetch={false}><a {...aProps}>{props.children}</a></Link>;
 }
 
-const Grid = <T extends {}>(props:GridProps<T>) => { 
+const Grid = <T extends {}>(props:GridProps<T>) => {
+    const isAmp = useAmp();
+    const important = render.important(isAmp);
     const className = _.get(props, 'className', '').concat(' ').concat(GRID_CLASS_NAME).trim();
     return !_.isEmpty(props.items) ? (
         <SemanticGrid centered className={className}>
@@ -54,11 +57,12 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                 const description = props.description && props.description(it);
                 const extra = props.extra && props.extra(it);
                 return (<SemanticGrid.Column key={`${GRID_ITEM_CLASS_NAME}-${i}`}>
-                    <Card color={useRandomColor(i)}>
+                    <Card color={render.useRandomColor(i)}>
                         <Card.Content>
                             {header && <Card.Header><Linkify link={link}>{header}</Linkify></Card.Header>}
                             {meta && <Card.Meta>{meta}</Card.Meta>}
                             <Linkify link={imageLink}>
+                                { !isAmp ?
                                 <Image alt={alt} src={image} wrapped onError={(e:React.SyntheticEvent|any) => {
                                     e.persist();
                                     if(imageAlternate && !_.endsWith(e.target.src, imageAlternate)) {
@@ -68,7 +72,11 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                                     } else {
                                         return e && e.stopPropagation();
                                     }
-                                }}/>
+                                }}/> : 
+                                <div className='amp-container'>
+                                    <amp-img className='contain' alt={alt} src={image} layout='fill' />
+                                </div>
+                                }
                             </Linkify>
                             {description && <Card.Description>{description}</Card.Description>}
                             {extra && <Card.Content extra>{extra}</Card.Content>}
@@ -78,9 +86,9 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
             })}
             <style jsx global>{`
                 .fli-items {
-                   margin: auto !important;
+                   margin: auto ${important};
                    overflow-wrap: break-word;
-                   display: block !important;
+                   display: block ${important};
                    column-count: 1;
                    column-gap: 0;
                 }
@@ -94,7 +102,7 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                    justify-content: center;
                 }
                 .fli-items .column {
-                   width: 100% !important;
+                   width: 100% ${important};
                 }
                 @media only screen and (min-width: ${GRID_ITEM_WIDTH * 2}px) {
                 .fli-items {

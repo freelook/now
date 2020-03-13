@@ -13,6 +13,8 @@ import * as route from 'hooks/route';
 import * as render from 'hooks/render';
 import { useWebtask, RSS_TASK } from 'hooks/webtask';
 
+export const config = { amp: 'hybrid' };
+
 export const NEWS_LOCALES = {
     [locale.EN]: 'en',
     [locale.ES]: 'es',

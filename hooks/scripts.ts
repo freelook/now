@@ -7,7 +7,7 @@ export const init = () => {
   RGA.initialize('UA-57893328-1');
   render.load('facebook-jssdk', 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0&appId=846841298681206');
   render.load('adsbygoogle', 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js', {
-      "data-ad-client": "ca-pub-2500456856779147"
+    "data-ad-client": "ca-pub-2500456856779147"
   });
 };
 
