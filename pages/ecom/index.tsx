@@ -23,6 +23,7 @@ export const ECOM_LOCALES = {
     [locale.ES]: 'es_US',
     [locale.DE]: 'de_DE'
 } as {[key:string]:string};
+export const ECOM_SCHEMA = 'https://schema.org/Product';
 export const ECOM_CACHE = '86400'; // one day
 export const ECOM_TOTAL_ITEMS = 10;
 export const ECOM_FIRST_PAGE = 1;
@@ -86,8 +87,12 @@ export const renderItems = (items:IItem[]) => {
                   items={items} 
                   header={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
                   image={(it) => _.get(it, 'Images.Primary.Large.URL')}
-                  meta={(it) => _.get(it, 'Offers.Listings[0].Price.DisplayAmount')}
+                  meta={(it) => (<>
+                    {_.get(it, 'ASIN')}{' - '}
+                    {_.get(it, 'Offers.Listings[0].Price.DisplayAmount')}
+                  </>)}
                   alt={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
+                  schema={() => ECOM_SCHEMA}
                   link={(it)=> {
                       const asin = _.get(it, 'ASIN', '');
                       const slug = route.slug(it, 'ItemInfo.Title.DisplayValue');
@@ -128,7 +133,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
             <Input {...{ctx}} query={{p:null}}/>
         </Segment>
 
-        <Segment>
+        <Segment itemProp="keywords">
             {renderNodes(router)(nodes)}
         </Segment>
 

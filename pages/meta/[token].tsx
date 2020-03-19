@@ -8,6 +8,7 @@ import { Segment, Icon, Table, Image, List } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'pages';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
+import {GRID_SCHEMA} from 'components/grid';
 import Footer from 'components/footer';
 import Input from 'components/input';
 import * as route from 'hooks/route';
@@ -55,30 +56,30 @@ const Meta = (ctx:MetaContext) => {
             <Input {...{ctx}} pathname={PATH.NEWS}/>
         </Segment>
 
-        <Segment className="meta">
+        <Segment className="meta" itemScope itemType={GRID_SCHEMA}>
             <Table color={render.useRandomColor(title.length)}><Table.Body>
                 <Table.Row>
                     <Table.Cell rowSpan={2} textAlign='center'>
-                    {!isAmp ? <Image wrapped src={image} alt={title} /> :                                 
+                    {!isAmp ? <Image itemProp="image" wrapped src={image} alt={title} /> :                                 
                     <div className='amp-container'>
-                        <amp-img className='contain' alt={title} src={image} layout='fill' />
+                        <amp-img itemProp="image" className='contain' alt={title} src={image} layout='fill' />
                     </div>}
                     </Table.Cell>
-                    <Table.Cell><h3>{title}</h3></Table.Cell>
+                    <Table.Cell><h3 {...{itemProp:'name'}}>{title}</h3></Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell textAlign='right'>
+                    <Table.Cell textAlign='right' itemProp="offers">
                          {rss ? <Link href={`${PATH.FEED}/${route.encode(rss)}`} prefetch={false}><a><Icon circular name="feed"/></a></Link> : null}
                          <Nav.External link={url}><Icon color='teal' circular name="external alternate"/></Nav.External>
                     </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell colSpan={2}>{description}</Table.Cell>
+                    <Table.Cell colSpan={2} itemProp="description">{description}</Table.Cell>
                 </Table.Row>
                 {
                     keywords.length > 0 ?
                     <Table.Row>
-                        <Table.Cell colSpan={2}><List horizontal>{
+                        <Table.Cell colSpan={2}><List horizontal itemProp="keywords">{
                             _.map(keywords, (v, k) => <List.Item key={k}>
                                 <Link href={route.buildUrl(router, {pathname: PATH.WEB, query: {input:v} })} prefetch={false}><a>{v}</a></Link>
                             </List.Item>)

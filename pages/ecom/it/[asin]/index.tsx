@@ -13,7 +13,7 @@ import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import * as render from 'hooks/render';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
-import { IItem, ECOM_CACHE, ECOM_LOCALES, renderNodes, renderItems } from 'pages/ecom';
+import { IItem, ECOM_CACHE, ECOM_LOCALES, ECOM_SCHEMA, renderNodes, renderItems } from 'pages/ecom';
 
 export const config = { amp: 'hybrid' };
 
@@ -49,27 +49,27 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
             <Input {...{ctx}} pathname={PATH.ECOM}/>
         </Segment>
 
-        <Segment>
+        <Segment itemProp="keywords">
             {renderNodes(router)(nodes)}
         </Segment>
 
-        <Segment className="ecom-item">
+        <Segment className="ecom-item" itemScope itemType={ECOM_SCHEMA}>
             <Table color={render.useRandomColor(itemTitle.length)}><Table.Body>
                 <Table.Row>
                     <Table.Cell rowSpan={2} textAlign='center'>
-                    {!isAmp ? <Image wrapped src={image} alt={itemTitle} /> :                                 
+                    {!isAmp ? <Image itemProp="image" wrapped src={image} alt={itemTitle} /> :                                 
                     <div className='amp-container'>
-                        <amp-img className='contain' alt={itemTitle} src={image} layout='fill' />
+                        <amp-img itemProp="image" className='contain' alt={itemTitle} src={image} layout='fill' />
                     </div>}
                     </Table.Cell>
-                    <Table.Cell><h3>{itemTitle}</h3></Table.Cell>
+                    <Table.Cell><h3 {...{itemProp:'name'}}>{itemTitle}</h3></Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell textAlign='right'>{!isAmp ? itemPrice : <a href={itemDp}>{itemPrice}</a>} <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External></Table.Cell>
+                    <Table.Cell textAlign='right' itemProp="offers">{!isAmp ? itemPrice : <a href={itemDp}>{itemPrice}</a>} <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External></Table.Cell>
                 </Table.Row>
                 {itemFeatures.length > 0 ?
                 <Table.Row>
-                    <Table.Cell colSpan={2}><List bulleted>
+                    <Table.Cell colSpan={2}><List bulleted itemProp="description">
                         {_.map(itemFeatures, (f: string, i) => (
                             <List.Item key={`feature-${i}`}>{f}</List.Item>
                         ))}

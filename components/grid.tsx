@@ -5,10 +5,11 @@ import Link, {LinkProps} from 'next/link';
 import { Grid as SemanticGrid, Card, Image, Icon } from 'semantic-ui-react';
 import * as render from 'hooks/render';
 
-const GRID_CLASS_NAME = `fli-items`;
-const GRID_ITEM_CLASS_NAME = `fli-item`;
-const GRID_ITEM_IMAGE = '/static/no_image.png';
-const GRID_ITEM_WIDTH = 300;
+export const GRID_CLASS_NAME = `fli-items`;
+export const GRID_ITEM_CLASS_NAME = `fli-item`;
+export const GRID_ITEM_IMAGE = '/static/no_image.png';
+export const GRID_SCHEMA = 'http://schema.org/Article';
+export const GRID_ITEM_WIDTH = 300;
 
 type ElementType = string|JSX.Element;
 
@@ -28,6 +29,7 @@ interface GridProps<T> {
    meta?: (item:T) => ElementType;
    description?: (item:T) => ElementType;
    extra?: (item:T) => ElementType;
+   schema?: (item:T) => string;
 }
 
 const Linkify = (props: {link?: LinkAttr; children: any; target?:string}) => {
@@ -36,7 +38,8 @@ const Linkify = (props: {link?: LinkAttr; children: any; target?:string}) => {
         return props.children;
     }
     const target = _.get(link, 'target');
-    const aProps = target ? {target} : {};
+    const aProps:{[key:string]:string} = target ? {target} : {};
+    aProps['itemProp'] = 'url';
     return <Link href={link.href} as={link.as} prefetch={false}><a {...aProps}>{props.children}</a></Link>;
 }
 
@@ -56,14 +59,15 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                 const meta = props.meta && props.meta(it);
                 const description = props.description && props.description(it);
                 const extra = props.extra && props.extra(it);
+                const schema = props.schema && props.schema(it) || GRID_SCHEMA;
                 return (<SemanticGrid.Column key={`${GRID_ITEM_CLASS_NAME}-${i}`}>
                     <Card color={render.useRandomColor(i)}>
-                        <Card.Content>
-                            {header && <Card.Header><Linkify link={link}>{header}</Linkify></Card.Header>}
-                            {meta && <Card.Meta>{meta}</Card.Meta>}
+                        <Card.Content itemScope itemType={schema}>
+                            {header && <Card.Header itemProp="name"><Linkify link={link}>{header}</Linkify></Card.Header>}
+                            {meta && <Card.Meta itemProp="identifier">{meta}</Card.Meta>}
                             <Linkify link={imageLink}>
                                 { !isAmp ?
-                                <Image alt={alt} src={image} wrapped onError={(e:React.SyntheticEvent|any) => {
+                                <Image itemProp="image" alt={alt} src={image} wrapped onError={(e:React.SyntheticEvent|any) => {
                                     e.persist();
                                     if(imageAlternate && !_.endsWith(e.target.src, imageAlternate)) {
                                         e.target.src = imageAlternate;
@@ -74,12 +78,12 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                                     }
                                 }}/> : 
                                 <div className='amp-container'>
-                                    <amp-img className='contain' alt={alt} src={image} layout='fill' />
+                                    <amp-img itemProp="image" className='contain' alt={alt} src={image} layout='fill' />
                                 </div>
                                 }
                             </Linkify>
-                            {description && <Card.Description>{description}</Card.Description>}
-                            {extra && <Card.Content extra>{extra}</Card.Content>}
+                            {description && <Card.Description itemProp="description">{description}</Card.Description>}
+                            {extra && <Card.Content itemProp="offers" extra>{extra}</Card.Content>}
                         </Card.Content>
                     </Card>
                 </SemanticGrid.Column>);

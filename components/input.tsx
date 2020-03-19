@@ -71,7 +71,7 @@ const Input = (props:InputProps) => {
                 className="fli-input"
                 onChange={handleInputChange} />
 
-            {suggestion.length > 0 ? <List horizontal>
+            {suggestion.length > 0 ? <List horizontal itemProp="keywords">
                 {_.map(suggestion, (s) => (<List.Item key={s}>
                     <Link href={route.buildUrl(router, {query: {input:s} })} prefetch={false}><a>{s}</a></Link>
                 </List.Item>))}
