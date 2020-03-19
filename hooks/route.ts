@@ -24,23 +24,27 @@ export const parseUrl = (router: NextRouter|NextPageContext) => {
     const parseQueryString = true;
     const asPath = _.get(router, 'asPath', '');
     return url.parse(asPath, parseQueryString) || {};
-}
+};
 
 export const urlQuery = (router: NextRouter|NextPageContext) => {
     return parseUrl(router).query || {};
-}
+};
 
 export const urlPath = (router: NextRouter|NextPageContext) => {
     return parseUrl(router).pathname || '';
-}
+};
+
+export const ifPath = (router: NextRouter|NextPageContext) => ({ has : (path:string) => {
+    return _.includes(urlPath(router), path);
+}});
 
 export const stringifyQuery = (query:ParsedUrlQuery) => {
     return querystring.stringify(query as querystring.ParsedUrlQueryInput);
-}
+};
 
 export const mergeQuery = (q:ParsedUrlQuery = {}, params:Object)  => {
     return _.chain({}).assign(q, params).omitBy(_.isEmpty).value();
-}
+};
 
 export const buildUrl = (
     router: NextRouter|NextPageContext, 

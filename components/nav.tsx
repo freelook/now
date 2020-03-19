@@ -1,8 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as route from 'hooks/route';
 import { IndexContext } from 'pages';
+import {useInput} from 'components/input';
 
 interface NavProps {
     ctx: IndexContext;
@@ -18,11 +20,14 @@ export const PATH = {
 };
 
 const Nav = (props: NavProps) => {
+    const input = useInput();
+    const router = useRouter();
+    const query = input ? `?input=${input}` : '';
     const links = [
         { href: PATH.HOME, label: _.get(props.ctx, 't.Trends', 'Trends') },
-        { href: PATH.NEWS, label: _.get(props.ctx, 't.News', 'News') },
-        { href: PATH.WEB, label: _.get(props.ctx, 't.Web', 'Web') },
-        { href: PATH.ECOM, label: _.get(props.ctx, 't.Ecom', 'Ecom') },
+        { href: route.ifPath(router).has(PATH.NEWS) ? PATH.NEWS : `${PATH.NEWS}${query}`, label: _.get(props.ctx, 't.News', 'News') },
+        { href: route.ifPath(router).has(PATH.WEB) ? PATH.WEB : `${PATH.WEB}${query}`, label: _.get(props.ctx, 't.Web', 'Web') },
+        { href: route.ifPath(router).has(PATH.ECOM) ? PATH.ECOM : `${PATH.ECOM}${query}`, label: _.get(props.ctx, 't.Ecom', 'Ecom') },
     ];
 
     return (
