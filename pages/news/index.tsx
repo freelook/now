@@ -102,11 +102,15 @@ News.getInitialProps = async (ctx:NextPageContext) => {
     },
     cache: true
   });
+  const rss = (await newsTask || {}).rss
+  if(_.isEmpty(rss)) {
+    route.redirect(ctx).to(`${PATH.WEB}?input=${render.encode(input)}`);
+  }
   return {
       name: 'News',
       ...indexProps,
       slug: slug,
-      news: (await newsTask || {}).rss
+      news: rss
   };
 };
 
