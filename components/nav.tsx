@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import Link from 'next/link';
+import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
 import * as route from 'hooks/route';
 import { IndexContext } from 'pages';
@@ -64,10 +65,13 @@ const Nav = (props: NavProps) => {
 };
 
 Nav.External = (props:{children:any; link:string;}) => {
-    return <a onClick={(e) => {
+    const isAmp = useAmp();
+    return !isAmp ? 
+    <a onClick={(e) => {
         e && e.preventDefault();
         route.open(props.link);
-    }}>{props.children}</a>
+    }}>{props.children}</a> : 
+    <a href={props.link} target="_blank">{props.children}</a>
 };
 
 export default Nav;

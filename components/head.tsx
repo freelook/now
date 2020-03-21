@@ -58,6 +58,11 @@ const Head = (props: HeadPropsType) => {
                 .list > .item { display: inline-block; margin: 3px; }
                 .amp-container { position: relative; width: 250px; height: 200px; }
                 .amp-container amp-img.contain img { object-fit: contain; }
+                .icon.external:after { content: '>'; }
+                .icon { padding: 1px; }
+                .icon.search:after { content: '+'; }
+                .icon.images:after { content: '#'; }
+                .icon.cart:after { content: '%'; }
             `}</style>: null}
         </NextHead>
     );

@@ -104,7 +104,7 @@ export const renderItems = (items:IItem[]) => {
                   extra={(it) => {
                       const dp = _.get(it, 'DetailPageURL', '');
                       return (<Grid.Extra>
-                        <Nav.External link={dp}><Icon color='teal' circular name="external alternate"/></Nav.External>
+                        <Nav.External link={dp}><Icon itemProp="url" content={dp} color='teal' circular name="external alternate"/></Nav.External>
                       </Grid.Extra>);
                   }} />
         </Segment>
