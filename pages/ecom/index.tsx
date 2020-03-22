@@ -24,6 +24,7 @@ export const ECOM_LOCALES = {
     [locale.DE]: 'de_DE'
 } as {[key:string]:string};
 export const ECOM_SCHEMA = 'https://schema.org/Product';
+export const ECOM_SCHEMA_OFFER = 'http://schema.org/Offer';
 export const ECOM_CACHE = '86400'; // one day
 export const ECOM_TOTAL_ITEMS = 10;
 export const ECOM_FIRST_PAGE = 1;
@@ -88,8 +89,7 @@ export const renderItems = (items:IItem[]) => {
                   header={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
                   image={(it) => _.get(it, 'Images.Primary.Large.URL')}
                   meta={(it) => (<>
-                    {_.get(it, 'ASIN')}{' - '}
-                    {_.get(it, 'Offers.Listings[0].Price.DisplayAmount')}
+                    {_.get(it, 'ASIN')}
                   </>)}
                   alt={(it) => _.get(it, 'ItemInfo.Title.DisplayValue')}
                   schema={() => ECOM_SCHEMA}
@@ -103,9 +103,10 @@ export const renderItems = (items:IItem[]) => {
                   }}
                   extra={(it) => {
                       const dp = _.get(it, 'DetailPageURL', '');
-                      return (<Grid.Extra>
+                      return (<Grid.Extra><div itemProp="offers" itemScope itemType={ECOM_SCHEMA_OFFER}>
+                        <span itemProp="price">{_.get(it, 'Offers.Listings[0].Price.DisplayAmount')}</span>
                         <Nav.External link={dp}><Icon itemProp="url" content={dp} color='teal' circular name="external alternate"/></Nav.External>
-                      </Grid.Extra>);
+                      </div></Grid.Extra>);
                   }} />
         </Segment>
     ) : <></>;

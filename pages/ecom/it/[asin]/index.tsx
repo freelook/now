@@ -13,7 +13,7 @@ import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import * as render from 'hooks/render';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
-import { IItem, ECOM_CACHE, ECOM_LOCALES, ECOM_SCHEMA, renderNodes, renderItems } from 'pages/ecom';
+import { IItem, ECOM_CACHE, ECOM_LOCALES, ECOM_SCHEMA, ECOM_SCHEMA_OFFER, renderNodes, renderItems } from 'pages/ecom';
 
 export const config = { amp: 'hybrid' };
 
@@ -65,7 +65,10 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
                     <Table.Cell><h3 {...{itemProp:'name'}}>{itemTitle}</h3></Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell textAlign='right' itemProp="offers">{!isAmp ? itemPrice : <a href={itemDp}>{itemPrice}</a>} <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External></Table.Cell>
+                    <Table.Cell textAlign='right' itemProp="offers" itemScope itemType={ECOM_SCHEMA_OFFER}>
+                        <span itemProp="price">{itemPrice}</span>
+                        <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External>
+                    </Table.Cell>
                 </Table.Row>
                 {itemFeatures.length > 0 ?
                 <Table.Row>

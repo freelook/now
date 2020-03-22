@@ -9,7 +9,6 @@ export const GRID_CLASS_NAME = `fli-items`;
 export const GRID_ITEM_CLASS_NAME = `fli-item`;
 export const GRID_ITEM_IMAGE = '/static/no_image.png';
 export const GRID_SCHEMA = 'http://schema.org/Article';
-export const GRID_SCHEMA_OFFER = 'http://schema.org/Offer';
 export const GRID_ITEM_WIDTH = 300;
 
 type ElementType = string|JSX.Element;
@@ -84,7 +83,7 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                                 }
                             </Linkify>
                             {description && <Card.Description itemProp="description">{description}</Card.Description>}
-                            {extra && <Card.Content itemProp="offers" itemScope itemType={GRID_SCHEMA_OFFER} extra>{extra}</Card.Content>}
+                            {extra && <Card.Content extra>{extra}</Card.Content>}
                         </Card.Content>
                     </Card>
                 </SemanticGrid.Column>);

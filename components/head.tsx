@@ -60,9 +60,9 @@ const Head = (props: HeadPropsType) => {
                 .amp-container amp-img.contain img { object-fit: contain; }
                 .icon.external:after { content: '>'; }
                 .icon { padding: 1px; }
-                .icon.search:after { content: '+'; }
-                .icon.images:after { content: '#'; }
-                .icon.cart:after { content: '%'; }
+                .icon.search:before { content: '+'; }
+                .icon.images:before { content: '#'; }
+                .icon.cart:before { content: '%'; }
             `}</style>: null}
         </NextHead>
     );
