@@ -31,7 +31,7 @@ export const urlQuery = (router: NextRouter|NextPageContext) => {
 };
 
 export const urlPath = (router: NextRouter|NextPageContext) => {
-    return parseUrl(router).pathname || '';
+    return (parseUrl(router).pathname || '').replace(/ /mig, '%20');
 };
 
 export const ifPath = (router: NextRouter|NextPageContext) => ({ has : (path:string) => {

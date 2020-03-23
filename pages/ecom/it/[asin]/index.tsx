@@ -50,7 +50,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
         </Segment>
 
         <Segment itemProp="keywords">
-            {renderNodes(router)(nodes)}
+            {renderNodes(router, PATH.ECOM)(nodes)}
         </Segment>
 
         <Segment className="ecom-item" itemScope itemType={ECOM_SCHEMA}>

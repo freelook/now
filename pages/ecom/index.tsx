@@ -35,6 +35,7 @@ export const ECOM_PARENT_NODES = {
 interface EcommerceContext extends IndexContext {
     node?: string;
     slug?: string;
+    seo?: string;
     page: number;
     nodes: {BrowseNodesResult: {BrowseNodes: INode[]}};
     items: {SearchResult: {Items: IItem[]; TotalResultCount: number;}};
@@ -61,24 +62,24 @@ interface INode {
     Ancestor?: INode|INode[];
 }
 
-const renderHomeNode = (router: NextRouter) => (<Link href={route.buildUrl(router, {query: {node: ''}, pathname: PATH.ECOM})} prefetch={false}><a><Icon name="eye slash"/></a></Link>);
-const renderFullNodes = (router: NextRouter) => (nodes: INode[] = [], space:string = ' | ') => _.map(nodes, (n: INode) => {
+const renderHomeNode = (router: NextRouter, pathname?:string) => (<Link href={route.buildUrl(router, {query: {node: ''}, pathname})} prefetch={false}><a><Icon name="eye slash"/></a></Link>);
+const renderFullNodes = (router: NextRouter, pathname?:string) => (nodes: INode[] = [], space:string = ' | ') => _.map(nodes, (n: INode) => {
     if(n && n.Id) {
         const slug = route.slug(n, 'DisplayName');
         const node = !!slug ? slug.concat('-').concat(n.Id): n.Id;
         return (<span key={`node-${n.Id}`}>
-                {n.Ancestor && renderFullNodes(router)(_.isArray(n.Ancestor) ? n.Ancestor: [n.Ancestor], ' * ')}
-                {space} <Link href={route.buildUrl(router, {query: { node }, pathname: PATH.ECOM})} prefetch={false}>
+                {n.Ancestor && renderFullNodes(router, pathname)(_.isArray(n.Ancestor) ? n.Ancestor: [n.Ancestor], ' * ')}
+                {space} <Link href={route.buildUrl(router, {query: { node }, pathname})} prefetch={false}>
                             <a>{n.DisplayName}</a>
                         </Link>
-                {n.Children && renderFullNodes(router)(_.isArray(n.Children) ? n.Children: [n.Children], ' - ')}
+                {n.Children && renderFullNodes(router, pathname)(_.isArray(n.Children) ? n.Children: [n.Children], ' - ')}
         </span>);
     }
 });
-export const renderNodes = (router: NextRouter) => (nodes: INode[] = []) => {
+export const renderNodes = (router: NextRouter, pathname?:string) => (nodes: INode[] = []) => {
     return (<>
-        {renderHomeNode(router)}
-        {renderFullNodes(router)(nodes)}
+        {renderHomeNode(router, pathname)}
+        {renderFullNodes(router, pathname)(nodes)}
     </>);
 };
 export const renderItems = (items:IItem[]) => {
@@ -120,11 +121,14 @@ const Ecommerce = (ctx:EcommerceContext) => {
   const items = _.get(ctx.items, 'SearchResult.Items', []);
   const total = _.get(ctx.items, 'SearchResult.TotalResultCount', 0);
   const slug = _.get(ctx, 'slug' , '');
+  const seo = _.get(ctx, 'seo' , '');
   const titlePrefix = _.get(ctx, 't.Ecom', 'Ecom');
-  let title = slug ? titlePrefix.concat(`: ${slug}`): titlePrefix;
+  const titleSlug = slug || seo;
+  let title = titleSlug ? titlePrefix.concat(`: ${titleSlug}`): titlePrefix;
   title = input ? title.concat(`: ${input}`) : title;
   let description = input || '';
-  description = slug ? description.concat(` ${slug}`) : description;
+  description = slug ? _.trim(description.concat(` ${slug}`)) : description;
+  description = seo ? _.trim(seo.concat(` ${description}`)) : description;
 
   return (
     <Layout head={{title: title, description: description, image: ''}}>
@@ -168,7 +172,8 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
   const page = Math.min(Math.max(_.chain(query).get('p').toInteger().value(), ECOM_FIRST_PAGE), ECOM_TOTAL_ITEMS);
   const slugArr = _.get(query, 'node', '').split('-');
   const node = _.last(slugArr) || null;
-  const slug = slugArr.slice(0, -1).join(' ').trim() || _.get(query, 'seo', '');
+  const slug = slugArr.slice(0, -1).join(' ').trim();
+  const seo =  _.get(query, 'seo', '');
   const indexProps = await useIndexProps(ctx);
   const lang = ECOM_LOCALES[locale.getLng(indexProps.locale)] || ECOM_LOCALES[locale.EN];
   const nodesTaks = useWebtask(ctx)({
@@ -199,6 +204,7 @@ Ecommerce.getInitialProps = async (ctx:NextPageContext) => {
       ...indexProps,
       node: node,
       slug: slug,
+      seo: seo,
       page: page,
       nodes: await nodesTaks || {},
       items: await itemsTask || {},
