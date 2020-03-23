@@ -62,14 +62,14 @@ interface INode {
     Ancestor?: INode|INode[];
 }
 
-const renderHomeNode = (router: NextRouter, pathname?:string) => (<Link href={route.buildUrl(router, {query: {node: ''}, pathname})} prefetch={false}><a><Icon name="eye slash"/></a></Link>);
+const renderHomeNode = (router: NextRouter, pathname?:string) => (<Link href={route.buildUrl(router, {query: {node: '', p: ''}, pathname})} prefetch={false}><a><Icon name="eye slash"/></a></Link>);
 const renderFullNodes = (router: NextRouter, pathname?:string) => (nodes: INode[] = [], space:string = ' | ') => _.map(nodes, (n: INode) => {
     if(n && n.Id) {
         const slug = route.slug(n, 'DisplayName');
         const node = !!slug ? slug.concat('-').concat(n.Id): n.Id;
         return (<span key={`node-${n.Id}`}>
                 {n.Ancestor && renderFullNodes(router, pathname)(_.isArray(n.Ancestor) ? n.Ancestor: [n.Ancestor], ' * ')}
-                {space} <Link href={route.buildUrl(router, {query: { node }, pathname})} prefetch={false}>
+                {space} <Link href={route.buildUrl(router, {query: { node, p: '' }, pathname})} prefetch={false}>
                             <a>{n.DisplayName}</a>
                         </Link>
                 {n.Children && renderFullNodes(router, pathname)(_.isArray(n.Children) ? n.Children: [n.Children], ' - ')}
@@ -155,7 +155,7 @@ const Ecommerce = (ctx:EcommerceContext) => {
                 defaultActivePage={ctx.page}
                 pageItem={(PaginationItem, props) => {
                     const p = _.toString(props.value);
-                    const href = route.buildUrl(router, {query: { p }, pathname: PATH.ECOM});
+                    const href = route.buildUrl(router, {query: { p }});
                     props.onClick = _.noop;
                     return <Link key={p} passHref={true} href={href} prefetch={false}><PaginationItem {...props} /></Link>;
                 }} /> : null}
