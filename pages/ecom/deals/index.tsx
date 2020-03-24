@@ -81,7 +81,7 @@ const Deals = (ctx:DealsContext) => {
                     </div>;
                   }}
                   extra={(d) => {
-                      const dp = _.get(d, 'payload.shortUrl', _.get(d, 'payload.url', ''));
+                      const dp = _.get(d, 'payload.shortUrl') || _.get(d, 'payload.url', '');
                       return (<Grid.Extra><div itemProp="offers" itemScope itemType={ECOM_SCHEMA_OFFER}>
                         <span itemProp="price">${_.get(d, 'payload.promoDealPrice', _.get(d, 'payload.promoListPrice'))}</span>
                         <Nav.External link={dp}><Icon itemProp="url" content={dp} color='teal' circular name="external alternate"/></Nav.External>
