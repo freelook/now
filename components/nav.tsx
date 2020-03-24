@@ -16,6 +16,7 @@ export const PATH = {
     NEWS: '/news',
     WEB: '/web',
     ECOM: '/ecom',
+    DEALS: '/ecom/deals',
     META: '/meta',
     FEED: '/feed'
 };
@@ -29,6 +30,7 @@ const Nav = (props: NavProps) => {
         { href: route.ifPath(router).has(PATH.NEWS) ? PATH.NEWS : `${PATH.NEWS}${query}`, label: _.get(props.ctx, 't.News', 'News') },
         { href: route.ifPath(router).has(PATH.WEB) ? PATH.WEB : `${PATH.WEB}${query}`, label: _.get(props.ctx, 't.Web', 'Web') },
         { href: route.ifPath(router).has(PATH.ECOM) ? PATH.ECOM : `${PATH.ECOM}${query}`, label: _.get(props.ctx, 't.Ecom', 'Ecom') },
+        { href: PATH.DEALS, label: _.get(props.ctx, 't.Deals', 'Deals') },
     ];
 
     return (

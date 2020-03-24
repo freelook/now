@@ -27,7 +27,7 @@ interface GridProps<T> {
    link?: (item:T) => LinkAttr;
    imageLink?: (item:T) => LinkAttr;
    meta?: (item:T) => ElementType;
-   description?: (item:T) => ElementType;
+   description?: (item:T) => ElementType|null;
    extra?: (item:T) => ElementType;
    schema?: (item:T) => string;
 }

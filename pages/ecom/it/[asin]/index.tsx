@@ -36,7 +36,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
   const itemPrice = _.get(item, 'Offers.Listings[0].Price.DisplayAmount', '');
   const itemFeatures = _.get(item, 'ItemInfo.Features.DisplayValues', []);
   const itemDp = _.get(item, 'DetailPageURL', '');
-  const slug = _.get(ctx, 'slug', itemTitle);
+  const slug = ctx.slug || itemTitle;
   const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
   const description = slug;
   const image = _.get(item, 'Images.Primary.Large.URL', '');

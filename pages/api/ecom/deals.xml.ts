@@ -1,12 +1,11 @@
 import _ from 'lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 import * as request from 'hooks/request';
-
-export const LIST_ENDPOINT = 'https://gist.githubusercontent.com/freelook/0374495b5313c6db2fc9c009de23caf1/raw/c647f74643c0b3f8407c28ddbb599e9f594365ca/US_States_and_Cities.json';
+import { LIST_ENDPOINT } from './sitemap.xml';
 
 export default async (req:NextApiRequest, res:NextApiResponse) => {
 
-    const keywords = ["best", "buy"];
+    const keywords = ["deals", "discounts"];
     const list = await request.get(LIST_ENDPOINT);
     const states = _.keys(list);
     const cities:string[] = _.reduce(states, (acc, s) => acc.concat(list[s]), []);
@@ -18,8 +17,8 @@ export default async (req:NextApiRequest, res:NextApiResponse) => {
             let seo = (`${k} in ${p}`).replace(/ /mig, '%20');
             urls.push(`
             <url>
-                <loc>https://freelook.now.sh/ecom/${seo}/</loc>
-                <changefreq>weekly</changefreq>
+                <loc>https://freelook.now.sh/ecom/deals/${seo}/</loc>
+                <changefreq>hourly</changefreq>
                 <priority>1.0</priority>
             </url>
             `);
