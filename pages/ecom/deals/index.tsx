@@ -103,7 +103,7 @@ Deals.getInitialProps = async (ctx:NextPageContext) => {
         taskName: DEALS_TASK,
         taskPath: 'US/today',
         body: {},
-        cache: ECOM_CACHE
+        cache: true
   });
   return {
       name: 'Deals',
