@@ -20,6 +20,7 @@ export const config = { amp: 'hybrid' };
 
 interface MetaContext extends IndexContext {
     link: string;
+    redirect: string;
     meta: Object;
 }
 
@@ -28,6 +29,7 @@ const Meta = (ctx:MetaContext) => {
   const important = render.important(isAmp);
   const router = useRouter();
   const meta = _.get(ctx, 'meta', {});
+  const redirect = _.get(ctx, 'redirect', '');
   const titlePrefix = _.get(ctx, 't.Meta', 'Meta');
   const title = _.get(meta, 'og:title', _.get(meta, 'title', ''));
   const headTitle = title ? titlePrefix.concat(`: ${title}`): titlePrefix;
@@ -38,7 +40,15 @@ const Meta = (ctx:MetaContext) => {
   const rss = _.get(meta, 'rss');
 
   useEffect(() => {
-    if(!(title || description || image)) {
+    if(!!redirect) {
+        const to = _.get(PATH, redirect);
+        if(!to) {
+            setTimeout(() => route.replace(ctx.link), 1234);
+        } else {
+           route.open(ctx.link);
+           router.replace(to); 
+        }
+    } else if(!(title || description || image)) {
         route.open(url);
         if(route.prev().length) {
             router.back();
@@ -104,6 +114,7 @@ const Meta = (ctx:MetaContext) => {
 Meta.getInitialProps = async (ctx:NextPageContext) => {
   const query = route.query(ctx);
   const token = _.get(query, 'token', '');
+  const redirect = _.get(query, 'r', '');
   const url = route.decode(token);
   const indexProps = await useIndexProps(ctx);
   const metaTask = useWebtask(ctx)({
@@ -115,6 +126,7 @@ Meta.getInitialProps = async (ctx:NextPageContext) => {
       name: 'Meta',
       ...indexProps,
       link: url,
+      redirect: redirect,
       meta: await metaTask || {}
   };
 };
