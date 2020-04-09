@@ -61,12 +61,15 @@ const Deals = (ctx:DealsContext) => {
                   items={deals} 
                   header={(d) => _.get(d, 'payload.promoText')}
                   image={(d) => _.get(d, 'payload.promoImg')}
-                  meta={(d) => _.get(d, 'payload.asin')}
+                  meta={(d) => {
+                      const asin = _.get(d, 'payload.asin', '');
+                      return <Link {...{href: `${PATH.ECOM}/it/[asin]`, as: `${PATH.ECOM}/it/${asin}`}} prefetch={false}><a>{asin}</a></Link>;
+                  }}
                   alt={(d) => _.get(d, 'payload.promoText')}
                   schema={() => ECOM_SCHEMA}
                   link={(d)=> {
-                      const asin = _.get(d, 'payload.asin', '');
-                      return {href: `${PATH.ECOM}/it/[asin]`, as: `${PATH.ECOM}/it/${asin}`};
+                      const dp = _.get(d, 'payload.shortUrl') || _.get(d, 'payload.url', '');
+                      return {href: dp, target: '_blank'};
                   }}
                   description={(d) => {
                     let description = _.get(d, 'payload.promoDescription');
@@ -81,10 +84,12 @@ const Deals = (ctx:DealsContext) => {
                     </div>;
                   }}
                   extra={(d) => {
-                      const dp = _.get(d, 'payload.shortUrl') || _.get(d, 'payload.url', '');
+                      const discount = _.get(d, 'payload.promoDiscount');
+                      const price = _.get(d, 'payload.promoDealPrice') || _.get(d, 'payload.promoListPrice');
                       return (<Grid.Extra><div itemProp="offers" itemScope itemType={ECOM_SCHEMA_OFFER}>
-                        <span itemProp="price">${_.get(d, 'payload.promoDealPrice', _.get(d, 'payload.promoListPrice'))}</span>
-                        <Nav.External link={dp}><Icon itemProp="url" content={dp} color='teal' circular name="external alternate"/></Nav.External>
+                        {price ? <span itemProp="price">${price}</span> : null}
+                        {' '}
+                        {discount ? <span className="ui red tag label" itemProp="discount">-{discount}%</span> : null}
                       </div></Grid.Extra>);
                   }} />
         </Segment>
