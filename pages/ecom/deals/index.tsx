@@ -29,6 +29,7 @@ export interface IDeal {
         promoImage: string;
         url: string;
         shortUrl?: string;
+        promoType?: string;
         promoDescription?: string; // html
         promoDealPrice?: string;
         promoListPrice?: string;
@@ -63,7 +64,11 @@ const Deals = (ctx:DealsContext) => {
                   image={(d) => _.get(d, 'payload.promoImg')}
                   meta={(d) => {
                       const asin = _.get(d, 'payload.asin', '');
-                      return <Link {...{href: `${PATH.ECOM}/it/[asin]`, as: `${PATH.ECOM}/it/${asin}`}} prefetch={false}><a>{asin}</a></Link>;
+                      const promoType = _.get(d, 'payload.promoType', '');
+                      return <>
+                        <Link {...{href: `${PATH.ECOM}/it/[asin]`, as: `${PATH.ECOM}/it/${asin}`}} prefetch={false}><a>{asin}</a></Link>
+                        <i className="ui">{promoType}</i>
+                      </>;
                   }}
                   alt={(d) => _.get(d, 'payload.promoText')}
                   schema={() => ECOM_SCHEMA}
