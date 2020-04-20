@@ -5,7 +5,7 @@ import { useAmp } from 'next/amp';
 import Link from 'next/link';
 import { useRouter, NextRouter } from 'next/router';
 import { Segment, Icon, Pagination } from 'semantic-ui-react';
-import {IndexContext, useIndexProps} from 'pages';
+import {IndexContext, useIndexProps} from 'functions';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';

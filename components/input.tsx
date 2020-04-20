@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import { Input as SemanticInput, List } from 'semantic-ui-react';
-import Link from 'next/link';
+import Link from 'components/link';
 import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
-import { IndexContext } from 'pages';
+import { IndexContext } from 'functions';
 import * as route from 'hooks/route';
 import * as suggest from 'hooks/suggest';
 
@@ -37,15 +37,14 @@ const Input = (props:InputProps) => {
 
     const pushInput = () => {
         const pathname = props.as || props.pathname;
+        const query = _.chain({}).assign(props.query, {input: _.trim(value as string)}).value();
         const url = route.buildUrl(router, {
-            query: _.chain({}).assign(props.query, {input: _.trim(value as string)}).value(),
+            query: query,
             pathname: pathname,
-            asObject: true
-        });
-        if(props.as && props.pathname) {
-            return router.push(props.pathname, url);
-        }
-        return router.push(url);
+            asObject: false
+        }) as string;
+        const urlQuery = url.split('?')[1];
+        return router.push(`/[...path]${urlQuery ? `?${urlQuery}`: ''}`, url);
     };
     const handleInputChange = (e:React.SyntheticEvent) => {
         preventDefault(e);

@@ -7,6 +7,8 @@ import Router, { NextRouter, useRouter } from 'next/router';
 import { LinkProps } from 'next/link';
 import { NextPageContext } from 'next';
 import querystring, { ParsedUrlQuery } from 'querystring';
+import {pathToRegexp, match} from 'path-to-regexp';
+import notFound from 'functions/notFound';
 
 const MAX_PREV_HISTORY = 3;
 
@@ -117,4 +119,20 @@ export const prev = (path?:string) => {
         w.prev.push(path);
     } 
     return w.prev;
+};
+
+export const resolve = (_ctx:any):any => (routes:Object) => {
+    const ctx = _.cloneDeep(_ctx);
+    const q = query(ctx);
+    const path = '/' + (q.path || []).join('/');
+    let func = notFound;
+    ctx.query = ctx.query || {};
+    const key = _.keys(routes).find((r) => {
+        return pathToRegexp(r).test(path);
+    });
+    if(!!key) {
+     func = _.get(routes, key);
+     ctx.query = _.assign(ctx.query, (match(key)(path) || {}).params);
+    }
+    return [func, ctx];  
 };

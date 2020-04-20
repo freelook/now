@@ -4,7 +4,7 @@ import { useAmp } from 'next/amp';
 import Locale from 'components/locale';
 import Share from 'components/share';
 import Comments from 'components/comments';
-import { IndexContext } from 'pages';
+import { IndexContext } from 'functions';
 
 interface FooterProps {
     ctx: IndexContext;

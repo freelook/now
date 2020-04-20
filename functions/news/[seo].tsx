@@ -1,3 +1,3 @@
-import News from 'pages/news';
+import News from 'functions/news';
 export const config = { amp: 'hybrid' };
 export default News;

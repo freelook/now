@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { NextPageContext } from 'next';
 import { Segment, Icon, StrictFormGroupProps } from 'semantic-ui-react';
-import {IndexContext, useIndexProps} from 'pages';
+import {IndexContext, useIndexProps} from 'functions';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';

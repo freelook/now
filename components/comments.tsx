@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Segment } from 'semantic-ui-react';
 import dynamic from 'next/dynamic';
-import { IndexContext } from 'pages';
+import { IndexContext } from 'functions';
 
 interface CommentsProps {
     ctx: IndexContext;

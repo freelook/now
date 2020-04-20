@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
-import Link from 'next/link';
+import Link from 'components/link';
 import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
 import * as route from 'hooks/route';
-import { IndexContext } from 'pages';
+import { IndexContext } from 'functions';
 import {useInput} from 'components/input';
 
 interface NavProps {

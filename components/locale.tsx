@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import React from 'react';
 import { Segment, Dropdown } from 'semantic-ui-react';
-import Link from 'next/link';
+import Link from 'components/link';
 import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
 import { geo, lng, splitLocale } from 'hooks/locale';
 import { buildUrl } from 'hooks/route';
-import { IndexContext } from 'pages';
+import { IndexContext } from 'functions';
 
 interface LocaleProps {
     ctx: IndexContext;

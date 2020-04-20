@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import React, {useEffect} from 'react';
 import { NextPageContext } from 'next';
-import Link from 'next/link';
+import Link from 'components/link';
 import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
 import { Segment, Icon, Table, Image, List } from 'semantic-ui-react';
-import {IndexContext, useIndexProps} from 'pages';
+import {IndexContext, useIndexProps} from 'functions';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
 import {GRID_SCHEMA} from 'components/grid';

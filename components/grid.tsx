@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useAmp } from 'next/amp';
-import Link, {LinkProps} from 'next/link';
+import Link, {LinkProps} from 'components/link';
 import { Grid as SemanticGrid, Card, Image, Icon } from 'semantic-ui-react';
 import * as render from 'hooks/render';
 

@@ -4,7 +4,7 @@ import { NextPageContext } from 'next';
 import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
 import { Segment, Icon, Table, Image, List } from 'semantic-ui-react';
-import {IndexContext, useIndexProps} from 'pages';
+import {IndexContext, useIndexProps} from 'functions';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';
@@ -13,7 +13,7 @@ import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import * as render from 'hooks/render';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
-import { IItem, ECOM_CACHE, ECOM_LOCALES, ECOM_SCHEMA, ECOM_SCHEMA_OFFER, renderNodes, renderItems } from 'pages/ecom';
+import { IItem, ECOM_CACHE, ECOM_LOCALES, ECOM_SCHEMA, ECOM_SCHEMA_OFFER, renderNodes, renderItems } from 'functions/ecom';
 
 export const config = { amp: 'hybrid' };
 

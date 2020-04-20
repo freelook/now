@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import { Segment, Icon } from 'semantic-ui-react';
-import {IndexContext, useIndexProps} from 'pages';
+import {IndexContext, useIndexProps} from 'functions';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';

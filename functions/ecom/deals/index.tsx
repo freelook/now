@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
 import { Segment, Icon, List } from 'semantic-ui-react';
-import {IndexContext, useIndexProps} from 'pages';
+import {IndexContext, useIndexProps} from 'functions';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
 import Footer from 'components/footer';
@@ -13,7 +13,7 @@ import Grid from 'components/grid';
 import Input, {useInput} from 'components/input';
 import * as route from 'hooks/route';
 import { useWebtask, DEALS_TASK } from 'hooks/webtask';
-import { ECOM_CACHE, ECOM_SCHEMA, ECOM_SCHEMA_OFFER } from 'pages/ecom';
+import { ECOM_CACHE, ECOM_SCHEMA, ECOM_SCHEMA_OFFER } from 'functions/ecom';
 
 export const config = { amp: 'hybrid' };
 
