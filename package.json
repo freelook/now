@@ -9,8 +9,7 @@
   "scripts": {
     "dev": "NODE_PATH=. next",
     "build": "NODE_PATH=. next build",
-    "start": "next start",
-    "heroku": "next start -p $PORT",
+    "start": "next start -p $PORT",
     "type-check": "tsc"
   },
   "dependencies": {
