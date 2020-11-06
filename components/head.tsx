@@ -12,7 +12,7 @@ export interface HeadPropsType {
   image?: string
 };
 
-export const FLI_DOMAIN = 'freelook.now.sh';
+export const FLI_DOMAIN = 'freelook-now.herokuapp.com';
 
 const Head = (props: HeadPropsType) => {
     const isAmp = useAmp();
@@ -40,7 +40,7 @@ const Head = (props: HeadPropsType) => {
             <meta charSet="UTF-8" />
             {!isAmp ? <meta name="viewport" content="width=device-width,initial-scale=1" />: null}
             <meta name="robots" content="index,follow" />
-            <meta name="google-site-verification" content="5TUCUwv0Gd1iR99AyKGk47oJnx4931mvYoNyTKM2MNM" />
+            <meta name="google-site-verification" content="3mHDDzJ0pnhPM5k2nydyYC28H_AP9oqjoIaVXum05DM" />
             <meta name="msvalidate.01" content="36AC47E1042C4DBD8923DEEE0F9FC843" />
             <meta name="yandex-verification" content="aa19f081865997ad" />
             <meta name="description" content={description} />
