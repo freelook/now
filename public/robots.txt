@@ -1,4 +1,4 @@
-Sitemap: https:/freelook.now.sh/sitemap.xml
+Sitemap: https://freelook-now.herokuapp.com/sitemap.xml
 
 User-agent: *
 Allow: /

@@ -17,7 +17,7 @@ export default async (req:NextApiRequest, res:NextApiResponse) => {
             let seo = (`${k} in ${p}`).replace(/ /mig, '%20');
             urls.push(`
             <url>
-                <loc>https://freelook.now.sh/ecom/deals/${seo}/</loc>
+                <loc>https://freelook-now.herokuapp.com/ecom/deals/${seo}/</loc>
                 <changefreq>hourly</changefreq>
                 <priority>1.0</priority>
             </url>
