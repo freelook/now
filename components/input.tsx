@@ -39,7 +39,7 @@ const Input = (props:InputProps) => {
         const pathname = props.as || props.pathname;
         const query = _.chain({}).assign(props.query, {input: _.trim(value as string)}).value();
         const url = route.buildUrl(router, {
-            query: query,
+            query: query as any,
             pathname: pathname,
             asObject: false
         }) as string;
