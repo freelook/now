@@ -41,6 +41,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
   const description = slug;
   const image = _.get(item, 'Images.Primary.Large.URL', '');
   const asin = _.get(ctx, 'asin', '');
+  const tag = (itemDp.match(/tag=(.*?)&/) || [])[1];
 
   return (
     <Layout head={{title, description, image}}>
@@ -67,7 +68,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell textAlign='right' itemProp="offers" itemScope itemType={ECOM_SCHEMA_OFFER}>
-                        <Nav.External link={`${ECOM_ADD_TO_CART}?ASIN.1=${asin}&Quantity.1=1`}><Button positive>
+                        <Nav.External link={`${ECOM_ADD_TO_CART}?ASIN.1=${asin}&Quantity.1=1&AssociateTag=${tag}`}><Button positive>
                             {_.get(ctx, 't.AddToCart', 'Add to Cart')}
                         </Button></Nav.External>
                         <span itemProp="price">{itemPrice}</span>
