@@ -7,7 +7,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_PATH=. next",
+    "dev": "next",
     "build": "NODE_PATH=. next build",
     "start": "next start",
     "heroku": "next start -p $PORT",

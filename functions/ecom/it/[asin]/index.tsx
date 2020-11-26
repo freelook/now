@@ -3,7 +3,7 @@ import React from 'react';
 import { NextPageContext } from 'next';
 import { useAmp } from 'next/amp';
 import { useRouter } from 'next/router';
-import { Segment, Icon, Table, Image, List } from 'semantic-ui-react';
+import { Segment, Icon, Table, Image, List, Button } from 'semantic-ui-react';
 import {IndexContext, useIndexProps} from 'functions';
 import Layout from 'components/layout';
 import Nav, {PATH} from 'components/nav';
@@ -13,7 +13,7 @@ import * as locale from 'hooks/locale';
 import * as route from 'hooks/route';
 import * as render from 'hooks/render';
 import { useWebtask, AMZN_TASK } from 'hooks/webtask';
-import { IItem, ECOM_CACHE, ECOM_LOCALES, ECOM_SCHEMA, ECOM_SCHEMA_OFFER, renderNodes, renderItems } from 'functions/ecom';
+import { IItem, ECOM_ADD_TO_CART, ECOM_CACHE, ECOM_LOCALES, ECOM_SCHEMA, ECOM_SCHEMA_OFFER, renderNodes, renderItems } from 'functions/ecom';
 
 export const config = { amp: 'hybrid' };
 
@@ -40,6 +40,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
   const title = slug? titlePrefix.concat(`: ${slug}`): titlePrefix;
   const description = slug;
   const image = _.get(item, 'Images.Primary.Large.URL', '');
+  const asin = _.get(ctx, 'asin', '');
 
   return (
     <Layout head={{title, description, image}}>
@@ -66,6 +67,9 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell textAlign='right' itemProp="offers" itemScope itemType={ECOM_SCHEMA_OFFER}>
+                        <Nav.External link={`${ECOM_ADD_TO_CART}?ASIN.1=${asin}&Quantity.1=1`}><Button positive>
+                            {_.get(ctx, 't.AddToCart', 'Add to Cart')}
+                        </Button></Nav.External>
                         <span itemProp="price">{itemPrice}</span>
                         <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External>
                     </Table.Cell>

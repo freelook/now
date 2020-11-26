@@ -31,6 +31,7 @@ export const ECOM_FIRST_PAGE = 1;
 export const ECOM_PARENT_NODES = {
     US: ["2617941011", "2619525011", "15684181", "3760901", "3760911", "283155", "165796011", "1055398", "3375251", "172282"]
 };
+export const ECOM_ADD_TO_CART = 'https://www.amazon.com/gp/aws/cart/add.html';
 
 interface EcommerceContext extends IndexContext {
     node?: string;
