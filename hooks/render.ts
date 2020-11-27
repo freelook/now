@@ -63,4 +63,10 @@ export const decode = (v:string) => {
     return decodeURIComponent(v);
 };
 
+export const encodeHTML = (str: string = '') => {
+    return str.replace(/[\u00A0-\u9999<>\&]/gim, function(i: string) {
+        return '&#' + i.charCodeAt(0) + ';';
+    });
+};
+
 export const important = (isAmp:boolean) => !isAmp ? '!important' : '';

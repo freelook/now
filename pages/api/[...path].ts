@@ -9,6 +9,7 @@ import MetaImgApi from 'functions/api/meta/img/[token]';
 import WebtaskApi from 'functions/api/webtask/[name]';
 import EcomDealsXml from 'functions/api/ecom/deals.xml';
 import EcomSitemapXml from 'functions/api/ecom/sitemap.xml';
+import EcomBestDealsXml from 'functions/api/ecom/best-deals.xml';
 
 const routes = {
     '/date': DateApi,
@@ -16,7 +17,8 @@ const routes = {
     '/meta/img/:token': MetaImgApi,
     '/webtask/:name': WebtaskApi,
     '/ecom/deals.xml': EcomDealsXml,
-    '/ecom/sitemap.xml': EcomSitemapXml
+    '/ecom/sitemap.xml': EcomSitemapXml,
+    '/ecom/best-deals.xml': EcomBestDealsXml
 };
 
 const All = (_req:NextApiRequest, _res:NextApiResponse) => {
