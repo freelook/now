@@ -15,7 +15,7 @@ export default async (req:NextApiRequest, res:NextApiResponse) => {
             const payload = _.get(deal, 'payload', {});
             const product = `<item>
                 <g:id>${_.get(payload, 'asin', '-')}</g:id>
-                <title>${_.get(payload, 'asin', '-')}</title>
+                <title>Deal: ${_.get(payload, 'asin', '-')}</title>
                 <description>${encodeHTML(_.get(payload, 'promoText', _.get(payload, 'promoDescription', '-')))}</description>
                 <g:image_link>${_.get(payload, 'promoImg', '-').replace(/&/g, "&amp;")}</g:image_link>
                 <g:availability>${'in stock'}</g:availability>
