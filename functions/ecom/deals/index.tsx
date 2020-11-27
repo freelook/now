@@ -64,9 +64,10 @@ const Deals = (ctx:DealsContext) => {
                   image={(d) => _.get(d, 'payload.promoImg')}
                   meta={(d) => {
                       const asin = _.get(d, 'payload.asin', '');
+                      const discount = _.get(d, 'payload.promoDiscount');
                       const promoType = _.get(d, 'payload.promoType', '');
                       return <>
-                        <Link {...{href: `${PATH.ECOM}/it/[asin]`, as: `${PATH.ECOM}/it/${asin}`}} prefetch={false}><a>{asin}</a></Link>
+                        <Link {...{href: `${PATH.ECOM}/it/[asin]?deal=${discount}`, as: `${PATH.ECOM}/it/${asin}?deal=${discount}`}} prefetch={false}><a>{asin}</a></Link>
                         <i className="ui">{promoType}</i>
                       </>;
                   }}

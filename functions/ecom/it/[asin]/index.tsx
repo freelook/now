@@ -19,6 +19,7 @@ export const config = { amp: 'hybrid' };
 
 interface EcommerceItemContext extends IndexContext {
     asin: string;
+    deal?: string;
     slug?: string;
     item: {ItemsResult: {Items: [IItem]}};
     variations: {VariationsResult: {Items: IItem[]}};
@@ -41,6 +42,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
   const description = slug;
   const image = _.get(item, 'Images.Primary.Large.URL', '');
   const asin = _.get(ctx, 'asin', '');
+  const deal = _.get(ctx, 'deal', '');
   const tag = (itemDp.match(/tag=(.*?)&/) || [])[1];
 
   return (
@@ -64,15 +66,20 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
                         <amp-img itemProp="image" className='contain' alt={itemTitle} src={image} layout='fill' />
                     </div>}
                     </Table.Cell>
-                    <Table.Cell><h3 {...{itemProp:'name'}}>{itemTitle}</h3></Table.Cell>
+                    <Table.Cell>
+                        <h3 {...{itemProp:'name'}}>
+                            {itemTitle}
+                            {' '}
+                            <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External>
+                        </h3>
+                    </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell textAlign='right' itemProp="offers" itemScope itemType={ECOM_SCHEMA_OFFER}>
                         <Nav.External link={`${ECOM_ADD_TO_CART}?ASIN.1=${asin}&Quantity.1=1&AssociateTag=${tag}`}><Button positive>
                             {_.get(ctx, 't.AddToCart', 'Add to Cart')}
                         </Button></Nav.External>
-                        <span itemProp="price">{itemPrice}</span>
-                        <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External>
+                        <span itemProp="price">{itemPrice} {deal ? <span className="ui red tag label" itemProp="discount">-{deal}%</span> : null}</span>
                     </Table.Cell>
                 </Table.Row>
                 {itemFeatures.length > 0 ?
@@ -103,6 +110,7 @@ EcommerceItem.getInitialProps = async (ctx:NextPageContext) => {
   const query = route.query(ctx);
   const input = _.get(query, 'input');
   const asin = _.get(query, 'asin', '');
+  const deal = _.get(query, 'deal', '');
   const slug = _.get(query, 'seo', '');
   const indexProps = await useIndexProps(ctx);
   const lang = ECOM_LOCALES[indexProps.locale] || ECOM_LOCALES[locale.EN];
@@ -134,6 +142,7 @@ EcommerceItem.getInitialProps = async (ctx:NextPageContext) => {
       name: 'EcommerceItem',
       ...indexProps,
       asin: asin,
+      deal: deal,
       slug: slug,
       item: await itemTask || {},
       variations: await variationsTask || {}

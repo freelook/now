@@ -14,15 +14,15 @@ export default async (req:NextApiRequest, res:NextApiResponse) => {
         const products = deals.map((deal: Object) => {
             const payload = _.get(deal, 'payload', {});
             const product = `<item>
-                <g:id>${_.get(payload, 'asin', '-')}</g:id>
-                <title>Deal: ${_.get(payload, 'asin', '-')}</title>
-                <description>${encodeHTML(_.get(payload, 'promoText', _.get(payload, 'promoDescription', '-')))}</description>
-                <g:image_link>${_.get(payload, 'promoImg', '-').replace(/&/g, "&amp;")}</g:image_link>
+                <g:id>${_.get(payload, 'asin', '')}</g:id>
+                <title>Deal: ${_.get(payload, 'asin', '')}</title>
+                <description>${encodeHTML(_.get(payload, 'promoText', _.get(payload, 'promoDescription', '')))}</description>
+                <g:image_link>${_.get(payload, 'promoImg', '').replace(/&/g, "&amp;")}</g:image_link>
                 <g:availability>${'in stock'}</g:availability>
-                <g:price>${_.get(payload, 'promoDealPrice', _.get(payload, 'promoListPrice', '-'))} USD</g:price>
+                <g:price>${_.get(payload, 'promoDealPrice', _.get(payload, 'promoListPrice', ''))} USD</g:price>
                 <g:brand>${'amzn'}</g:brand>
                 <g:condition>${'new'}</g:condition>
-                <link>${_.get(payload, 'url', '-').replace(/&/g, "&amp;")}</link>
+                <link>https://freelook-now.herokuapp.com/ecom/it/${_.get(payload, 'asin', '')}?deal=${_.get(payload, 'promoDiscount', '')}</link>
             </item>`;
             return product;
         });
