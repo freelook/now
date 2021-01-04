@@ -10,6 +10,7 @@ import WebtaskApi from 'functions/api/webtask/[name]';
 import EcomDealsXml from 'functions/api/ecom/deals.xml';
 import EcomSitemapXml from 'functions/api/ecom/sitemap.xml';
 import EcomBestDealsXml from 'functions/api/ecom/best-deals.xml';
+import EcomBestDealsNewsXml from 'functions/api/ecom/best-deals-news.xml';
 
 const routes = {
     '/date': DateApi,
@@ -18,7 +19,8 @@ const routes = {
     '/webtask/:name': WebtaskApi,
     '/ecom/deals.xml': EcomDealsXml,
     '/ecom/sitemap.xml': EcomSitemapXml,
-    '/ecom/best-deals.xml': EcomBestDealsXml
+    '/ecom/best-deals.xml': EcomBestDealsXml,
+    '/ecom/best-deals-news.xml': EcomBestDealsNewsXml
 };
 
 const All = (_req:NextApiRequest, _res:NextApiResponse) => {
