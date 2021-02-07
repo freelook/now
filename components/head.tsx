@@ -42,7 +42,7 @@ const Head = (props: HeadPropsType) => {
             <meta name="robots" content="index,follow" />
             <meta name="google-site-verification" content="3mHDDzJ0pnhPM5k2nydyYC28H_AP9oqjoIaVXum05DM" />
             <meta name="msvalidate.01" content="36AC47E1042C4DBD8923DEEE0F9FC843" />
-            <meta name="yandex-verification" content="aa19f081865997ad" />
+            <meta name="yandex-verification" content="a496d068d44f4568" />
             <meta name="description" content={description} />
             <meta property="og:url" content={url} />
             <meta property="og:title" content={title} />
