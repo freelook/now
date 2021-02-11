@@ -39,7 +39,7 @@ export default async (req:NextApiRequest, res:NextApiResponse) => {
                 <g:id>${_.get(payload, 'asin', '')}</g:id>
                 <title>${config.deal}: ${_.get(payload, 'asin', '')}</title>
                 <description>${encodeHTML(_.get(payload, 'promoText', _.get(payload, 'promoDescription', '')))}</description>
-                <g:image_link>${_.get(payload, 'promoImg', '').replace(/&/g, "&amp;")}</g:image_link>
+                <g:image_link>${`${baseURL}/api/meta/img/${encode(_.get(payload, 'promoImg', '').replace(/&/g, "&amp;"))}?r=1`}</g:image_link>
                 <g:availability>${'in stock'}</g:availability>
                 <g:price>${_.get(payload, 'promoDealPrice', _.get(payload, 'promoListPrice', ''))} ${config.currency}</g:price>
                 <g:brand>${'amzn'}</g:brand>

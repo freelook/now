@@ -11,6 +11,9 @@ export default async (req:NextApiRequest, res:NextApiResponse) => {
     let meta = {};
     try {
         const url = route.decode(token);
+        if(_.get(req, 'query.r')) {
+            return route.redirect({req, res}).to(url); 
+        }
         meta = await webtask({
             taskName: META_TASK, 
             body: { url },

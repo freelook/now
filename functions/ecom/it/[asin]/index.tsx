@@ -79,7 +79,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
                         <Nav.External link={`${ECOM_ADD_TO_CART}?ASIN.1=${asin}&Quantity.1=1&AssociateTag=${tag}`}><Button positive>
                             {_.get(ctx, 't.AddToCart', 'Add to Cart')}
                         </Button></Nav.External>
-                        <span itemProp="price">{itemPrice} {deal ? <span className="ui red tag label" itemProp="discount">-{deal}%</span> : null}</span>
+                        <span itemProp="price">{itemPrice} {deal && +deal > 0 ? <span className="ui red tag label" itemProp="discount">-{deal}%</span> : null}</span>
                     </Table.Cell>
                 </Table.Row>
                 {itemFeatures.length > 0 ?
@@ -88,6 +88,7 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
                         {_.map(itemFeatures, (f: string, i) => (
                             <List.Item key={`feature-${i}`}>{f}</List.Item>
                         ))}
+                        <List.Item><sup>*</sup> The price is valid only for active Deals</List.Item>
                     </List></Table.Cell>
                 </Table.Row> : null} 
             </Table.Body></Table>
