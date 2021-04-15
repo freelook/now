@@ -51,7 +51,7 @@ const Head = (props: HeadPropsType) => {
             <meta property="og:description" content={description} />
             {image ? <meta property="og:image" content={image} /> : null}
             {isAmp ? <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script> : null}
-            {isAmp ? <style jsx global>{`
+            {isAmp ? <style dangerouslySetInnerHTML={{__html: `
                 .fli-input > input { width:100%; }
                 .segment { margin: 15px; }
                 .fli-items.grid { column-gap: 5px; }
@@ -65,7 +65,7 @@ const Head = (props: HeadPropsType) => {
                 .icon.search:before { content: '+'; }
                 .icon.images:before { content: '#'; }
                 .icon.cart:before { content: '%'; }
-            `}</style>: null}
+            `}} />: null}
         </NextHead>
     );
 }
