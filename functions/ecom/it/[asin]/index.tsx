@@ -61,17 +61,21 @@ const EcommerceItem = (ctx:EcommerceItemContext) => {
             <Table color={render.useRandomColor(itemTitle.length)}><Table.Body>
                 <Table.Row>
                     <Table.Cell rowSpan={2} textAlign='center'>
+                    <Nav.External link={itemDp}>
                     {!isAmp ? <Image itemProp="image" wrapped src={image} alt={itemTitle} /> :                                 
                     <div className='amp-container'>
                         <amp-img itemProp="image" className='contain' alt={itemTitle} src={image} layout='fill' />
                     </div>}
+                    </Nav.External>
                     </Table.Cell>
                     <Table.Cell>
-                        <h3 {...{itemProp:'name'}}>
-                            {itemTitle}
-                            {' '}
-                            <Nav.External link={itemDp}><Icon color='teal' circular name="external alternate"/></Nav.External>
-                        </h3>
+                        <Nav.External link={itemDp}>
+                            <h3 {...{itemProp:'name'}}>
+                                {itemTitle}
+                                {' '}
+                                <Icon color='teal' circular name="external alternate"/>
+                            </h3>
+                        </Nav.External>
                     </Table.Cell>
                 </Table.Row>
                 <Table.Row>

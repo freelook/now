@@ -95,7 +95,7 @@ const Deals = (ctx:DealsContext) => {
                   schema={() => ECOM_SCHEMA}
                   link={(d)=> {
                       const dp = _.get(d, 'payload.shortUrl') || _.get(d, 'payload.url', '');
-                      return {href: dp, target: '_blank'};
+                      return {href: dp, target: '_blank', rel: 'nofollow'};
                   }}
                   description={(d) => {
                     let description = _.get(d, 'payload.promoDescription');

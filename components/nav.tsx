@@ -28,7 +28,6 @@ const Nav = (props: NavProps) => {
     const links = [
         { href: PATH.HOME, label: _.get(props.ctx, 't.Trends', 'Trends') },
         { href: route.ifPath(router).has(PATH.NEWS) ? PATH.NEWS : `${PATH.NEWS}${query}`, label: _.get(props.ctx, 't.News', 'News') },
-        { href: route.ifPath(router).has(PATH.WEB) ? PATH.WEB : `${PATH.WEB}${query}`, label: _.get(props.ctx, 't.Web', 'Web') },
         { href: route.ifPath(router).has(PATH.ECOM) ? PATH.ECOM : `${PATH.ECOM}${query}`, label: _.get(props.ctx, 't.Ecom', 'Ecom') },
         { href: PATH.DEALS, label: _.get(props.ctx, 't.Deals', 'Deals') },
     ];
@@ -69,11 +68,11 @@ const Nav = (props: NavProps) => {
 Nav.External = (props:{children:any; link:string;}) => {
     const isAmp = useAmp();
     return !isAmp ? 
-    <a onClick={(e) => {
+    <a href="#" onClick={(e) => {
         e && e.preventDefault();
         route.open(props.link);
     }}>{props.children}</a> : 
-    <a href={props.link} target="_blank">{props.children}</a>
+    <a href={props.link} target="_blank" rel="nofollow">{props.children}</a>
 };
 
 export default Nav;

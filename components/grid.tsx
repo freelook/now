@@ -38,8 +38,11 @@ const Linkify = (props: {link?: LinkAttr; children: any; target?:string}) => {
         return props.children;
     }
     const target = _.get(link, 'target');
-    const aProps:{[key:string]:string} = target ? {target} : {};
-    aProps['itemProp'] = 'url';
+    const rel = _.get(link, 'rel');
+    const itemProp = 'url';
+    const aProps:{[key:string]:string|undefined} = {
+        itemProp, target, rel
+    };
     return <Link href={link.href} as={link.as} prefetch={false}><a {...aProps}>{props.children}</a></Link>;
 }
 

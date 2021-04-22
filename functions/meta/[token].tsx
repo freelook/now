@@ -93,7 +93,7 @@ const Meta = (ctx:MetaContext) => {
                     <Table.Row>
                         <Table.Cell colSpan={2}><List horizontal itemProp="keywords">{
                             _.map(keywords, (v, k) => <List.Item key={k}>
-                                <Link href={route.buildUrl(router, {pathname: PATH.WEB, query: {input:v} })} prefetch={false}><a>{v}</a></Link>
+                                <Link href={route.buildUrl(router, {pathname: PATH.NEWS, query: {input:v} })} prefetch={false}><a>{v}</a></Link>
                             </List.Item>)
                         }</List></Table.Cell>
                     </Table.Row>

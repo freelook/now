@@ -113,8 +113,6 @@ const Home = (ctx:HomeContext) => {
                       const images = `${PATH.WEB}/images?input=${_.get(tr, 'title', '')}`;
                       const ecom = `${PATH.ECOM}?input=${_.get(tr, 'title', '')}`;
                       return (<Grid.Extra>
-                        <Link href={web} prefetch={false}><a><Icon circular name="search plus"/></a></Link>
-                        <Link href={images} prefetch={false}><a><Icon circular name="images"/></a></Link>
                         <Link href={ecom} prefetch={false}><a><Icon circular name="shopping cart"/></a></Link>
                       </Grid.Extra>);
                   }}/>
