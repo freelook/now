@@ -111,8 +111,8 @@ const Grid = <T extends {}>(props:GridProps<T>) => {
                 .fli-items .column {
                    width: 100% ${important};
                 }
-                .fli-items .ui.card, .ui.cards>.card {
-                   width: 100%
+                .fli-items .ui.card {
+                   width: 100%;
                 }
                 @media only screen and (min-width: ${GRID_ITEM_WIDTH * 2}px) {
                 .fli-items {
