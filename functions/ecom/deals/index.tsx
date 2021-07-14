@@ -68,18 +68,35 @@ const Deals = (ctx:DealsContext) => {
   const titlePrefix = _.get(ctx, 't.Deals', 'Deals');
   let title = seo ? titlePrefix.concat(`: ${seo}`): titlePrefix;
   const description = seo || `Best Today Deals - ${geo}`;
+  const placeholder = `Dealcode | ${_.get(ctx, 't.Placeholder', 'Looking for...')}`;
+
+  const [dealsState, setDealsState] = React.useState(deals);
+
+  const applyFilter = (v: string): boolean => {
+    if(v) {
+        const filteredDeals = deals.filter((d) => JSON.stringify(d).toLowerCase().includes(v.toLowerCase()));
+        if(!!filteredDeals.length) {
+            setDealsState(filteredDeals);
+            return true;
+        }
+    } else {
+        setDealsState(deals);
+        return true;
+    } 
+    return false;
+  };
 
   return (
     <Layout head={{title: title, description: description, image: ''}}>
         <Nav {...{ctx}} />
 
         <Segment>
-            <Input {...{ctx}} pathname={PATH.ECOM}/>
+            <Input {...{ctx}} pathname={PATH.ECOM} filter={applyFilter} placeholder={placeholder} />
         </Segment>
 
         <Segment>
             <Grid<IDeal> 
-                  items={deals} 
+                  items={dealsState} 
                   header={(d) => _.get(d, 'payload.promoText')}
                   image={(d) => _.get(d, 'payload.promoImg')}
                   meta={(d) => {

@@ -20,6 +20,8 @@ interface InputProps {
     query?: Object;
     pathname?: string;
     as?: string;
+    filter?: (v: any) => boolean;
+    placeholder?: string;
 }
 
 export const preventDefault = (e:React.SyntheticEvent) => e && e.preventDefault();
@@ -52,6 +54,9 @@ const Input = (props:InputProps) => {
     };
     const handleInputSubmit = (e:React.SyntheticEvent) => {
         preventDefault(e);
+        if(_.isFunction(props.filter) && props.filter(value)) {
+            return;
+        }
         pushInput();
     };
     React.useEffect(() => {
@@ -65,7 +70,7 @@ const Input = (props:InputProps) => {
             <SemanticInput fluid
                 type="text"
                 name="input"
-                placeholder={_.get(props.ctx, 't.Placeholder', 'Looking for...')}
+                placeholder={props.placeholder || _.get(props.ctx, 't.Placeholder', 'Looking for...')}
                 value={value}
                 className="fli-input"
                 onChange={handleInputChange} />

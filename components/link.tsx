@@ -3,7 +3,7 @@ import Link, {LinkProps as LP} from 'next/link';
 
 export type LinkProps = LP;
 
-export default (props:LinkProps&any) => {
+const LinkComponent = (props:LinkProps&any) => {
     const as = props.as || props.href || '';
     const query = as.split('?')[1];
     const prefetch = false;
@@ -13,3 +13,5 @@ export default (props:LinkProps&any) => {
     }
     return <Link {...{as, href, prefetch}}>{props.children}</Link>;
 };
+
+export default LinkComponent;
