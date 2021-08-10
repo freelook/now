@@ -110,9 +110,15 @@ const Deals = (ctx:DealsContext) => {
                   }}
                   alt={(d) => _.get(d, 'payload.promoText')}
                   schema={() => ECOM_SCHEMA}
+                  imageLink={(d)=> {
+                    const dp = _.get(d, 'payload.shortUrl') || _.get(d, 'payload.url', '');
+                    return {href: dp, target: '_blank', rel: 'nofollow'};
+                  }}
                   link={(d)=> {
                       const dp = _.get(d, 'payload.shortUrl') || _.get(d, 'payload.url', '');
-                      return {href: dp, target: '_blank', rel: 'nofollow'};
+                      const img = _.get(d, 'payload.promoImg', '');
+                      const metaLink = `${PATH.META}/${route.encode(dp)}?img=${route.encode(img)}&r=1`;
+                      return {href: metaLink, target: '_blank'};
                   }}
                   description={(d) => {
                     let description = _.get(d, 'payload.promoDescription');
